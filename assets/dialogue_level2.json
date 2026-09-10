@@ -1,0 +1,27 @@
+{
+  "old_artisan": {
+    "lines": [
+      { "speaker": "老匠人", "text": "你是哪家窑上的？看着面生。" },
+      { "speaker": "陈默", "text": "我……我是来拍照的，摄像机在哪？这布景搭得真像。" },
+      { "speaker": "老匠人", "text": "（怔了一下）布景？小娃娃，水火不等人。你们那儿的房子，经得起洪水吗？" },
+      { "speaker": "陈默", "text": "（答不上来，沉默）" }
+    ],
+    "options": [],
+    "goods_event": ""
+  },
+  "aming": {
+    "lines": [
+      { "speaker": "阿明", "text": "大哥哥，吃个烤红薯吧，刚出窑的，热乎。" },
+      { "speaker": "陈默", "text": "谢……谢谢。（红薯很甜，甜得有点噎人）" }
+    ],
+    "options": [],
+    "goods_event": ""
+  },
+  "porridge": {
+    "lines": [
+      { "speaker": "陈默", "text": "（糊粥又烫又稠，难以下咽。他端着碗，一句话也没说。）" }
+    ],
+    "options": [],
+    "goods_event": ""
+  }
+}

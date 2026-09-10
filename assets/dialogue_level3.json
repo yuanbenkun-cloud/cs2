@@ -1,0 +1,125 @@
+{
+  "old_shopkeeper": {
+    "lines": [
+      { "speaker": "老掌柜", "text": "劳驾，把这包货送到码头，交给一个叫老周的人。他认得这包上的绳结。" },
+      { "speaker": "陈默", "text": "……行吧，反正我也是顺路。（他掂了掂货包，比想象中沉）" }
+    ],
+    "options": [
+      { "label": "接下货包，走大路", "next": "take_bag_main" },
+      { "label": "接下货包，抄小巷", "next": "take_bag_alley" }
+    ],
+    "goods_event": ""
+  },
+  "take_bag_main": {
+    "lines": [
+      { "speaker": "陈默", "text": "大路远点，但至少能看清谁是谁。" },
+      { "speaker": "旁白", "text": "一路平安。镇子不设防的眼睛，都在看着这条大路。" }
+    ],
+    "options": [],
+    "goods_event": "safe"
+  },
+  "take_bag_alley": {
+    "lines": [
+      { "speaker": "陈默", "text": "抄近路，快点送到就完事。" },
+      { "speaker": "巷口汉子", "text": "兄弟，货不少啊？我帮你提一段？……哎哟手滑！" },
+      { "speaker": "陈默", "text": "（货包被撞散，少了东西）" }
+    ],
+    "options": [],
+    "goods_event": "stolen"
+  },
+  "teahouse": {
+    "lines": [
+      { "speaker": "胖掌柜", "text": "哟，面生。替老掌柜送货的？那包里头装的可值不少钱吧？" },
+      { "speaker": "胖掌柜", "text": "跟哥哥说实话，老掌柜是不是托你运什么宝贝？" }
+    ],
+    "options": [
+      { "label": "实话实说：就是一包布匹", "next": "teahouse_honest" },
+      { "label": "撒谎：什么都不知道", "next": "teahouse_lie" },
+      { "label": "反问：你打听这个做什么", "next": "teahouse_retort" }
+    ],
+    "goods_event": ""
+  },
+  "teahouse_honest": {
+    "lines": [
+      { "speaker": "胖掌柜", "text": "哈哈，实在人。布匹就布匹，哥哥不惦记。" }
+    ],
+    "options": [],
+    "goods_event": "safe"
+  },
+  "teahouse_lie": {
+    "lines": [
+      { "speaker": "胖掌柜", "text": "哦？不知道？那你怀里鼓鼓的是什么？……当我没看见，你走吧。" },
+      { "speaker": "陈默", "text": "（回头一摸——夹层里的货被顺走了）" }
+    ],
+    "options": [],
+    "goods_event": "cheated"
+  },
+  "teahouse_retort": {
+    "lines": [
+      { "speaker": "胖掌柜", "text": "呵，外地人嘴还挺硬。行，那就不送客了——走好。" },
+      { "speaker": "陈默", "text": "（出门时被人群挤了一下，货少了一截）" }
+    ],
+    "options": [],
+    "goods_event": "stolen"
+  },
+  "helper": {
+    "lines": [
+      { "speaker": "码头帮工", "text": "老板，货沉，我搭把手？码头上水深，一个人可不好走。" }
+    ],
+    "options": [
+      { "label": "让他帮忙", "next": "helper_yes" },
+      { "label": "不用，我自己来", "next": "helper_no" }
+    ],
+    "goods_event": ""
+  },
+  "helper_yes": {
+    "lines": [
+      { "speaker": "陈默", "text": "行，搭把手。" },
+      { "speaker": "码头帮工", "text": "哎，来了来了——（突然脚下一绊，货包脱手滚进水里）" },
+      { "speaker": "陈默", "text": "（捞上来时，包已经破了，东西冲走大半）" }
+    ],
+    "options": [],
+    "goods_event": "robbed"
+  },
+  "helper_no": {
+    "lines": [
+      { "speaker": "陈默", "text": "不用。我自己能行。" },
+      { "speaker": "旁白", "text": "他小心地避开伸过来的手，一路抱到老周跟前。" }
+    ],
+    "options": [],
+    "goods_event": "safe"
+  },
+  "laozhou_good": {
+    "lines": [
+      { "speaker": "老周", "text": "绳结原样，分量分毫不差。小友，你这路走得干净。" },
+      { "speaker": "老周", "text": "这镇子看着简单，其实到处都是眼睛。可眼睛，也认得干净的人。" },
+      { "speaker": "陈默", "text": "（他第一次觉得，被人“看穿”不是什么坏事。）" }
+    ],
+    "options": [],
+    "goods_event": ""
+  },
+  "laozhou_damaged": {
+    "lines": [
+      { "speaker": "老周", "text": "绳结松了，货也短了。路上有人搭话了吧？" },
+      { "speaker": "陈默", "text": "……是。" },
+      { "speaker": "老周", "text": "镇子不大，人心却绕。下次，眼睛放亮些。" }
+    ],
+    "options": [],
+    "goods_event": ""
+  },
+  "laozhou_bad": {
+    "lines": [
+      { "speaker": "老周", "text": "东西少了大半。年轻人，这一路，你怕是连自己怀里的都看不住。" },
+      { "speaker": "陈默", "text": "（他低着头，第一次说不出“来都来了”四个字。）" }
+    ],
+    "options": [],
+    "goods_event": ""
+  },
+  "goods_bag": {
+    "lines": [
+      { "speaker": "旁白", "text": "沉甸甸的货包。绳结是老掌柜亲手打的，说是码头老周一眼就能认出来。" }
+    ],
+    "options": [],
+    "goods_event": ""
+  }
+}

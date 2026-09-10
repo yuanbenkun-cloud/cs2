@@ -1,0 +1,252 @@
+class_name SceneBuilderCommon
+extends RefCounted
+
+## build_common 本身不产出场景（run 恒返回 true），只提供公共辅助。
+
+func run(_tree: SceneTree) -> bool:
+	return true
+
+func new_scene(name: String) -> Node2D:
+	var root := Node2D.new()
+	root.name = name
+	return root
+
+func add_node(parent: Node, type: String, node_name: String) -> Node:
+	var n: Node = ClassDB.instantiate(type)
+	n.name = node_name
+	parent.add_child(n)
+	return n
+
+func save_scene(root: Node, path: String) -> bool:
+	## PackedScene.pack 要求整树节点 owner=root，否则子节点不序列化
+	_own_recursive(root, root)
+	var packed := PackedScene.new()
+	packed.pack(root)
+	return ResourceSaver.save(packed, path) == OK
+
+func _own_recursive(node: Node, scene_root: Node) -> void:
+	if node != scene_root:
+		node.owner = scene_root
+	for c in node.get_children():
+		_own_recursive(c, scene_root)
+
+func make_color_rect(size: Vector2, color: Color, pos: Vector2 = Vector2.ZERO, parent: Node = null) -> ColorRect:
+	var cr := ColorRect.new()
+	cr.size = size
+	cr.position = pos
+	cr.color = color
+	if parent != null:
+		parent.add_child(cr)
+	return cr
+
+func make_label(text: String, pos: Vector2, font_size: int = 10, color: Color = Color.WHITE, parent: Node = null) -> Label:
+	var lb := Label.new()
+	lb.text = text
+	lb.position = pos
+	lb.add_theme_font_size_override("font_size", font_size)
+	lb.add_theme_color_override("font_color", color)
+	if parent != null:
+		parent.add_child(lb)
+	return lb
+
+func bind_script(node: Node, script_path: String) -> Node:
+	node.set_script(load(script_path))
+	return node
+
+## ---- Phase 8 背景辅助 ----
+
+## 五层视差背景：cols = [sky, far, mid, near, fore]（Color）。第 3 层江水 motion_mirroring。
+func make_background(root: Node, cols: Array) -> ParallaxBackground:
+	var pbg := ParallaxBackground.new()
+	pbg.name = "BG_Parallax"
+	root.add_child(pbg)
+	var names := ["BG_Sky", "BG_Far", "BG_Mid", "BG_Near", "BG_Fore"]
+	var scales := [Vector2(0.05, 1), Vector2(0.2, 1), Vector2(0.5, 1), Vector2(0.9, 1), Vector2(1.3, 1)]
+	var ys := [-24.0, 60.0, 122.0, 184.0, 214.0]
+	var hs := [120.0, 96.0, 92.0, 58.0, 44.0]
+	for i in range(5):
+		var layer := ParallaxLayer.new()
+		layer.name = names[i]
+		layer.motion_scale = scales[i]
+		pbg.add_child(layer)
+		var band := ColorRect.new()
+		band.color = cols[i]
+		band.size = Vector2(4400, hs[i])
+		band.position = Vector2(-2200, ys[i])
+		layer.add_child(band)
+		band.modulate = Color(1, 1, 1, 0.0)
+		if i == 2:
+			layer.motion_mirroring = Vector2(48.0, 0.0)
+	root.move_child(pbg, 1)
+	return pbg
+
+## WorldEnvironment：glow + adjustments + vignette（bg_col 为环境底色）
+func make_environment(root: Node, bg_col: Color) -> void:
+	var wenv := WorldEnvironment.new()
+	wenv.name = "WorldEnvironment"
+	var e := Environment.new()
+	e.background_mode = Environment.BG_COLOR
+	e.background_color = bg_col
+	e.glow_enabled = true
+	e.glow_intensity = 0.4
+	e.glow_bloom = 0.1
+	e.adjustment_enabled = true
+	e.adjustment_brightness = 1.0
+	e.adjustment_saturation = 1.0
+	wenv.environment = e
+	root.add_child(wenv)
+
+## LightRig：CanvasModulate 时代色调 + 若干点光源；lights=[x, y, colorhex, energy, radius]
+func make_light_rig(root: Node, tone: Color, lights: Array) -> void:
+	var rig := Node2D.new()
+	rig.name = "LightRig"
+	root.add_child(rig)
+	var cm := CanvasModulate.new()
+	cm.name = "CanvasModulate"
+	cm.color = tone
+	rig.add_child(cm)
+	for L in lights:
+		var p := PointLight2D.new()
+		p.name = "PointLight"
+		p.position = Vector2(L[0], L[1])
+		p.color = Color(L[2])
+		p.energy = L[3]
+		p.texture_scale = L[4] / 32.0
+		rig.add_child(p)
+	bind_script(rig, "res://scripts/background/light_rig.gd")
+
+const CROWD_SKINS := [
+	"res://assets/generated/npc_helper.png",
+	"res://assets/generated/npc_oldman.png",
+	"res://assets/generated/npc_aming.png",
+	"res://assets/generated/npc_teahouse.png",
+	"res://assets/generated/npc_flyerlady.png",
+]
+
+## 人群路障：物理阻挡 + 多名路人立绘（追逐战掩体 → 人群）
+func make_crowd(root: Node, cid: int, cx: float, w: float, h: float) -> void:
+	var body := StaticBody2D.new()
+	body.name = "diyiguan_renqun_%02d" % cid
+	body.position = Vector2(cx, 240.0 - h / 2.0)
+	root.add_child(body)
+	var csh := CollisionShape2D.new()
+	var cr := RectangleShape2D.new()
+	cr.size = Vector2(w, h)
+	csh.shape = cr
+	body.add_child(csh)
+	var base := ColorRect.new()
+	base.color = Color(0.45, 0.5, 0.56, 0.9)
+	base.size = Vector2(w, 10)
+	base.position = Vector2(-w / 2.0, h / 2.0 - 10.0)
+	body.add_child(base)
+	var n := 3
+	var stepx := w / float(n + 1)
+	for i in range(n):
+		var tex: Texture2D = load(CROWD_SKINS[(cid + i) % CROWD_SKINS.size()])
+		if tex == null:
+			continue
+		var sp := Sprite2D.new()
+		sp.texture = tex
+		sp.centered = false
+		sp.flip_h = (cid + i) % 2 == 0
+		sp.position = Vector2(-w / 2.0 + stepx * float(i + 1) - 16.0, h / 2.0 - 46.0)
+		body.add_child(sp)
+
+
+## ---- C/D：无缝背景艺术层 + 场景摆件 ----
+
+## 五关素材目录（与 raw 素材库一致）
+const ERA_DIRS := {
+	"01": "res://assets/raw/素材2/背景/01洪崖洞-现代夜",
+	"02": "res://assets/raw/素材2/背景/02磁器口-古代窑场",
+	"03": "res://assets/raw/素材2/背景/03中山古镇-古代",
+	"04": "res://assets/raw/素材2/背景/04防空洞-近代",
+	"05": "res://assets/raw/素材2/背景/05洪崖洞-归来晨光",
+}
+
+func add_scene_art(pbg: ParallaxBackground, ground: Node, era: String) -> void:
+	var dir_p: String = ERA_DIRS.get(era, "")
+	if dir_p == "" or pbg == null:
+		return
+	var d := DirAccess.open(dir_p)
+	if d == null:
+		return
+	var files: Array[String] = []
+	d.list_dir_begin()
+	var fn := d.get_next()
+	while fn != "":
+		if not d.current_is_dir():
+			files.append(fn)
+		fn = d.get_next()
+	d.list_dir_end()
+	# 远景主背景（天空氛围，motion_scale 极小 + mirroring 补宽）
+	var far_p := _pick(files, "主背景", ".jpg")
+	if far_p != "":
+		var tex: Texture2D = load(dir_p + "/" + far_p)
+		if tex != null:
+			var lay := ParallaxLayer.new()
+			lay.motion_scale = Vector2(0.06, 1)
+			pbg.add_child(lay)
+			var sp := Sprite2D.new()
+			sp.texture = tex
+			sp.centered = false
+			var s := 360.0 / float(tex.get_height())
+			sp.scale = Vector2(s, s)
+			sp.position = Vector2(-float(tex.get_width()) * s * 0.5, -40.0)
+			sp.modulate = Color(1, 1, 1, 0.95)
+			lay.add_child(sp)
+			lay.motion_mirroring = Vector2(float(tex.get_width()) * s, 0)
+	# 中景无缝单元（motion_mirroring 循环）
+	var mid_p := _pick(files, "中景_无缝单元", ".png")
+	if mid_p != "" and not mid_p.contains("预览"):
+		var tex: Texture2D = load(dir_p + "/" + mid_p)
+		if tex != null:
+			var lay := ParallaxLayer.new()
+			lay.motion_scale = Vector2(0.5, 1)
+			pbg.add_child(lay)
+			var sp := Sprite2D.new()
+			sp.texture = tex
+			sp.centered = false
+			var s := 200.0 / float(tex.get_height())
+			sp.scale = Vector2(s, s)
+			sp.position = Vector2(0.0, 70.0)
+			lay.add_child(sp)
+			lay.motion_mirroring = Vector2(float(tex.get_width()) * s, 0)
+	# 地形无缝单元：铺在 GroundFill 之上（地面贴图）
+	var terr_p := _pick(files, "地形_无缝单元", ".png")
+	if terr_p != "" and ground != null:
+		var tex: Texture2D = load(dir_p + "/" + terr_p)
+		if tex != null:
+			var s := 150.0 / float(tex.get_height())
+			var step_x := float(tex.get_width()) * s
+			var n := int(ceil(3250.0 / step_x)) + 1
+			for i in range(n):
+				var sp := Sprite2D.new()
+				sp.name = "TerrainTile"
+				sp.texture = tex
+				sp.centered = false
+				sp.scale = Vector2(s, s)
+				sp.position = Vector2(-700.0 + float(i) * step_x, -20.0)
+				sp.z_index = 10
+				ground.add_child(sp)
+
+## 地面后的场景摆件（吊脚楼/窑炉/门面/码头），wx=世界x，h=显示高度
+func add_object_behind(ground: Node, path: String, wx: float, h: float) -> void:
+	if ground == null:
+		return
+	var tex: Texture2D = load(path)
+	if tex == null:
+		return
+	var spr := Sprite2D.new()
+	spr.texture = tex
+	spr.centered = false
+	var s := h / float(tex.get_height())
+	spr.scale = Vector2(s, s)
+	spr.position = Vector2(wx - 900.0 - float(tex.get_width()) * s * 0.5, -20.0 - h)
+	ground.add_child(spr)
+
+func _pick(files: Array, keyword: String, ext: String) -> String:
+	for f in files:
+		if f.contains(keyword) and f.ends_with(ext):
+			return f
+	return ""

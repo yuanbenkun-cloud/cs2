@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/npc/npc_base.gd" id="1_dx2v5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v1oek"]
+size = Vector2(24, 40)
+
+[node name="laozhou" type="Area2D" unique_id=1698145725]
+script = ExtResource("1_dx2v5")
+
+[node name="laozhou_pengzhuangtiji" type="CollisionShape2D" parent="." unique_id=1343082144]
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_v1oek")
+
+[node name="laozhou_tishi" type="ColorRect" parent="." unique_id=313813727]
+offset_left = -6.0
+offset_top = -50.0
+offset_right = 6.0
+offset_bottom = -38.0
+color = Color(0.49803922, 0.83137256, 1, 1)

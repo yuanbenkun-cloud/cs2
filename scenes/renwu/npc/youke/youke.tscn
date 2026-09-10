@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/npc/npc_base.gd" id="1_x0fqy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aj5v4"]
+size = Vector2(24, 40)
+
+[node name="youke" type="Area2D" unique_id=703253539]
+script = ExtResource("1_x0fqy")
+
+[node name="youke_pengzhuangtiji" type="CollisionShape2D" parent="." unique_id=1507981491]
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_aj5v4")
+
+[node name="youke_tishi" type="ColorRect" parent="." unique_id=624377062]
+offset_left = -6.0
+offset_top = -50.0
+offset_right = 6.0
+offset_bottom = -38.0
+color = Color(0.49803922, 0.83137256, 1, 1)

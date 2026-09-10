@@ -1,0 +1,19 @@
+# Godot editor/import cache
+.godot/
+
+# Local editor and OS noise
+.vscode/
+.idea/
+*.tmp
+*.bak
+Thumbs.db
+.DS_Store
+
+# Exported binaries/packages (source presets remain tracked)
+*.exe
+*.pck
+*.zip
+
+# MCP project-local runtime state
+.mcp-runtime/
+

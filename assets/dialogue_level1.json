@@ -1,0 +1,29 @@
+{
+  "test_npc": {
+    "lines": [
+      { "speaker": "陈默", "text": "这洪崖洞人也太多了吧，拍个照都挤不进去。" },
+      { "speaker": "陈默", "text": "路这么难走，早知道去商场吹空调了。" },
+      { "speaker": "陈默", "text": "……算了，来都来了，往观景台挤挤吧。" }
+    ],
+    "options": [],
+    "goods_event": ""
+  },
+  "flyer_lady": {
+    "lines": [
+      { "speaker": "传单阿姨", "text": "小哥哥，扫码关注一下吧，洪崖洞探店视频点个赞……" },
+      { "speaker": "传单阿姨", "text": "诶？你走什么呀？姐妹们，拦住他！" },
+      { "speaker": "陈默", "text": "（不妙，得赶紧溜！）" }
+    ],
+    "options": [],
+    "goods_event": ""
+  },
+  "info_board": {
+    "lines": [
+      { "speaker": "历史木牌", "text": "洪崖洞：依山而建、沿江而生的吊脚楼群，是山城世代临水而居的记忆。" },
+      { "speaker": "陈默", "text": "……哦。拍个照差不多得了，谁有空看这个。" },
+      { "speaker": "陈默", "text": "（脚下传来一声异响……）" }
+    ],
+    "options": [],
+    "goods_event": ""
+  }
+}

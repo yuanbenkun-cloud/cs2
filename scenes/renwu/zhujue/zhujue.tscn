@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="1_42kwi"]
+[ext_resource type="Script" path="res://scripts/systems/camera_rig.gd" id="2_b882f"]
+[ext_resource type="Script" path="res://scripts/player/hero_anim.gd" id="3_u1vsn"]
+[ext_resource type="Script" path="res://scripts/player/player_animator.gd" id="4_t8bc1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mr466"]
+size = Vector2(24, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p7t5r"]
+size = Vector2(36, 42)
+
+[node name="zhujue" type="CharacterBody2D" unique_id=957632326]
+script = ExtResource("1_42kwi")
+
+[node name="zhujue_pengzhuangtiji" type="CollisionShape2D" parent="." unique_id=491192450]
+position = Vector2(0, -13)
+shape = SubResource("RectangleShape2D_mr466")
+
+[node name="zhujue_jiaohuquyu" type="Area2D" parent="." unique_id=1649234734]
+
+[node name="@CollisionShape2D@2" type="CollisionShape2D" parent="zhujue_jiaohuquyu" unique_id=422776101]
+position = Vector2(0, -18)
+shape = SubResource("RectangleShape2D_p7t5r")
+
+[node name="zhujue_shexiangji" type="Camera2D" parent="." unique_id=236993994]
+offset = Vector2(0, -140)
+position_smoothing_enabled = true
+script = ExtResource("2_b882f")
+
+[node name="zhujue_donghua" type="AnimatedSprite2D" parent="." unique_id=2063765898]
+centered = false
+script = ExtResource("3_u1vsn")
+
+[node name="zhujue_anim_kongzhi" type="Node" parent="." unique_id=1610689033]
+script = ExtResource("4_t8bc1")

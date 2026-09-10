@@ -1,0 +1,54 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[PASS] res://scenes/01_hongyadong.tscn 含 Player
+[PASS] res://scenes/01_hongyadong.tscn 含 HeartSystem
+[PASS] res://scenes/01_hongyadong.tscn 含 NPC_FlyerLady
+[PASS] res://scenes/01_hongyadong.tscn 含 OBJ_InfoBoard
+[PASS] res://scenes/01_hongyadong.tscn 含 OBJ_LooseTile
+[PASS] res://scenes/01_hongyadong.tscn 含 5 个 BG_* 视差层
+[PASS] res://scenes/01_hongyadong.tscn 含 WorldEnvironment
+[PASS] res://scenes/01_hongyadong.tscn 含 LightRig
+[PASS] res://scenes/02_ciqikou.tscn 含 Player
+[PASS] res://scenes/02_ciqikou.tscn 含 ForgeSequence
+[PASS] res://scenes/02_ciqikou.tscn 含 OBJ_Wall
+[PASS] res://scenes/02_ciqikou.tscn 含 OBJ_Wood
+[PASS] res://scenes/02_ciqikou.tscn 含 NPC_OldArtisan
+[PASS] res://scenes/02_ciqikou.tscn 含 NPC_AMing
+[PASS] res://scenes/02_ciqikou.tscn 含 UI_Timer
+[PASS] res://scenes/02_ciqikou.tscn 含 5 个 BG_* 视差层
+[PASS] res://scenes/02_ciqikou.tscn 含 WorldEnvironment
+[PASS] res://scenes/02_ciqikou.tscn 含 LightRig
+[PASS] res://scenes/03_zhongshan.tscn 含 Player
+[PASS] res://scenes/03_zhongshan.tscn 含 ChoiceSystem
+[PASS] res://scenes/03_zhongshan.tscn 含 NPC_OldShopkeeper
+[PASS] res://scenes/03_zhongshan.tscn 含 NPC_FatTeahouse
+[PASS] res://scenes/03_zhongshan.tscn 含 NPC_Helper
+[PASS] res://scenes/03_zhongshan.tscn 含 NPC_LaoZhou
+[PASS] res://scenes/03_zhongshan.tscn 含 OBJ_GoodsBag
+[PASS] res://scenes/03_zhongshan.tscn 含 5 个 BG_* 视差层
+[PASS] res://scenes/03_zhongshan.tscn 含 WorldEnvironment
+[PASS] res://scenes/03_zhongshan.tscn 含 LightRig
+[PASS] res://scenes/04_fangdong.tscn 含 Player
+[PASS] res://scenes/04_fangdong.tscn 含 GroupFollower
+[PASS] res://scenes/04_fangdong.tscn 含 BombWarning
+[PASS] res://scenes/04_fangdong.tscn 含 NPC_Group
+[PASS] res://scenes/04_fangdong.tscn 含 PointLight2D
+[PASS] res://scenes/04_fangdong.tscn 含 Checkpoint
+[PASS] res://scenes/04_fangdong.tscn 含 OBJ_Exit
+[PASS] 04 队伍 NPC 数量 6 >= 6
+[PASS] res://scenes/04_fangdong.tscn 含 5 个 BG_* 视差层
+[PASS] res://scenes/04_fangdong.tscn 含 WorldEnvironment
+[PASS] res://scenes/04_fangdong.tscn 含 LightRig
+[PASS] res://scenes/05_hongyadong_return.tscn 含 Player
+[PASS] res://scenes/05_hongyadong_return.tscn 含 OBJ_InfoBoard
+[PASS] res://scenes/05_hongyadong_return.tscn 含 NPC_OldMan
+[PASS] res://scenes/05_hongyadong_return.tscn 含 OBJ_ViewSpot
+[PASS] res://scenes/05_hongyadong_return.tscn 含 OBJ_PhotoSpot
+[PASS] res://scenes/05_hongyadong_return.tscn 含 5 个 BG_* 视差层
+[PASS] res://scenes/05_hongyadong_return.tscn 含 WorldEnvironment
+[PASS] res://scenes/05_hongyadong_return.tscn 含 LightRig
+[PASS] JSON 可解析: dialogue_level1.json
+[PASS] JSON 可解析: dialogue_level2.json
+[PASS] JSON 可解析: dialogue_level3.json
+[PASS] JSON 可解析: dialogue_level5.json
+[RESULT] PASS

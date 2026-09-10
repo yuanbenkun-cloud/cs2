@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf
+
+[PASS] res://scenes/01_hongyadong.tscn 含 Player
+[PASS] res://scenes/01_hongyadong.tscn 含 HeartSystem
+[PASS] res://scenes/01_hongyadong.tscn 含 NPC_FlyerLady
+[PASS] res://scenes/01_hongyadong.tscn 含 OBJ_InfoBoard
+[PASS] res://scenes/01_hongyadong.tscn 含 OBJ_LooseTile
+[PASS] JSON 可解析: dialogue_level1.json
+[RESULT] PASS

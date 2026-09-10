@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/npc/npc_base.gd" id="1_nty0a"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6c7d3"]
+size = Vector2(24, 40)
+
+[node name="laozhanggui" type="Area2D" unique_id=547801819]
+script = ExtResource("1_nty0a")
+
+[node name="laozhanggui_pengzhuangtiji" type="CollisionShape2D" parent="." unique_id=981830074]
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_6c7d3")
+
+[node name="laozhanggui_tishi" type="ColorRect" parent="." unique_id=1603864725]
+offset_left = -6.0
+offset_top = -50.0
+offset_right = 6.0
+offset_bottom = -38.0
+color = Color(0.49803922, 0.83137256, 1, 1)

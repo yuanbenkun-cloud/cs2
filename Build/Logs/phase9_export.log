@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf
+
+导出尝试（可选）失败并记录降级：
+ERROR: Cannot export project with preset "Windows Desktop": 未找到导出模板
+  C:/Users/Administrator/AppData/Roaming/Godot/export_templates/4.7.2.stable/windows_{debug,release}_x86_64.exe
+→ 按 SPEC 4.6：验收标准降级为 headless 冒烟测试全 PASS + 项目可被编辑器正常打开。

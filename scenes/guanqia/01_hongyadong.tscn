@@ -1,0 +1,708 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/raw/素材2/背景/01洪崖洞-现代夜/地形_无缝单元_1024_v3.png" id="1_o4xvm"]
+[ext_resource type="Texture2D" path="res://assets/objects/stilt.png" id="2_v4w0a"]
+[ext_resource type="Texture2D" path="res://assets/raw/素材2/背景/01洪崖洞-现代夜/洪崖洞夜景_主背景.jpg" id="3_fwc1a"]
+[ext_resource type="Texture2D" path="res://assets/raw/素材2/背景/01洪崖洞-现代夜/中景_无缝单元_1024_v2.png" id="4_k4fq4"]
+[ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="5_ce6eb"]
+[ext_resource type="Script" path="res://scripts/systems/camera_rig.gd" id="6_6us3v"]
+[ext_resource type="Script" path="res://scripts/player/player_animator.gd" id="7_643l5"]
+[ext_resource type="Script" path="res://scripts/player/hero_anim.gd" id="8_tck4c"]
+[ext_resource type="Script" path="res://scripts/systems/heart_system.gd" id="9_oyk6g"]
+[ext_resource type="Script" path="res://scripts/ui/dialogue_panel.gd" id="10_nkpkb"]
+[ext_resource type="Script" path="res://scripts/systems/checkpoint.gd" id="11_0yshq"]
+[ext_resource type="Script" path="res://scripts/npc/flyer_lady.gd" id="12_efa3g"]
+[ext_resource type="Script" path="res://scripts/systems/chase_manager.gd" id="13_lbflm"]
+[ext_resource type="Script" path="res://scripts/npc/chaser_lady.gd" id="14_vdhea"]
+[ext_resource type="Texture2D" path="res://assets/generated/npc_flyerlady.png" id="15_ymbic"]
+[ext_resource type="Texture2D" path="res://assets/generated/npc_oldman.png" id="16_l72l2"]
+[ext_resource type="Texture2D" path="res://assets/generated/npc_aming.png" id="17_bsx5k"]
+[ext_resource type="Texture2D" path="res://assets/generated/npc_teahouse.png" id="18_wg0bg"]
+[ext_resource type="Texture2D" path="res://assets/generated/npc_helper.png" id="19_np7tj"]
+[ext_resource type="Texture2D" path="res://assets/generated/obj_lantern.png" id="20_ls70n"]
+[ext_resource type="Script" path="res://scripts/npc/npc_base.gd" id="21_pnf32"]
+[ext_resource type="Script" path="res://scripts/systems/loose_tile.gd" id="22_jewsh"]
+[ext_resource type="Script" path="res://scripts/background/light_rig.gd" id="23_y3jmo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_86wy6"]
+size = Vector2(3200, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l2gix"]
+size = Vector2(40, 320)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3wl35"]
+size = Vector2(40, 320)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3npq7"]
+size = Vector2(24, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t3f5k"]
+size = Vector2(36, 42)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4p6a0"]
+size = Vector2(30, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0gmfv"]
+size = Vector2(26, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4vmbl"]
+size = Vector2(20, 42)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ktiwy"]
+size = Vector2(20, 42)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_elc2x"]
+size = Vector2(20, 42)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wwhdv"]
+size = Vector2(20, 42)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cuymu"]
+size = Vector2(84, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nnr0s"]
+size = Vector2(64, 46)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uu1gj"]
+size = Vector2(92, 52)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0jigs"]
+size = Vector2(72, 46)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bhs28"]
+size = Vector2(40, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hm0vj"]
+size = Vector2(34, 8)
+
+[sub_resource type="Environment" id="Environment_brobe"]
+background_mode = 1
+background_color = Color(0.039215688, 0.05882353, 0.13333334, 1)
+glow_enabled = true
+glow_intensity = 0.4
+glow_bloom = 0.1
+adjustment_enabled = true
+
+[node name="LevelRoot" type="Node2D" unique_id=489440444]
+
+[node name="Ground" type="StaticBody2D" parent="." unique_id=341158917]
+position = Vector2(900, 260)
+
+[node name="@CollisionShape2D@3" type="CollisionShape2D" parent="Ground" unique_id=161354631]
+shape = SubResource("RectangleShape2D_86wy6")
+
+[node name="@ColorRect@4" type="ColorRect" parent="Ground" unique_id=342174191]
+offset_left = -1600.0
+offset_top = -20.0
+offset_right = 1600.0
+offset_bottom = 20.0
+color = Color(0.22352941, 0.25882354, 0.30588236, 1)
+
+[node name="TerrainTile" type="Sprite2D" parent="Ground" unique_id=1818848722]
+z_index = 10
+position = Vector2(-700, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@55" type="Sprite2D" parent="Ground" unique_id=684099413]
+z_index = 10
+position = Vector2(-550, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@56" type="Sprite2D" parent="Ground" unique_id=1033021855]
+z_index = 10
+position = Vector2(-400, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@57" type="Sprite2D" parent="Ground" unique_id=1151856257]
+z_index = 10
+position = Vector2(-250, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@58" type="Sprite2D" parent="Ground" unique_id=810945518]
+z_index = 10
+position = Vector2(-100, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@59" type="Sprite2D" parent="Ground" unique_id=1436483247]
+z_index = 10
+position = Vector2(50, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@60" type="Sprite2D" parent="Ground" unique_id=1696198105]
+z_index = 10
+position = Vector2(200, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@61" type="Sprite2D" parent="Ground" unique_id=857375387]
+z_index = 10
+position = Vector2(350, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@62" type="Sprite2D" parent="Ground" unique_id=2110017761]
+z_index = 10
+position = Vector2(500, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@63" type="Sprite2D" parent="Ground" unique_id=579673980]
+z_index = 10
+position = Vector2(650, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@64" type="Sprite2D" parent="Ground" unique_id=1483526794]
+z_index = 10
+position = Vector2(800, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@65" type="Sprite2D" parent="Ground" unique_id=221149392]
+z_index = 10
+position = Vector2(950, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@66" type="Sprite2D" parent="Ground" unique_id=1566765044]
+z_index = 10
+position = Vector2(1100, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@67" type="Sprite2D" parent="Ground" unique_id=169742407]
+z_index = 10
+position = Vector2(1250, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@68" type="Sprite2D" parent="Ground" unique_id=1288868799]
+z_index = 10
+position = Vector2(1400, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@69" type="Sprite2D" parent="Ground" unique_id=645282439]
+z_index = 10
+position = Vector2(1550, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@70" type="Sprite2D" parent="Ground" unique_id=1531382537]
+z_index = 10
+position = Vector2(1700, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@71" type="Sprite2D" parent="Ground" unique_id=1083216949]
+z_index = 10
+position = Vector2(1850, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@72" type="Sprite2D" parent="Ground" unique_id=1275743619]
+z_index = 10
+position = Vector2(2000, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@73" type="Sprite2D" parent="Ground" unique_id=726294204]
+z_index = 10
+position = Vector2(2150, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@74" type="Sprite2D" parent="Ground" unique_id=1246835419]
+z_index = 10
+position = Vector2(2300, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@75" type="Sprite2D" parent="Ground" unique_id=1417423303]
+z_index = 10
+position = Vector2(2450, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="@Sprite2D@76" type="Sprite2D" parent="Ground" unique_id=596097140]
+z_index = 10
+position = Vector2(2600, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_o4xvm")
+centered = false
+
+[node name="GroundFill" type="ColorRect" parent="Ground" unique_id=184085101]
+offset_left = -1600.0
+offset_right = 1600.0
+offset_bottom = 130.0
+color = Color(0.13725491, 0.16470589, 0.2, 1)
+
+[node name="@Sprite2D@79" type="Sprite2D" parent="Ground" unique_id=2146009775]
+position = Vector2(1045, -230)
+scale = Vector2(0.20507813, 0.20507813)
+texture = ExtResource("2_v4w0a")
+centered = false
+
+[node name="BG_Parallax" type="ParallaxBackground" parent="." unique_id=1141661466]
+
+[node name="BG_Sky" type="ParallaxLayer" parent="BG_Parallax" unique_id=300346055]
+motion_scale = Vector2(0.05, 1)
+
+[node name="@ColorRect@46" type="ColorRect" parent="BG_Parallax/BG_Sky" unique_id=802851132]
+modulate = Color(1, 1, 1, 0)
+offset_left = -2200.0
+offset_top = -24.0
+offset_right = 2200.0
+offset_bottom = 96.0
+color = Color(0.039215688, 0.05882353, 0.13333334, 1)
+
+[node name="BG_Far" type="ParallaxLayer" parent="BG_Parallax" unique_id=895383706]
+motion_scale = Vector2(0.2, 1)
+
+[node name="@ColorRect@47" type="ColorRect" parent="BG_Parallax/BG_Far" unique_id=411687829]
+modulate = Color(1, 1, 1, 0)
+offset_left = -2200.0
+offset_top = 60.0
+offset_right = 2200.0
+offset_bottom = 156.0
+color = Color(0.078431375, 0.1254902, 0.2901961, 1)
+
+[node name="BG_Mid" type="ParallaxLayer" parent="BG_Parallax" unique_id=150331310]
+motion_scale = Vector2(0.5, 1)
+motion_mirroring = Vector2(48, 0)
+
+[node name="@ColorRect@48" type="ColorRect" parent="BG_Parallax/BG_Mid" unique_id=235445879]
+modulate = Color(1, 1, 1, 0)
+offset_left = -2200.0
+offset_top = 122.0
+offset_right = 2200.0
+offset_bottom = 214.0
+color = Color(0.22745098, 0.30980393, 0.56078434, 1)
+
+[node name="BG_Near" type="ParallaxLayer" parent="BG_Parallax" unique_id=79321229]
+motion_scale = Vector2(0.9, 1)
+
+[node name="@ColorRect@49" type="ColorRect" parent="BG_Parallax/BG_Near" unique_id=199270235]
+modulate = Color(1, 1, 1, 0)
+offset_left = -2200.0
+offset_top = 184.0
+offset_right = 2200.0
+offset_bottom = 242.0
+color = Color(0.41960785, 0.2901961, 0.41960785, 1)
+
+[node name="BG_Fore" type="ParallaxLayer" parent="BG_Parallax" unique_id=115286270]
+motion_scale = Vector2(1.3, 1)
+
+[node name="@ColorRect@50" type="ColorRect" parent="BG_Parallax/BG_Fore" unique_id=1728700820]
+modulate = Color(1, 1, 1, 0)
+offset_left = -2200.0
+offset_top = 214.0
+offset_right = 2200.0
+offset_bottom = 258.0
+color = Color(0.13725491, 0.15294118, 0.24705882, 1)
+
+[node name="@ParallaxLayer@51" type="ParallaxLayer" parent="BG_Parallax" unique_id=567443412]
+motion_scale = Vector2(0.06, 1)
+motion_mirroring = Vector2(845.5046, 0)
+
+[node name="@Sprite2D@52" type="Sprite2D" parent="BG_Parallax/@ParallaxLayer@51" unique_id=1588035435]
+modulate = Color(1, 1, 1, 0.95)
+position = Vector2(-422.7523, -40)
+scale = Vector2(0.41284403, 0.41284403)
+texture = ExtResource("3_fwc1a")
+centered = false
+
+[node name="@ParallaxLayer@53" type="ParallaxLayer" parent="BG_Parallax" unique_id=1344957809]
+motion_scale = Vector2(0.5, 1)
+motion_mirroring = Vector2(341.33334, 0)
+
+[node name="@Sprite2D@54" type="Sprite2D" parent="BG_Parallax/@ParallaxLayer@53" unique_id=20494591]
+position = Vector2(0, 70)
+scale = Vector2(0.33333334, 0.33333334)
+texture = ExtResource("4_k4fq4")
+centered = false
+
+[node name="EdgeWall" type="StaticBody2D" parent="." unique_id=2112956291]
+position = Vector2(-712, 140)
+
+[node name="@CollisionShape2D@5" type="CollisionShape2D" parent="EdgeWall" unique_id=1114939109]
+shape = SubResource("RectangleShape2D_l2gix")
+
+[node name="@StaticBody2D@7" type="StaticBody2D" parent="." unique_id=842706790]
+position = Vector2(2512, 140)
+
+[node name="@CollisionShape2D@6" type="CollisionShape2D" parent="@StaticBody2D@7" unique_id=1063435410]
+shape = SubResource("RectangleShape2D_3wl35")
+
+[node name="zhujue" type="CharacterBody2D" parent="." unique_id=1423239755]
+position = Vector2(-680, 200)
+script = ExtResource("5_ce6eb")
+
+[node name="@CollisionShape2D@8" type="CollisionShape2D" parent="zhujue" unique_id=473098007]
+position = Vector2(0, -13)
+shape = SubResource("RectangleShape2D_3npq7")
+
+[node name="BodyRect" type="ColorRect" parent="zhujue" unique_id=1603347970]
+visible = false
+offset_left = -16.0
+offset_top = -32.0
+offset_right = 16.0
+color = Color(0.9098039, 0.6901961, 0.29411766, 1)
+
+[node name="FaceRect" type="ColorRect" parent="zhujue" unique_id=415997730]
+visible = false
+offset_left = 10.0
+offset_top = -30.0
+offset_right = 14.0
+offset_bottom = -26.0
+
+[node name="zhujue_jiaohuquyu" type="Area2D" parent="zhujue" unique_id=1815244567]
+
+[node name="@CollisionShape2D@9" type="CollisionShape2D" parent="zhujue/zhujue_jiaohuquyu" unique_id=710040246]
+position = Vector2(0, -18)
+shape = SubResource("RectangleShape2D_t3f5k")
+
+[node name="zhujue_shexiangji" type="Camera2D" parent="zhujue" unique_id=612571976]
+offset = Vector2(0, -140)
+position_smoothing_enabled = true
+script = ExtResource("6_6us3v")
+
+[node name="zhujue_anim_kongzhi" type="Node" parent="zhujue" unique_id=246732651]
+script = ExtResource("7_643l5")
+
+[node name="zhujue_donghua" type="AnimatedSprite2D" parent="zhujue" unique_id=441104716]
+centered = false
+script = ExtResource("8_tck4c")
+
+[node name="HeartSystem" type="Node" parent="." unique_id=498000061]
+script = ExtResource("9_oyk6g")
+
+[node name="UI_Base" type="CanvasLayer" parent="." unique_id=871100273]
+layer = 10
+
+[node name="UI_Hearts" type="Label" parent="UI_Base" unique_id=103158541]
+offset_left = 8.0
+offset_top = 4.0
+offset_right = 8.0
+offset_bottom = 4.0
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.36078432, 0.36078432, 1)
+text = "♥♥♥"
+
+[node name="UI_Notice" type="Label" parent="UI_Base" unique_id=1805135568]
+visible = false
+offset_left = 8.0
+offset_top = 30.0
+offset_right = 472.0
+offset_bottom = 70.0
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(1, 0.9137255, 0.78039217, 1)
+
+[node name="DialoguePanel" type="Control" parent="UI_Base" unique_id=1023084823]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("10_nkpkb")
+
+[node name="Checkpoint" type="Area2D" parent="." unique_id=1192399344]
+position = Vector2(140, 215)
+script = ExtResource("11_0yshq")
+
+[node name="@CollisionShape2D@10" type="CollisionShape2D" parent="Checkpoint" unique_id=1179017312]
+position = Vector2(0, -30)
+shape = SubResource("RectangleShape2D_4p6a0")
+
+[node name="chuandanayi" type="Area2D" parent="." unique_id=993109951]
+position = Vector2(250, 210)
+script = ExtResource("12_efa3g")
+
+[node name="@CollisionShape2D@11" type="CollisionShape2D" parent="chuandanayi" unique_id=513718235]
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_0gmfv")
+
+[node name="@ColorRect@12" type="ColorRect" parent="chuandanayi" unique_id=576561255]
+offset_left = -13.0
+offset_top = -38.0
+offset_right = 13.0
+color = Color(0.70980394, 0.39607844, 0.4627451, 1)
+
+[node name="Prompt" type="ColorRect" parent="chuandanayi" unique_id=1285372226]
+offset_left = -6.0
+offset_top = -50.0
+offset_right = 6.0
+offset_bottom = -38.0
+color = Color(0.49803922, 0.83137256, 1, 1)
+
+[node name="ChaseManager" type="Node" parent="." unique_id=1463221050]
+script = ExtResource("13_lbflm")
+
+[node name="chaseayi_01" type="CharacterBody2D" parent="." unique_id=1158035619]
+position = Vector2(320, 215)
+script = ExtResource("14_vdhea")
+
+[node name="@CollisionShape2D@13" type="CollisionShape2D" parent="chaseayi_01" unique_id=1879716127]
+position = Vector2(0, -21)
+shape = SubResource("RectangleShape2D_4vmbl")
+
+[node name="@Sprite2D@14" type="Sprite2D" parent="chaseayi_01" unique_id=1247653964]
+position = Vector2(-16, -48)
+texture = ExtResource("15_ymbic")
+centered = false
+
+[node name="chaseayi_02" type="CharacterBody2D" parent="." unique_id=992658095]
+position = Vector2(560, 215)
+script = ExtResource("14_vdhea")
+
+[node name="@CollisionShape2D@15" type="CollisionShape2D" parent="chaseayi_02" unique_id=1944390458]
+position = Vector2(0, -21)
+shape = SubResource("RectangleShape2D_ktiwy")
+
+[node name="@Sprite2D@16" type="Sprite2D" parent="chaseayi_02" unique_id=486606418]
+position = Vector2(-16, -48)
+texture = ExtResource("15_ymbic")
+centered = false
+
+[node name="chaseayi_03" type="CharacterBody2D" parent="." unique_id=408973266]
+position = Vector2(1350, 215)
+script = ExtResource("14_vdhea")
+
+[node name="@CollisionShape2D@17" type="CollisionShape2D" parent="chaseayi_03" unique_id=885594780]
+position = Vector2(0, -21)
+shape = SubResource("RectangleShape2D_elc2x")
+
+[node name="@Sprite2D@18" type="Sprite2D" parent="chaseayi_03" unique_id=1088210016]
+position = Vector2(-16, -48)
+texture = ExtResource("15_ymbic")
+centered = false
+
+[node name="chaseayi_04" type="CharacterBody2D" parent="." unique_id=754384157]
+position = Vector2(1650, 215)
+script = ExtResource("14_vdhea")
+
+[node name="@CollisionShape2D@19" type="CollisionShape2D" parent="chaseayi_04" unique_id=1343177469]
+position = Vector2(0, -21)
+shape = SubResource("RectangleShape2D_wwhdv")
+
+[node name="@Sprite2D@20" type="Sprite2D" parent="chaseayi_04" unique_id=807022692]
+position = Vector2(-16, -48)
+texture = ExtResource("15_ymbic")
+centered = false
+
+[node name="diyiguan_renqun_01" type="StaticBody2D" parent="." unique_id=1471171891]
+position = Vector2(780, 215)
+
+[node name="@CollisionShape2D@21" type="CollisionShape2D" parent="diyiguan_renqun_01" unique_id=660974758]
+shape = SubResource("RectangleShape2D_cuymu")
+
+[node name="@ColorRect@22" type="ColorRect" parent="diyiguan_renqun_01" unique_id=676225536]
+offset_left = -42.0
+offset_top = 15.0
+offset_right = 42.0
+offset_bottom = 25.0
+color = Color(0.45, 0.5, 0.56, 0.9)
+
+[node name="@Sprite2D@23" type="Sprite2D" parent="diyiguan_renqun_01" unique_id=1227742742]
+position = Vector2(-37, -21)
+texture = ExtResource("16_l72l2")
+centered = false
+
+[node name="@Sprite2D@24" type="Sprite2D" parent="diyiguan_renqun_01" unique_id=1092053629]
+position = Vector2(-16, -21)
+texture = ExtResource("17_bsx5k")
+centered = false
+flip_h = true
+
+[node name="@Sprite2D@25" type="Sprite2D" parent="diyiguan_renqun_01" unique_id=237433043]
+position = Vector2(5, -21)
+texture = ExtResource("18_wg0bg")
+centered = false
+
+[node name="diyiguan_renqun_02" type="StaticBody2D" parent="." unique_id=1045685417]
+position = Vector2(1000, 217)
+
+[node name="@CollisionShape2D@26" type="CollisionShape2D" parent="diyiguan_renqun_02" unique_id=1066112641]
+shape = SubResource("RectangleShape2D_nnr0s")
+
+[node name="@ColorRect@27" type="ColorRect" parent="diyiguan_renqun_02" unique_id=799694855]
+offset_left = -32.0
+offset_top = 13.0
+offset_right = 32.0
+offset_bottom = 23.0
+color = Color(0.45, 0.5, 0.56, 0.9)
+
+[node name="@Sprite2D@28" type="Sprite2D" parent="diyiguan_renqun_02" unique_id=949369647]
+position = Vector2(-32, -23)
+texture = ExtResource("17_bsx5k")
+centered = false
+flip_h = true
+
+[node name="@Sprite2D@29" type="Sprite2D" parent="diyiguan_renqun_02" unique_id=1948022206]
+position = Vector2(-16, -23)
+texture = ExtResource("18_wg0bg")
+centered = false
+
+[node name="@Sprite2D@30" type="Sprite2D" parent="diyiguan_renqun_02" unique_id=1065803081]
+position = Vector2(0, -23)
+texture = ExtResource("15_ymbic")
+centered = false
+flip_h = true
+
+[node name="diyiguan_renqun_03" type="StaticBody2D" parent="." unique_id=1760108758]
+position = Vector2(1220, 214)
+
+[node name="@CollisionShape2D@31" type="CollisionShape2D" parent="diyiguan_renqun_03" unique_id=1132481496]
+shape = SubResource("RectangleShape2D_uu1gj")
+
+[node name="@ColorRect@32" type="ColorRect" parent="diyiguan_renqun_03" unique_id=637973507]
+offset_left = -46.0
+offset_top = 16.0
+offset_right = 46.0
+offset_bottom = 26.0
+color = Color(0.45, 0.5, 0.56, 0.9)
+
+[node name="@Sprite2D@33" type="Sprite2D" parent="diyiguan_renqun_03" unique_id=269261713]
+position = Vector2(-39, -20)
+texture = ExtResource("18_wg0bg")
+centered = false
+
+[node name="@Sprite2D@34" type="Sprite2D" parent="diyiguan_renqun_03" unique_id=219035137]
+position = Vector2(-16, -20)
+texture = ExtResource("15_ymbic")
+centered = false
+flip_h = true
+
+[node name="@Sprite2D@35" type="Sprite2D" parent="diyiguan_renqun_03" unique_id=23955822]
+position = Vector2(7, -20)
+texture = ExtResource("19_np7tj")
+centered = false
+
+[node name="diyiguan_renqun_04" type="StaticBody2D" parent="." unique_id=221192302]
+position = Vector2(1460, 217)
+
+[node name="@CollisionShape2D@36" type="CollisionShape2D" parent="diyiguan_renqun_04" unique_id=469995909]
+shape = SubResource("RectangleShape2D_0jigs")
+
+[node name="@ColorRect@37" type="ColorRect" parent="diyiguan_renqun_04" unique_id=2043725455]
+offset_left = -36.0
+offset_top = 13.0
+offset_right = 36.0
+offset_bottom = 23.0
+color = Color(0.45, 0.5, 0.56, 0.9)
+
+[node name="@Sprite2D@38" type="Sprite2D" parent="diyiguan_renqun_04" unique_id=1386043860]
+position = Vector2(-34, -23)
+texture = ExtResource("15_ymbic")
+centered = false
+flip_h = true
+
+[node name="@Sprite2D@39" type="Sprite2D" parent="diyiguan_renqun_04" unique_id=1150766768]
+position = Vector2(-16, -23)
+texture = ExtResource("19_np7tj")
+centered = false
+
+[node name="@Sprite2D@40" type="Sprite2D" parent="diyiguan_renqun_04" unique_id=1320095801]
+position = Vector2(2, -23)
+texture = ExtResource("16_l72l2")
+centered = false
+flip_h = true
+
+[node name="OBJ_Lantern" type="Sprite2D" parent="." unique_id=1873263347]
+position = Vector2(584, 96)
+texture = ExtResource("20_ls70n")
+centered = false
+
+[node name="@Sprite2D@41" type="Sprite2D" parent="." unique_id=1477524531]
+position = Vector2(1734, 96)
+texture = ExtResource("20_ls70n")
+centered = false
+
+[node name="diyiguan_mupai" type="Area2D" parent="." unique_id=1868124218]
+position = Vector2(1820, 210)
+script = ExtResource("21_pnf32")
+dialogue_file = "res://assets/dialogue_level1.json"
+dialogue_node = "info_board"
+
+[node name="@CollisionShape2D@42" type="CollisionShape2D" parent="diyiguan_mupai" unique_id=1579433433]
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_bhs28")
+
+[node name="@ColorRect@43" type="ColorRect" parent="diyiguan_mupai" unique_id=47052521]
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+color = Color(0.5411765, 0.41568628, 0.23137255, 1)
+
+[node name="Prompt" type="ColorRect" parent="diyiguan_mupai" unique_id=1864034997]
+offset_left = -6.0
+offset_top = -50.0
+offset_right = 6.0
+offset_bottom = -38.0
+color = Color(0.49803922, 0.83137256, 1, 1)
+
+[node name="diyiguan_husongdizhuan" type="Area2D" parent="." unique_id=882970909]
+position = Vector2(1930, 240)
+script = ExtResource("22_jewsh")
+
+[node name="@CollisionShape2D@44" type="CollisionShape2D" parent="diyiguan_husongdizhuan" unique_id=1043428947]
+shape = SubResource("RectangleShape2D_hm0vj")
+
+[node name="@ColorRect@45" type="ColorRect" parent="diyiguan_husongdizhuan" unique_id=2024861217]
+offset_left = -17.0
+offset_top = -3.0
+offset_right = 17.0
+offset_bottom = 3.0
+color = Color(0.7529412, 0.22352941, 0.16862746, 1)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=925230093]
+environment = SubResource("Environment_brobe")
+
+[node name="LightRig" type="Node2D" parent="." unique_id=1167168061]
+script = ExtResource("23_y3jmo")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="LightRig" unique_id=1199936162]
+color = Color(1, 0.9, 0.75, 1)
+
+[node name="PointLight" type="PointLight2D" parent="LightRig" unique_id=764224504]
+position = Vector2(540, 70)
+color = Color(1, 0.56078434, 0.7019608, 1)
+energy = 0.9
+texture_scale = 1.875
+
+[node name="@PointLight2D@77" type="PointLight2D" parent="LightRig" unique_id=732422335]
+position = Vector2(1000, 60)
+color = Color(0.49803922, 0.83137256, 1, 1)
+energy = 0.7
+texture_scale = 1.875
+
+[node name="@PointLight2D@78" type="PointLight2D" parent="LightRig" unique_id=1174598808]
+position = Vector2(1600, 80)
+color = Color(1, 0.81960785, 0.4, 1)
+energy = 0.6
+texture_scale = 1.25

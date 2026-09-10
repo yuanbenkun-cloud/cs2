@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/npc/npc_base.gd" id="1_hqle6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b7ghv"]
+size = Vector2(24, 40)
+
+[node name="banggong" type="Area2D" unique_id=1349550874]
+script = ExtResource("1_hqle6")
+
+[node name="banggong_pengzhuangtiji" type="CollisionShape2D" parent="." unique_id=766637580]
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_b7ghv")
+
+[node name="banggong_tishi" type="ColorRect" parent="." unique_id=1214742072]
+offset_left = -6.0
+offset_top = -50.0
+offset_right = 6.0
+offset_bottom = -38.0
+color = Color(0.49803922, 0.83137256, 1, 1)

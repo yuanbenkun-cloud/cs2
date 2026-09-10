@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/kaishi_menu.gd" id="1_c16fg"]
+
+[node name="StartRoot" type="Control" unique_id=1783717201]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="KaishiMenu" type="Control" parent="." unique_id=204372105]
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_c16fg")
