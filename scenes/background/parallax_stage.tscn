@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/background/parallax_stage.gd" id="1_stage"]
+
+[node name="ParallaxStage" type="ParallaxBackground"]
+script = ExtResource("1_stage")
+
+[node name="BG_Sky" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0, 1)
+
+[node name="BG_Far" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.08, 1)
+
+[node name="BG_Mid" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.3, 1)
+
+[node name="BG_Near" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.62, 1)
+
+[node name="BG_Fore" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(1.1, 1)

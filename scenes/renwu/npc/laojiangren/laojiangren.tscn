@@ -5,16 +5,77 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_im48m"]
 size = Vector2(24, 40)
 
-[node name="laojiangren" type="Area2D" unique_id=329327161]
+[sub_resource type="Animation" id="Animation_aq0jy"]
+length = 1.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VisualPivot:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8, 1.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -1), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("VisualPivot:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8, 1.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [-0.008, 0.008, -0.008]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("laojiangren_tishi:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.8, 1.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(-9, -58), Vector2(-9, -62), Vector2(-9, -58)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_t5l4p"]
+_data = {
+&"ambient": SubResource("Animation_aq0jy")
+}
+
+[node name="laojiangren" type="Area2D" unique_id=1620505342]
 script = ExtResource("1_p1wc2")
 
-[node name="laojiangren_pengzhuangtiji" type="CollisionShape2D" parent="." unique_id=1014505312]
+[node name="VisualPivot" type="Node2D" parent="." unique_id=384120936]
+z_index = 20
+
+[node name="laojiangren_pengzhuangtiji" type="CollisionShape2D" parent="." unique_id=403337704]
 position = Vector2(0, -20)
 shape = SubResource("RectangleShape2D_im48m")
 
-[node name="laojiangren_tishi" type="ColorRect" parent="." unique_id=29146525]
-offset_left = -6.0
-offset_top = -50.0
-offset_right = 6.0
-offset_bottom = -38.0
-color = Color(0.49803922, 0.83137256, 1, 1)
+[node name="laojiangren_tishi" type="ColorRect" parent="." unique_id=668511375]
+z_index = 35
+offset_left = -9.0
+offset_top = -58.0
+offset_right = 9.0
+offset_bottom = -40.0
+color = Color(0.05, 0.08, 0.12, 0.92)
+
+[node name="KeyLabel" type="Label" parent="laojiangren_tishi" unique_id=156995787]
+layout_mode = 0
+offset_left = 5.0
+offset_right = 5.0
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(1, 0.81960785, 0.4, 1)
+text = "E"
+
+[node name="AmbientAnimationPlayer" type="AnimationPlayer" parent="." unique_id=1030761295]
+libraries/ = SubResource("AnimationLibrary_t5l4p")
+autoplay = &"ambient"

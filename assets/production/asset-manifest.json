@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "art_direction_brief": "docs/art-direction-brief.md",
+  "assets": [
+    {
+      "id": "hero-chenmo-idle-v1",
+      "role": "player identity seed and idle loop",
+      "path": "assets/production/hero/idle/sheet-transparent.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "512x512", "alpha": true, "anchor": "feet", "frames": 4, "filtering": "nearest"},
+      "visual_locks": ["identity", "olive-jacket", "black-backpack", "proportions", "side-view", "light-direction"],
+      "source": {
+        "kind": "generated",
+        "url_or_tool": "Codex built-in image_gen",
+        "creator": "OpenAI image generation",
+        "created_at": "2026-09-12",
+        "license": "project-generated media",
+        "attribution": "",
+        "prompt_or_source_record": "assets/production/hero/idle/prompt-used.txt"
+      },
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "hero-chenmo-walk-v1",
+      "role": "six-frame player locomotion loop",
+      "path": "assets/production/hero/walk/sheet-transparent.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "384x256", "alpha": true, "anchor": "feet", "frames": 6, "filtering": "nearest"},
+      "source": {"kind": "generated", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-12", "prompt_or_source_record": "assets/production/hero/walk/prompt-used.txt"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "hero-chenmo-jump-v1",
+      "role": "four-frame player jump sequence",
+      "path": "assets/production/hero/jump/sheet-transparent.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "256x256", "alpha": true, "anchor": "center", "frames": 4, "filtering": "nearest"},
+      "source": {"kind": "generated", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-12", "prompt_or_source_record": "assets/production/hero/jump/prompt-used.txt"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "hero-chenmo-interact-v1",
+      "role": "four-frame generic interaction one-shot",
+      "path": "assets/production/hero/interact/sheet-transparent.png",
+      "status": "processed_pending_in_engine_review",
+      "technical": {"dimensions": "256x256", "alpha": true, "anchor": "feet", "frames": 4, "filtering": "nearest"},
+      "source": {"kind": "generated", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-12", "prompt_or_source_record": "assets/production/hero/interact/prompt-used.txt"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": false, "technical_checks_passed": true, "approved_by": ""}
+    },
+    {
+      "id": "portrait-chenmo-v2",
+      "role": "player dialogue portrait",
+      "path": "assets/production/portraits/chenmo-v2.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "1024x1536", "alpha": true, "anchor": "center", "frames": 1, "filtering": "linear"},
+      "source": {"kind": "generated-and-extracted", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-12", "prompt_or_source_record": "assets/production/portraits/chenmo-v2.prompt.txt"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "prop-info-board-v1",
+      "role": "shared historical information board for level 1 and level 5",
+      "path": "assets/production/props/info_board/info-board.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "1536x1024", "alpha": true, "anchor": "feet", "frames": 1, "filtering": "linear"},
+      "source": {"kind": "generated", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-12", "license": "project-generated media", "prompt_or_source_record": "assets/production/props/info_board/prompt-used.txt"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "prop-scenic-viewer-v1",
+      "role": "level 5 scenic viewpoint interaction prop",
+      "path": "assets/production/props/scenic_viewer/scenic-viewer.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "1024x1536", "alpha": true, "anchor": "feet", "frames": 1, "filtering": "linear"},
+      "source": {"kind": "generated", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-12", "license": "project-generated media", "prompt_or_source_record": "assets/production/props/scenic_viewer/prompt-used.txt"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "prop-photo-camera-v1",
+      "role": "level 5 photo interaction prop",
+      "path": "assets/production/props/photo_camera/photo-camera.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "1162x1353", "alpha": true, "anchor": "feet", "frames": 1, "filtering": "linear"},
+      "source": {"kind": "generated", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-12", "license": "project-generated media", "prompt_or_source_record": "assets/production/props/photo_camera/prompt-used.txt"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "prop-forge-wall-v1",
+      "role": "level 2 timed forging target and collision landmark",
+      "path": "assets/production/props/gameplay/forge-wall.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "1086x1448", "alpha": true, "anchor": "feet", "frames": 1, "filtering": "linear"},
+      "source": {"kind": "generated", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-13", "license": "project-generated media", "prompt_or_source_record": "assets/production/props/gameplay/prompts.md"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "prop-log-bundle-v1",
+      "role": "level 2 heavy-object interaction",
+      "path": "assets/production/props/gameplay/log-bundle.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "1774x887", "alpha": true, "anchor": "feet", "frames": 1, "filtering": "linear"},
+      "source": {"kind": "generated", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-13", "license": "project-generated media", "prompt_or_source_record": "assets/production/props/gameplay/prompts.md"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "prop-porridge-pot-v1",
+      "role": "level 2 story interaction",
+      "path": "assets/production/props/gameplay/porridge-pot.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "1322x1190", "alpha": true, "anchor": "feet", "frames": 1, "filtering": "linear"},
+      "source": {"kind": "generated", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-13", "license": "project-generated media", "prompt_or_source_record": "assets/production/props/gameplay/prompts.md"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "prop-loose-tile-v1",
+      "role": "level 1 chase finish and transition trigger",
+      "path": "assets/production/props/gameplay/loose-tile.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "1899x828", "alpha": true, "anchor": "center", "frames": 1, "filtering": "linear"},
+      "source": {"kind": "generated", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-13", "license": "project-generated media", "prompt_or_source_record": "assets/production/props/gameplay/prompts.md"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "prop-cargo-states-v1",
+      "role": "level 3 cargo integrity state family",
+      "path": "assets/production/props/gameplay/cargo-intact.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "52x40 each", "alpha": true, "anchor": "bottom-center", "frames": 3, "filtering": "nearest"},
+      "source": {"kind": "generated-and-normalized", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-13", "license": "project-generated media", "prompt_or_source_record": "assets/production/props/gameplay/prompts.md"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "prop-aerial-bomb-v1",
+      "role": "level 4 falling bomb gameplay threat",
+      "path": "assets/production/props/gameplay/aerial-bomb.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "18x44", "alpha": true, "anchor": "center", "frames": 1, "filtering": "nearest"},
+      "source": {"kind": "generated-and-normalized", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-13", "license": "project-generated media", "prompt_or_source_record": "assets/production/props/gameplay/prompts.md"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "prop-blast-shield-states-v1",
+      "role": "level 4 protective cover and durability state family",
+      "path": "assets/production/props/gameplay/blast-shield-intact.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "184x104 each", "alpha": true, "anchor": "ground", "frames": 3, "filtering": "nearest"},
+      "source": {"kind": "generated-and-normalized", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-13", "license": "project-generated media", "prompt_or_source_record": "assets/production/props/gameplay/prompts.md"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "audio-kenney-feedback-v1",
+      "role": "footsteps, interaction, forge, cargo, shield and explosion feedback",
+      "path": "assets/vendor",
+      "status": "approved_in_engine",
+      "technical": {"format": "Ogg Vorbis", "buses": ["SFX", "UI"]},
+      "source": {"kind": "third-party", "url_or_tool": "Kenney.nl", "created_at": "2019-2020", "license": "CC0-1.0", "prompt_or_source_record": "assets/audio/KENNEY-CC0-LICENSE.txt"},
+      "verification": {"native_scale_reviewed": false, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "audio-original-loops-v1",
+      "role": "five level themes and five matching environmental ambience loops",
+      "path": "assets/audio/generated",
+      "status": "approved_in_engine",
+      "technical": {"format": "WAV PCM 16-bit", "sample_rate": 22050, "channels": 2, "duration_seconds_each": 24, "tracks": 10, "buses": ["Music", "Ambient"]},
+      "source": {"kind": "procedurally-generated-original", "url_or_tool": "tools/generate_audio_loops.py", "created_at": "2026-09-13", "license": "project-generated original media", "prompt_or_source_record": "assets/audio/generated/audio-manifest.json"},
+      "verification": {"native_scale_reviewed": false, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "terrain-grounded-v1",
+      "role": "five runtime ground plates aligned to the physics contact surface",
+      "path": "assets/production/terrain",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "1024x1024 each", "alpha": false, "frames": 5, "filtering": "linear", "surface_world_y": 240},
+      "source": {"kind": "derived-from-project-source", "url_or_tool": "tools/normalize_ground_strips.py", "created_at": "2026-09-13", "license": "same as project source media", "prompt_or_source_record": "per-era crop and color profiles in generator"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    }
+  ]
+}

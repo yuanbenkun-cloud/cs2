@@ -27,6 +27,10 @@ func save_scene(root: Node, path: String) -> bool:
 func _own_recursive(node: Node, scene_root: Node) -> void:
 	if node != scene_root:
 		node.owner = scene_root
+		# PackedScene 实例的内部节点由其源场景拥有；继续递归会在外层场景
+		# 再序列化一份同名子节点，运行时出现重复碰撞、动画和提示。
+		if node.scene_file_path != "":
+			return
 	for c in node.get_children():
 		_own_recursive(c, scene_root)
 
@@ -53,30 +57,48 @@ func bind_script(node: Node, script_path: String) -> Node:
 	node.set_script(load(script_path))
 	return node
 
+func instantiate_scene(parent: Node, scene_path: String, node_name: String, pos: Vector2) -> Node:
+	var packed: PackedScene = load(scene_path)
+	if packed == null:
+		push_error("无法加载场景：" + scene_path)
+		return null
+	var instance := packed.instantiate()
+	instance.name = node_name
+	if instance is Node2D:
+		instance.position = pos
+	parent.add_child(instance)
+	return instance
+
+func instantiate_npc(
+	parent: Node,
+	npc_key: String,
+	node_name: String,
+	pos: Vector2,
+	script_path: String = "res://scripts/npc/npc_base.gd",
+	properties: Dictionary = {}
+) -> Area2D:
+	var scene_path := "res://scenes/renwu/npc/%s/%s.tscn" % [npc_key, npc_key]
+	var npc := instantiate_scene(parent, scene_path, node_name, pos) as Area2D
+	if npc == null:
+		return null
+	if script_path != "":
+		bind_script(npc, script_path)
+	for property_name: String in properties:
+		npc.set(property_name, properties[property_name])
+	return npc
+
 ## ---- Phase 8 背景辅助 ----
 
-## 五层视差背景：cols = [sky, far, mid, near, fore]（Color）。第 3 层江水 motion_mirroring。
-func make_background(root: Node, cols: Array) -> ParallaxBackground:
-	var pbg := ParallaxBackground.new()
+## 可复用的五层横向舞台：天空 / 远景 / 中景 / 近雾 / 前景。
+func make_background(root: Node, cols: Array, era: String) -> ParallaxBackground:
+	var packed: PackedScene = load("res://scenes/background/parallax_stage.tscn")
+	if packed == null:
+		push_error("无法加载共享视差舞台")
+		return null
+	var pbg := packed.instantiate() as ParallaxBackground
 	pbg.name = "BG_Parallax"
+	pbg.call("configure", era, cols)
 	root.add_child(pbg)
-	var names := ["BG_Sky", "BG_Far", "BG_Mid", "BG_Near", "BG_Fore"]
-	var scales := [Vector2(0.05, 1), Vector2(0.2, 1), Vector2(0.5, 1), Vector2(0.9, 1), Vector2(1.3, 1)]
-	var ys := [-24.0, 60.0, 122.0, 184.0, 214.0]
-	var hs := [120.0, 96.0, 92.0, 58.0, 44.0]
-	for i in range(5):
-		var layer := ParallaxLayer.new()
-		layer.name = names[i]
-		layer.motion_scale = scales[i]
-		pbg.add_child(layer)
-		var band := ColorRect.new()
-		band.color = cols[i]
-		band.size = Vector2(4400, hs[i])
-		band.position = Vector2(-2200, ys[i])
-		layer.add_child(band)
-		band.modulate = Color(1, 1, 1, 0.0)
-		if i == 2:
-			layer.motion_mirroring = Vector2(48.0, 0.0)
 	root.move_child(pbg, 1)
 	return pbg
 
@@ -125,20 +147,18 @@ const CROWD_SKINS := [
 
 ## 人群路障：物理阻挡 + 多名路人立绘（追逐战掩体 → 人群）
 func make_crowd(root: Node, cid: int, cx: float, w: float, h: float) -> void:
-	var body := StaticBody2D.new()
+	var body := AnimatableBody2D.new()
 	body.name = "diyiguan_renqun_%02d" % cid
 	body.position = Vector2(cx, 240.0 - h / 2.0)
 	root.add_child(body)
+	bind_script(body, "res://scripts/npc/crowd_blocker.gd")
 	var csh := CollisionShape2D.new()
-	var cr := RectangleShape2D.new()
-	cr.size = Vector2(w, h)
+	var cr := SegmentShape2D.new()
+	# 只在迎向玩家的一侧形成竖直阻挡，避免矩形碰撞让主角站到群众头顶。
+	cr.a = Vector2(-w / 2.0, -h / 2.0)
+	cr.b = Vector2(-w / 2.0, h / 2.0)
 	csh.shape = cr
 	body.add_child(csh)
-	var base := ColorRect.new()
-	base.color = Color(0.45, 0.5, 0.56, 0.9)
-	base.size = Vector2(w, 10)
-	base.position = Vector2(-w / 2.0, h / 2.0 - 10.0)
-	body.add_child(base)
 	var n := 3
 	var stepx := w / float(n + 1)
 	for i in range(n):
@@ -155,8 +175,8 @@ func make_crowd(root: Node, cid: int, cx: float, w: float, h: float) -> void:
 
 ## ---- C/D：无缝背景艺术层 + 场景摆件 ----
 
-## 五关素材目录（与 raw 素材库一致）
-const ERA_DIRS := {
+## 五关旧素材目录仅继续提供与碰撞同速的地面纹理；正式背景已迁往 production。
+const TERRAIN_DIRS := {
 	"01": "res://assets/raw/素材2/背景/01洪崖洞-现代夜",
 	"02": "res://assets/raw/素材2/背景/02磁器口-古代窑场",
 	"03": "res://assets/raw/素材2/背景/03中山古镇-古代",
@@ -165,57 +185,13 @@ const ERA_DIRS := {
 }
 
 func add_scene_art(pbg: ParallaxBackground, ground: Node, era: String) -> void:
-	var dir_p: String = ERA_DIRS.get(era, "")
-	if dir_p == "" or pbg == null:
+	if not TERRAIN_DIRS.has(era) or pbg == null:
 		return
-	var d := DirAccess.open(dir_p)
-	if d == null:
-		return
-	var files: Array[String] = []
-	d.list_dir_begin()
-	var fn := d.get_next()
-	while fn != "":
-		if not d.current_is_dir():
-			files.append(fn)
-		fn = d.get_next()
-	d.list_dir_end()
-	# 远景主背景（天空氛围，motion_scale 极小 + mirroring 补宽）
-	var far_p := _pick(files, "主背景", ".jpg")
-	if far_p != "":
-		var tex: Texture2D = load(dir_p + "/" + far_p)
-		if tex != null:
-			var lay := ParallaxLayer.new()
-			lay.motion_scale = Vector2(0.06, 1)
-			pbg.add_child(lay)
-			var sp := Sprite2D.new()
-			sp.texture = tex
-			sp.centered = false
-			var s := 360.0 / float(tex.get_height())
-			sp.scale = Vector2(s, s)
-			sp.position = Vector2(-float(tex.get_width()) * s * 0.5, -40.0)
-			sp.modulate = Color(1, 1, 1, 0.95)
-			lay.add_child(sp)
-			lay.motion_mirroring = Vector2(float(tex.get_width()) * s, 0)
-	# 中景无缝单元（motion_mirroring 循环）
-	var mid_p := _pick(files, "中景_无缝单元", ".png")
-	if mid_p != "" and not mid_p.contains("预览"):
-		var tex: Texture2D = load(dir_p + "/" + mid_p)
-		if tex != null:
-			var lay := ParallaxLayer.new()
-			lay.motion_scale = Vector2(0.5, 1)
-			pbg.add_child(lay)
-			var sp := Sprite2D.new()
-			sp.texture = tex
-			sp.centered = false
-			var s := 200.0 / float(tex.get_height())
-			sp.scale = Vector2(s, s)
-			sp.position = Vector2(0.0, 70.0)
-			lay.add_child(sp)
-			lay.motion_mirroring = Vector2(float(tex.get_width()) * s, 0)
-	# 地形无缝单元：铺在 GroundFill 之上（地面贴图）
-	var terr_p := _pick(files, "地形_无缝单元", ".png")
-	if terr_p != "" and ground != null:
-		var tex: Texture2D = load(dir_p + "/" + terr_p)
+	# 天空、远景和中景由共享 ParallaxStage 在运行时装配；
+	# 可行走地形已按真正接触面裁切，顶边与 Ground 碰撞面严格一致。
+	var terrain_path := "res://assets/production/terrain/%s/ground.png" % era
+	if ResourceLoader.exists(terrain_path) and ground != null:
+		var tex: Texture2D = load(terrain_path)
 		if tex != null:
 			var s := 150.0 / float(tex.get_height())
 			var step_x := float(tex.get_width()) * s
@@ -226,7 +202,8 @@ func add_scene_art(pbg: ParallaxBackground, ground: Node, era: String) -> void:
 				sp.texture = tex
 				sp.centered = false
 				sp.scale = Vector2(s, s)
-				sp.position = Vector2(-700.0 + float(i) * step_x, -20.0)
+				# Ground 位于世界 x=900；其局部 -1600 正好对应世界左边界 -700。
+				sp.position = Vector2(-1600.0 + float(i) * step_x, -20.0)
 				sp.z_index = 10
 				ground.add_child(sp)
 
@@ -244,6 +221,14 @@ func add_object_behind(ground: Node, path: String, wx: float, h: float) -> void:
 	spr.scale = Vector2(s, s)
 	spr.position = Vector2(wx - 900.0 - float(tex.get_width()) * s * 0.5, -20.0 - h)
 	ground.add_child(spr)
+
+func add_goal_portal_visual(parent: Node, active: bool = true) -> Node2D:
+	var portal := Node2D.new()
+	portal.name = "GoalPortalVisual"
+	portal.set_script(load("res://scripts/systems/goal_portal_visual.gd"))
+	portal.set("active", active)
+	parent.add_child(portal)
+	return portal
 
 func _pick(files: Array, keyword: String, ext: String) -> String:
 	for f in files:

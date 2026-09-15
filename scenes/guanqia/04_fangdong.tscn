@@ -1,35 +1,42 @@
 [gd_scene format=3]
 
-[ext_resource type="Texture2D" path="res://assets/raw/素材2/背景/04防空洞-近代/防空洞_主背景.jpg" id="1_3kg1u"]
-[ext_resource type="Texture2D" path="res://assets/raw/素材2/背景/04防空洞-近代/中景_无缝单元_1024_v2.png" id="2_mb6iv"]
-[ext_resource type="Texture2D" path="res://assets/raw/素材2/背景/04防空洞-近代/地形_无缝单元_1024_v3.png" id="3_1t6nl"]
-[ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="4_pn4l0"]
-[ext_resource type="Script" path="res://scripts/systems/camera_rig.gd" id="5_i0gov"]
-[ext_resource type="Script" path="res://scripts/player/player_animator.gd" id="6_qu8rb"]
-[ext_resource type="Script" path="res://scripts/player/hero_anim.gd" id="7_gvr1x"]
-[ext_resource type="Script" path="res://scripts/ui/dialogue_panel.gd" id="8_ibpis"]
-[ext_resource type="Script" path="res://scripts/npc/group_follower.gd" id="9_54c5v"]
-[ext_resource type="Script" path="res://scripts/systems/bomb_warning.gd" id="10_k1xud"]
-[ext_resource type="Script" path="res://scripts/systems/checkpoint.gd" id="11_4dxso"]
-[ext_resource type="Script" path="res://scripts/systems/exit_portal.gd" id="12_20nql"]
-[ext_resource type="Script" path="res://scripts/background/light_rig.gd" id="13_eyci2"]
+[ext_resource type="Texture2D" path="res://assets/production/terrain/04/ground.png" id="1_pn4l0"]
+[ext_resource type="PackedScene" path="res://scenes/background/parallax_stage.tscn" id="2_i0gov"]
+[ext_resource type="Script" path="res://scripts/background/parallax_stage.gd" id="3_qu8rb"]
+[ext_resource type="PackedScene" path="res://scenes/renwu/zhujue/zhujue.tscn" id="4_gvr1x"]
+[ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="5_ibpis"]
+[ext_resource type="Script" path="res://scripts/ui/dialogue_panel.gd" id="6_54c5v"]
+[ext_resource type="PackedScene" path="res://scenes/renwu/npc/binanzhongqun/binanzhongqun.tscn" id="7_k1xud"]
+[ext_resource type="Script" path="res://scripts/npc/npc_base.gd" id="8_4dxso"]
+[ext_resource type="Script" path="res://scripts/npc/group_follower.gd" id="9_20nql"]
+[ext_resource type="Script" path="res://scripts/systems/level_story_intro.gd" id="10_eyci2"]
+[ext_resource type="Script" path="res://scripts/systems/bomb_warning.gd" id="11_7yepx"]
+[ext_resource type="Script" path="res://scripts/systems/blast_shield.gd" id="12_ioq23"]
+[ext_resource type="Texture2D" path="res://assets/production/props/gameplay/blast-shield-intact.png" id="13_l30t2"]
+[ext_resource type="Script" path="res://scripts/systems/checkpoint.gd" id="14_yve42"]
+[ext_resource type="Script" path="res://scripts/systems/exit_portal.gd" id="15_pamox"]
+[ext_resource type="Script" path="res://scripts/background/light_rig.gd" id="16_sn1sa"]
+[ext_resource type="Script" path="res://scripts/systems/goal_portal_visual.gd" id="17_goal_portal"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7yepx"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_10s3v"]
 size = Vector2(3200, 40)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ioq23"]
-size = Vector2(24, 26)
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jgq3j"]
+light_mode = 1
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_l30t2"]
-size = Vector2(36, 42)
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3obwf"]
+light_mode = 1
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_yve42"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_wi7pe"]
+light_mode = 1
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jer6x"]
 size = Vector2(30, 60)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_pamox"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1yxuj"]
 size = Vector2(50, 90)
 
-[sub_resource type="Environment" id="Environment_sn1sa"]
+[sub_resource type="Environment" id="Environment_g22e0"]
 background_mode = 1
 background_color = Color(0.039215688, 0.039215688, 0.047058824, 1)
 glow_enabled = true
@@ -37,336 +44,213 @@ glow_intensity = 0.4
 glow_bloom = 0.1
 adjustment_enabled = true
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_10s3v"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_22xbd"]
 size = Vector2(40, 320)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jgq3j"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0ld8q"]
 size = Vector2(40, 320)
 
-[node name="LevelRoot" type="Node2D" unique_id=952012471]
+[node name="LevelRoot" type="Node2D" unique_id=260542915]
 
-[node name="@ColorRect@187" type="ColorRect" parent="." unique_id=1653413059]
-offset_left = -100.0
-offset_right = 1600.0
-offset_bottom = 26.0
-color = Color(0.14901961, 0.14901961, 0.17254902, 1)
-
-[node name="BG_Parallax" type="ParallaxBackground" parent="." unique_id=1413098204]
-
-[node name="BG_Sky" type="ParallaxLayer" parent="BG_Parallax" unique_id=2102242523]
-motion_scale = Vector2(0.05, 1)
-
-[node name="@ColorRect@203" type="ColorRect" parent="BG_Parallax/BG_Sky" unique_id=1286309110]
-modulate = Color(1, 1, 1, 0)
-offset_left = -2200.0
-offset_top = -24.0
-offset_right = 2200.0
-offset_bottom = 96.0
-color = Color(0.019607844, 0.019607844, 0.03137255, 1)
-
-[node name="BG_Far" type="ParallaxLayer" parent="BG_Parallax" unique_id=390071447]
-motion_scale = Vector2(0.2, 1)
-
-[node name="@ColorRect@204" type="ColorRect" parent="BG_Parallax/BG_Far" unique_id=607091138]
-modulate = Color(1, 1, 1, 0)
-offset_left = -2200.0
-offset_top = 60.0
-offset_right = 2200.0
-offset_bottom = 156.0
-color = Color(0.078431375, 0.078431375, 0.101960786, 1)
-
-[node name="BG_Mid" type="ParallaxLayer" parent="BG_Parallax" unique_id=2013067367]
-motion_scale = Vector2(0.5, 1)
-motion_mirroring = Vector2(48, 0)
-
-[node name="@ColorRect@205" type="ColorRect" parent="BG_Parallax/BG_Mid" unique_id=1601123262]
-modulate = Color(1, 1, 1, 0)
-offset_left = -2200.0
-offset_top = 122.0
-offset_right = 2200.0
-offset_bottom = 214.0
-color = Color(0.14901961, 0.14901961, 0.18039216, 1)
-
-[node name="BG_Near" type="ParallaxLayer" parent="BG_Parallax" unique_id=631013253]
-motion_scale = Vector2(0.9, 1)
-
-[node name="@ColorRect@206" type="ColorRect" parent="BG_Parallax/BG_Near" unique_id=281355406]
-modulate = Color(1, 1, 1, 0)
-offset_left = -2200.0
-offset_top = 184.0
-offset_right = 2200.0
-offset_bottom = 242.0
-color = Color(0.20392157, 0.20392157, 0.24313726, 1)
-
-[node name="BG_Fore" type="ParallaxLayer" parent="BG_Parallax" unique_id=1703808220]
-motion_scale = Vector2(1.3, 1)
-
-[node name="@ColorRect@207" type="ColorRect" parent="BG_Parallax/BG_Fore" unique_id=1662496537]
-modulate = Color(1, 1, 1, 0)
-offset_left = -2200.0
-offset_top = 214.0
-offset_right = 2200.0
-offset_bottom = 258.0
-color = Color(0.0627451, 0.0627451, 0.078431375, 1)
-
-[node name="@ParallaxLayer@208" type="ParallaxLayer" parent="BG_Parallax" unique_id=362973876]
-motion_scale = Vector2(0.06, 1)
-motion_mirroring = Vector2(845.5046, 0)
-
-[node name="@Sprite2D@209" type="Sprite2D" parent="BG_Parallax/@ParallaxLayer@208" unique_id=1534043114]
-modulate = Color(1, 1, 1, 0.95)
-position = Vector2(-422.7523, -40)
-scale = Vector2(0.41284403, 0.41284403)
-texture = ExtResource("1_3kg1u")
-centered = false
-
-[node name="@ParallaxLayer@210" type="ParallaxLayer" parent="BG_Parallax" unique_id=1183120134]
-motion_scale = Vector2(0.5, 1)
-motion_mirroring = Vector2(341.33334, 0)
-
-[node name="@Sprite2D@211" type="Sprite2D" parent="BG_Parallax/@ParallaxLayer@210" unique_id=1916541878]
-position = Vector2(0, 70)
-scale = Vector2(0.33333334, 0.33333334)
-texture = ExtResource("2_mb6iv")
-centered = false
-
-[node name="@ColorRect@188" type="ColorRect" parent="." unique_id=211657042]
-offset_left = -100.0
-offset_top = 256.0
-offset_right = 1600.0
-offset_bottom = 270.0
-color = Color(0.14901961, 0.14901961, 0.17254902, 1)
-
-[node name="Ground" type="StaticBody2D" parent="." unique_id=1116870662]
+[node name="Ground" type="StaticBody2D" parent="." unique_id=4330107]
 position = Vector2(900, 260)
 
-[node name="@CollisionShape2D@189" type="CollisionShape2D" parent="Ground" unique_id=1673911804]
-shape = SubResource("RectangleShape2D_7yepx")
+[node name="@CollisionShape2D@125" type="CollisionShape2D" parent="Ground" unique_id=1224626824]
+shape = SubResource("RectangleShape2D_10s3v")
 
-[node name="@ColorRect@190" type="ColorRect" parent="Ground" unique_id=1948698817]
+[node name="@ColorRect@126" type="ColorRect" parent="Ground" unique_id=1295998254]
 offset_left = -1600.0
 offset_top = -20.0
 offset_right = 1600.0
 offset_bottom = 20.0
 color = Color(0.22745098, 0.22745098, 0.25882354, 1)
 
-[node name="TerrainTile" type="Sprite2D" parent="Ground" unique_id=436527316]
+[node name="TerrainTile" type="Sprite2D" parent="Ground" unique_id=1640828965]
+z_index = 10
+position = Vector2(-1600, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_pn4l0")
+centered = false
+
+[node name="@Sprite2D@130" type="Sprite2D" parent="Ground" unique_id=522871029]
+z_index = 10
+position = Vector2(-1450, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_pn4l0")
+centered = false
+
+[node name="@Sprite2D@131" type="Sprite2D" parent="Ground" unique_id=924018174]
+z_index = 10
+position = Vector2(-1300, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_pn4l0")
+centered = false
+
+[node name="@Sprite2D@132" type="Sprite2D" parent="Ground" unique_id=221779061]
+z_index = 10
+position = Vector2(-1150, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_pn4l0")
+centered = false
+
+[node name="@Sprite2D@133" type="Sprite2D" parent="Ground" unique_id=2114212816]
+z_index = 10
+position = Vector2(-1000, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_pn4l0")
+centered = false
+
+[node name="@Sprite2D@134" type="Sprite2D" parent="Ground" unique_id=244677484]
+z_index = 10
+position = Vector2(-850, -20)
+scale = Vector2(0.14648438, 0.14648438)
+texture = ExtResource("1_pn4l0")
+centered = false
+
+[node name="@Sprite2D@135" type="Sprite2D" parent="Ground" unique_id=2024102483]
 z_index = 10
 position = Vector2(-700, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@212" type="Sprite2D" parent="Ground" unique_id=397332019]
+[node name="@Sprite2D@136" type="Sprite2D" parent="Ground" unique_id=1978383297]
 z_index = 10
 position = Vector2(-550, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@213" type="Sprite2D" parent="Ground" unique_id=1621705634]
+[node name="@Sprite2D@137" type="Sprite2D" parent="Ground" unique_id=153587780]
 z_index = 10
 position = Vector2(-400, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@214" type="Sprite2D" parent="Ground" unique_id=500909543]
+[node name="@Sprite2D@138" type="Sprite2D" parent="Ground" unique_id=388539457]
 z_index = 10
 position = Vector2(-250, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@215" type="Sprite2D" parent="Ground" unique_id=1504584692]
+[node name="@Sprite2D@139" type="Sprite2D" parent="Ground" unique_id=523696269]
 z_index = 10
 position = Vector2(-100, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@216" type="Sprite2D" parent="Ground" unique_id=394255788]
+[node name="@Sprite2D@140" type="Sprite2D" parent="Ground" unique_id=16926765]
 z_index = 10
 position = Vector2(50, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@217" type="Sprite2D" parent="Ground" unique_id=279128628]
+[node name="@Sprite2D@141" type="Sprite2D" parent="Ground" unique_id=1938726220]
 z_index = 10
 position = Vector2(200, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@218" type="Sprite2D" parent="Ground" unique_id=1066287487]
+[node name="@Sprite2D@142" type="Sprite2D" parent="Ground" unique_id=1233693480]
 z_index = 10
 position = Vector2(350, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@219" type="Sprite2D" parent="Ground" unique_id=1994724759]
+[node name="@Sprite2D@143" type="Sprite2D" parent="Ground" unique_id=612335586]
 z_index = 10
 position = Vector2(500, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@220" type="Sprite2D" parent="Ground" unique_id=41840044]
+[node name="@Sprite2D@144" type="Sprite2D" parent="Ground" unique_id=1900502900]
 z_index = 10
 position = Vector2(650, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@221" type="Sprite2D" parent="Ground" unique_id=1818836319]
+[node name="@Sprite2D@145" type="Sprite2D" parent="Ground" unique_id=490522170]
 z_index = 10
 position = Vector2(800, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@222" type="Sprite2D" parent="Ground" unique_id=25121502]
+[node name="@Sprite2D@146" type="Sprite2D" parent="Ground" unique_id=1624749827]
 z_index = 10
 position = Vector2(950, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@223" type="Sprite2D" parent="Ground" unique_id=1383075226]
+[node name="@Sprite2D@147" type="Sprite2D" parent="Ground" unique_id=1949380625]
 z_index = 10
 position = Vector2(1100, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@224" type="Sprite2D" parent="Ground" unique_id=158955913]
+[node name="@Sprite2D@148" type="Sprite2D" parent="Ground" unique_id=160394716]
 z_index = 10
 position = Vector2(1250, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@225" type="Sprite2D" parent="Ground" unique_id=424075578]
+[node name="@Sprite2D@149" type="Sprite2D" parent="Ground" unique_id=1011229894]
 z_index = 10
 position = Vector2(1400, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@226" type="Sprite2D" parent="Ground" unique_id=686081767]
+[node name="@Sprite2D@150" type="Sprite2D" parent="Ground" unique_id=959218527]
 z_index = 10
 position = Vector2(1550, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@227" type="Sprite2D" parent="Ground" unique_id=2014121807]
+[node name="@Sprite2D@151" type="Sprite2D" parent="Ground" unique_id=998364160]
 z_index = 10
 position = Vector2(1700, -20)
 scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
+texture = ExtResource("1_pn4l0")
 centered = false
 
-[node name="@Sprite2D@228" type="Sprite2D" parent="Ground" unique_id=2207542]
-z_index = 10
-position = Vector2(1850, -20)
-scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
-centered = false
-
-[node name="@Sprite2D@229" type="Sprite2D" parent="Ground" unique_id=900322629]
-z_index = 10
-position = Vector2(2000, -20)
-scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
-centered = false
-
-[node name="@Sprite2D@230" type="Sprite2D" parent="Ground" unique_id=759953479]
-z_index = 10
-position = Vector2(2150, -20)
-scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
-centered = false
-
-[node name="@Sprite2D@231" type="Sprite2D" parent="Ground" unique_id=1940331067]
-z_index = 10
-position = Vector2(2300, -20)
-scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
-centered = false
-
-[node name="@Sprite2D@232" type="Sprite2D" parent="Ground" unique_id=82283763]
-z_index = 10
-position = Vector2(2450, -20)
-scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
-centered = false
-
-[node name="@Sprite2D@233" type="Sprite2D" parent="Ground" unique_id=1852965004]
-z_index = 10
-position = Vector2(2600, -20)
-scale = Vector2(0.14648438, 0.14648438)
-texture = ExtResource("3_1t6nl")
-centered = false
-
-[node name="GroundFill" type="ColorRect" parent="Ground" unique_id=1717157524]
+[node name="GroundFill" type="ColorRect" parent="Ground" unique_id=1751688654]
 offset_left = -1600.0
 offset_right = 1600.0
 offset_bottom = 130.0
 color = Color(0.13725491, 0.16470589, 0.2, 1)
 
-[node name="zhujue" type="CharacterBody2D" parent="." unique_id=2062152787]
+[node name="BG_Parallax" type="ParallaxBackground" parent="." unique_id=1570382062 instance=ExtResource("2_i0gov")]
+script = ExtResource("3_qu8rb")
+era = "04"
+layer_palette = PackedColorArray(0.019607844, 0.019607844, 0.03137255, 1, 0.078431375, 0.078431375, 0.101960786, 1, 0.14901961, 0.14901961, 0.18039216, 1, 0.20392157, 0.20392157, 0.24313726, 1, 0.0627451, 0.0627451, 0.078431375, 1)
+
+[node name="zhujue" type="CharacterBody2D" parent="." unique_id=701791354 instance=ExtResource("4_gvr1x")]
 position = Vector2(80, 200)
-script = ExtResource("4_pn4l0")
+script = ExtResource("5_ibpis")
 
-[node name="@CollisionShape2D@191" type="CollisionShape2D" parent="zhujue" unique_id=963397899]
-position = Vector2(0, -13)
-shape = SubResource("RectangleShape2D_ioq23")
-
-[node name="@ColorRect@192" type="ColorRect" parent="zhujue" unique_id=2088782371]
-visible = false
-offset_left = -16.0
-offset_top = -32.0
-offset_right = 16.0
-color = Color(0.9098039, 0.6901961, 0.29411766, 1)
-
-[node name="FaceRect" type="ColorRect" parent="zhujue" unique_id=882369145]
-visible = false
-offset_left = 10.0
-offset_top = -30.0
-offset_right = 14.0
-offset_bottom = -26.0
-
-[node name="zhujue_jiaohuquyu" type="Area2D" parent="zhujue" unique_id=1431856695]
-
-[node name="@CollisionShape2D@193" type="CollisionShape2D" parent="zhujue/zhujue_jiaohuquyu" unique_id=1589537727]
-position = Vector2(0, -18)
-shape = SubResource("RectangleShape2D_l30t2")
-
-[node name="zhujue_shexiangji" type="Camera2D" parent="zhujue" unique_id=620179343]
-offset = Vector2(0, -140)
-position_smoothing_enabled = true
-script = ExtResource("5_i0gov")
-
-[node name="PointLight2D" type="PointLight2D" parent="zhujue" unique_id=141796604]
+[node name="PointLight2D" type="PointLight2D" parent="zhujue" unique_id=430508753]
 position = Vector2(0, -20)
 color = Color(1, 0.85, 0.6, 1)
 energy = 1.4
 texture_scale = 6.0
 
-[node name="zhujue_anim_kongzhi" type="Node" parent="zhujue" unique_id=381458159]
-script = ExtResource("6_qu8rb")
-
-[node name="zhujue_donghua" type="AnimatedSprite2D" parent="zhujue" unique_id=317482615]
-centered = false
-script = ExtResource("7_gvr1x")
-
-[node name="UI_Base" type="CanvasLayer" parent="." unique_id=1940535117]
+[node name="UI_Base" type="CanvasLayer" parent="." unique_id=1185073610]
 layer = 10
 
-[node name="UI_BombFlash" type="ColorRect" parent="UI_Base" unique_id=269041217]
+[node name="UI_BombFlash" type="ColorRect" parent="UI_Base" unique_id=32414310]
 visible = false
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
@@ -375,112 +259,188 @@ anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(1, 0.1, 0.1, 1)
 
-[node name="DialoguePanel" type="Control" parent="UI_Base" unique_id=2042562503]
+[node name="UI_BombStatus" type="Label" parent="UI_Base" unique_id=273428893]
+visible = false
+offset_left = 96.0
+offset_top = 18.0
+offset_right = 544.0
+offset_bottom = 46.0
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(1, 0.81960785, 0.4, 1)
+horizontal_alignment = 1
+
+[node name="DialoguePanel" type="Control" parent="UI_Base" unique_id=760905833]
 layout_mode = 3
 anchors_preset = 0
-script = ExtResource("8_ibpis")
+script = ExtResource("6_54c5v")
 
-[node name="NPC_Group" type="Node2D" parent="." unique_id=1292704092]
+[node name="NPC_Group" type="Node2D" parent="." unique_id=831195079]
 
-[node name="NPC_Follower1" type="Node2D" parent="NPC_Group" unique_id=545466578]
-position = Vector2(50, 212)
+[node name="NPC_Follower1" type="Area2D" parent="NPC_Group" unique_id=283832677 instance=ExtResource("7_k1xud")]
+position = Vector2(20, 240)
+script = ExtResource("8_4dxso")
 
-[node name="@ColorRect@194" type="ColorRect" parent="NPC_Group/NPC_Follower1" unique_id=1335663953]
-offset_left = -9.0
-offset_top = -26.0
-offset_right = 9.0
-color = Color(0.3019608, 0.3647059, 0.43137255, 1)
+[node name="NPC_Follower2" type="Area2D" parent="NPC_Group" unique_id=1549385174 instance=ExtResource("7_k1xud")]
+position = Vector2(-4, 240)
+script = ExtResource("8_4dxso")
 
-[node name="NPC_Follower2" type="Node2D" parent="NPC_Group" unique_id=2114061065]
-position = Vector2(36, 212)
+[node name="NPC_Follower3" type="Area2D" parent="NPC_Group" unique_id=1165284473 instance=ExtResource("7_k1xud")]
+position = Vector2(-28, 240)
+script = ExtResource("8_4dxso")
 
-[node name="@ColorRect@195" type="ColorRect" parent="NPC_Group/NPC_Follower2" unique_id=424090464]
-offset_left = -9.0
-offset_top = -26.0
-offset_right = 9.0
-color = Color(0.3647059, 0.41960785, 0.3019608, 1)
+[node name="NPC_Follower4" type="Area2D" parent="NPC_Group" unique_id=522483864 instance=ExtResource("7_k1xud")]
+position = Vector2(-52, 240)
+script = ExtResource("8_4dxso")
 
-[node name="NPC_Follower3" type="Node2D" parent="NPC_Group" unique_id=2099490722]
-position = Vector2(22, 212)
+[node name="NPC_Follower5" type="Area2D" parent="NPC_Group" unique_id=302227813 instance=ExtResource("7_k1xud")]
+position = Vector2(-76, 240)
+script = ExtResource("8_4dxso")
 
-[node name="@ColorRect@196" type="ColorRect" parent="NPC_Group/NPC_Follower3" unique_id=1698135925]
-offset_left = -9.0
-offset_top = -26.0
-offset_right = 9.0
-color = Color(0.43137255, 0.3019608, 0.3647059, 1)
+[node name="NPC_Follower6" type="Area2D" parent="NPC_Group" unique_id=973785518 instance=ExtResource("7_k1xud")]
+position = Vector2(-100, 240)
+script = ExtResource("8_4dxso")
 
-[node name="NPC_Follower4" type="Node2D" parent="NPC_Group" unique_id=161712444]
-position = Vector2(8, 212)
+[node name="GroupFollower" type="Node" parent="." unique_id=1091632581]
+script = ExtResource("9_20nql")
 
-[node name="@ColorRect@197" type="ColorRect" parent="NPC_Group/NPC_Follower4" unique_id=1579008003]
-offset_left = -9.0
-offset_top = -26.0
-offset_right = 9.0
-color = Color(0.3647059, 0.3019608, 0.43137255, 1)
+[node name="LevelStoryIntro" type="Node" parent="." unique_id=1207432939]
+script = ExtResource("10_eyci2")
 
-[node name="NPC_Follower5" type="Node2D" parent="NPC_Group" unique_id=356504262]
-position = Vector2(-6, 212)
+[node name="BombWarning" type="Node" parent="." unique_id=773896661]
+script = ExtResource("11_7yepx")
 
-[node name="@ColorRect@198" type="ColorRect" parent="NPC_Group/NPC_Follower5" unique_id=1257770914]
-offset_left = -9.0
-offset_top = -26.0
-offset_right = 9.0
-color = Color(0.43137255, 0.43137255, 0.3019608, 1)
+[node name="BlastShield1" type="Node2D" parent="." unique_id=1213721237]
+material = SubResource("CanvasItemMaterial_jgq3j")
+position = Vector2(315, 128)
+script = ExtResource("12_ioq23")
 
-[node name="NPC_Follower6" type="Node2D" parent="NPC_Group" unique_id=783249555]
-position = Vector2(-20, 212)
+[node name="SafeZone" type="ColorRect" parent="BlastShield1" unique_id=92348057]
+z_index = 30
+offset_left = -92.0
+offset_top = 98.0
+offset_right = 92.0
+offset_bottom = 101.0
+color = Color(1, 0.76, 0.28, 0.62)
 
-[node name="@ColorRect@199" type="ColorRect" parent="NPC_Group/NPC_Follower6" unique_id=297940570]
-offset_left = -9.0
-offset_top = -26.0
-offset_right = 9.0
-color = Color(0.3019608, 0.43137255, 0.43137255, 1)
+[node name="Panel" type="Sprite2D" parent="BlastShield1" unique_id=792782598]
+z_index = 24
+use_parent_material = true
+position = Vector2(-92, -18)
+texture = ExtResource("13_l30t2")
+centered = false
 
-[node name="GroupFollower" type="Node" parent="." unique_id=1774368864]
-script = ExtResource("9_54c5v")
+[node name="Durability" type="Label" parent="BlastShield1" unique_id=499852852]
+z_index = 27
+use_parent_material = true
+offset_left = -38.0
+offset_top = -35.0
+offset_right = 38.0
+offset_bottom = -17.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_outline_color = Color(0.12941177, 0.09411765, 0.09019608, 1)
+theme_override_constants/outline_size = 2
+horizontal_alignment = 1
 
-[node name="BombWarning" type="Node" parent="." unique_id=251096035]
-script = ExtResource("10_k1xud")
+[node name="BlastShield2" type="Node2D" parent="." unique_id=144133320]
+material = SubResource("CanvasItemMaterial_3obwf")
+position = Vector2(660, 128)
+script = ExtResource("12_ioq23")
 
-[node name="Checkpoint" type="Area2D" parent="." unique_id=1838629063]
+[node name="SafeZone" type="ColorRect" parent="BlastShield2" unique_id=1992238846]
+z_index = 30
+offset_left = -92.0
+offset_top = 98.0
+offset_right = 92.0
+offset_bottom = 101.0
+color = Color(1, 0.76, 0.28, 0.62)
+
+[node name="Panel" type="Sprite2D" parent="BlastShield2" unique_id=285169535]
+z_index = 24
+use_parent_material = true
+position = Vector2(-92, -18)
+texture = ExtResource("13_l30t2")
+centered = false
+
+[node name="Durability" type="Label" parent="BlastShield2" unique_id=1167986493]
+z_index = 27
+use_parent_material = true
+offset_left = -38.0
+offset_top = -35.0
+offset_right = 38.0
+offset_bottom = -17.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_outline_color = Color(0.12941177, 0.09411765, 0.09019608, 1)
+theme_override_constants/outline_size = 2
+horizontal_alignment = 1
+
+[node name="BlastShield3" type="Node2D" parent="." unique_id=430354186]
+material = SubResource("CanvasItemMaterial_wi7pe")
+position = Vector2(1005, 128)
+script = ExtResource("12_ioq23")
+
+[node name="SafeZone" type="ColorRect" parent="BlastShield3" unique_id=52900548]
+z_index = 30
+offset_left = -92.0
+offset_top = 98.0
+offset_right = 92.0
+offset_bottom = 101.0
+color = Color(1, 0.76, 0.28, 0.62)
+
+[node name="Panel" type="Sprite2D" parent="BlastShield3" unique_id=1915787406]
+z_index = 24
+use_parent_material = true
+position = Vector2(-92, -18)
+texture = ExtResource("13_l30t2")
+centered = false
+
+[node name="Durability" type="Label" parent="BlastShield3" unique_id=2109497525]
+z_index = 27
+use_parent_material = true
+offset_left = -38.0
+offset_top = -35.0
+offset_right = 38.0
+offset_bottom = -17.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_outline_color = Color(0.12941177, 0.09411765, 0.09019608, 1)
+theme_override_constants/outline_size = 2
+horizontal_alignment = 1
+
+[node name="Checkpoint" type="Area2D" parent="." unique_id=1308018326]
 position = Vector2(700, 215)
-script = ExtResource("11_4dxso")
+script = ExtResource("14_yve42")
 
-[node name="@CollisionShape2D@200" type="CollisionShape2D" parent="Checkpoint" unique_id=974130936]
+[node name="@CollisionShape2D@127" type="CollisionShape2D" parent="Checkpoint" unique_id=2134391825]
 position = Vector2(0, -30)
-shape = SubResource("RectangleShape2D_yve42")
+shape = SubResource("RectangleShape2D_jer6x")
 
-[node name="disiguan_chukou" type="Area2D" parent="." unique_id=1862114509]
+[node name="disiguan_chukou" type="Area2D" parent="." unique_id=67084613]
 position = Vector2(1320, 215)
-script = ExtResource("12_20nql")
+script = ExtResource("15_pamox")
 
-[node name="@CollisionShape2D@201" type="CollisionShape2D" parent="disiguan_chukou" unique_id=821656156]
+[node name="@CollisionShape2D@128" type="CollisionShape2D" parent="disiguan_chukou" unique_id=1262301549]
 position = Vector2(0, -45)
-shape = SubResource("RectangleShape2D_pamox")
+shape = SubResource("RectangleShape2D_1yxuj")
 
-[node name="@ColorRect@202" type="ColorRect" parent="disiguan_chukou" unique_id=1740754977]
-offset_left = -25.0
-offset_top = -90.0
-offset_right = 25.0
-color = Color(0.9, 0.95, 1, 0.35)
+[node name="GoalPortalVisual" type="Node2D" parent="disiguan_chukou"]
+script = ExtResource("17_goal_portal")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1966998911]
-environment = SubResource("Environment_sn1sa")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=206470494]
+environment = SubResource("Environment_g22e0")
 
-[node name="LightRig" type="Node2D" parent="." unique_id=866502302]
-script = ExtResource("13_eyci2")
+[node name="LightRig" type="Node2D" parent="." unique_id=677963774]
+script = ExtResource("16_sn1sa")
 
-[node name="CanvasModulate" type="CanvasModulate" parent="LightRig" unique_id=208366682]
+[node name="CanvasModulate" type="CanvasModulate" parent="LightRig" unique_id=2060205099]
 color = Color(0.25, 0.25, 0.3, 1)
 
-[node name="EdgeWall" type="StaticBody2D" parent="." unique_id=81446676]
+[node name="EdgeWall" type="StaticBody2D" parent="." unique_id=1765839798]
 position = Vector2(-712, 140)
 
-[node name="@CollisionShape2D@234" type="CollisionShape2D" parent="EdgeWall" unique_id=884260651]
-shape = SubResource("RectangleShape2D_10s3v")
+[node name="@CollisionShape2D@152" type="CollisionShape2D" parent="EdgeWall" unique_id=988548497]
+shape = SubResource("RectangleShape2D_22xbd")
 
-[node name="@StaticBody2D@236" type="StaticBody2D" parent="." unique_id=1227336013]
+[node name="@StaticBody2D@154" type="StaticBody2D" parent="." unique_id=1739225269]
 position = Vector2(2512, 140)
 
-[node name="@CollisionShape2D@235" type="CollisionShape2D" parent="@StaticBody2D@236" unique_id=1160194707]
-shape = SubResource("RectangleShape2D_jgq3j")
+[node name="@CollisionShape2D@153" type="CollisionShape2D" parent="@StaticBody2D@154" unique_id=7900635]
+shape = SubResource("RectangleShape2D_0ld8q")

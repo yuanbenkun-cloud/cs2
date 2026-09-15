@@ -9,6 +9,7 @@ func run(_tree: SceneTree) -> bool:
 	# 地面
 	var ground: StaticBody2D = b.add_node(root, "StaticBody2D", "Ground")
 	ground.position = Vector2(900, 260)
+	b.bind_script(ground, "res://scripts/background/prop_grounding.gd")
 	var gshape := CollisionShape2D.new()
 	var gr := RectangleShape2D.new()
 	gr.size = Vector2(3200, 40)
@@ -20,58 +21,17 @@ func run(_tree: SceneTree) -> bool:
 	gvis.position = Vector2(-1600, -20)
 	ground.add_child(gvis)
 
-	# 主角
-	var player: CharacterBody2D = b.add_node(root, "CharacterBody2D", "zhujue")
-	player.position = Vector2(80, 200)
-	b.bind_script(player, "res://scripts/player/player_controller.gd")
-	var pshape := CollisionShape2D.new()
-	var prec := RectangleShape2D.new()
-	prec.size = Vector2(24, 26)
-	pshape.shape = prec
-	pshape.position = Vector2(0, -13)
-	player.add_child(pshape)
-	var pvis := ColorRect.new()
-	pvis.color = Color("#E8B04B")
-	pvis.size = Vector2(32, 32)
-	pvis.position = Vector2(-16, -32)
-	player.add_child(pvis)
-	var pface := ColorRect.new()
-	pface.name = "FaceRect"
-	pface.color = Color.WHITE
-	pface.size = Vector2(4, 4)
-	pface.position = Vector2(10, -30)
-	player.add_child(pface)
-	var zone: Area2D = b.add_node(player, "Area2D", "zhujue_jiaohuquyu")
-	var zsh := CollisionShape2D.new()
-	var zrec := RectangleShape2D.new()
-	zrec.size = Vector2(36, 42)
-	zsh.shape = zrec
-	zsh.position = Vector2(0, -18)
-	zone.add_child(zsh)
-	var cam: Camera2D = b.add_node(player, "Camera2D", "zhujue_shexiangji")
-	b.bind_script(cam, "res://scripts/systems/camera_rig.gd")
-	cam.position_smoothing_enabled = true
-	cam.offset = Vector2(0, -140)
-	var anim := Node.new()
-	anim.name = "zhujue_anim_kongzhi"
-	b.bind_script(anim, "res://scripts/player/player_animator.gd")
-	player.add_child(anim)
-	# --- 主角动画（帧表 AnimatedSprite2D）---
-	for c3 in player.get_children():
-		if c3 is ColorRect:
-			c3.visible = false
-	var hero := AnimatedSprite2D.new()
-	hero.name = "zhujue_donghua"
-	hero.centered = false
-	b.bind_script(hero, "res://scripts/player/hero_anim.gd")
-	player.add_child(hero)
+	# 主角使用独立 PackedScene；碰撞、相机与动画只维护一份。
+	var player: CharacterBody2D = b.instantiate_scene(
+		root, "res://scenes/renwu/zhujue/zhujue.tscn", "zhujue", Vector2(80, 200)
+	) as CharacterBody2D
 
 	# UI：DialoguePanel + 计时 + 提示
 	var ui: CanvasLayer = b.add_node(root, "CanvasLayer", "UI_Base")
 	ui.layer = 10
 	var timer_lb := Label.new()
 	timer_lb.name = "UI_Timer"
-	timer_lb.text = "⏳ 180"
+	timer_lb.text = "⏳ 105"
 	timer_lb.position = Vector2(200, 6)
 	timer_lb.add_theme_font_size_override("font_size", 16)
 	timer_lb.add_theme_color_override("font_color", Color("#ffd9a0"))
@@ -95,28 +55,11 @@ func run(_tree: SceneTree) -> bool:
 	b.bind_script(forge, "res://scripts/systems/forge_sequence.gd")
 
 	# NPC 老匠人 / 糊粥 / 大木头 / 阿明
-	var artisan: Area2D = b.add_node(root, "Area2D", "laojiangren")
-	artisan.position = Vector2(300, 210)
-	b.bind_script(artisan, "res://scripts/npc/npc_base.gd")
-	var ash := CollisionShape2D.new()
-	var arec := RectangleShape2D.new()
-	arec.size = Vector2(24, 38)
-	ash.shape = arec
-	ash.position = Vector2(0, -19)
-	artisan.add_child(ash)
-	var avis := ColorRect.new()
-	avis.color = Color("#c96f4a")
-	avis.size = Vector2(24, 36)
-	avis.position = Vector2(-12, -36)
-	artisan.add_child(avis)
-	var aprompt := ColorRect.new()
-	aprompt.name = "Prompt"
-	aprompt.color = Color("#7fd4ff")
-	aprompt.size = Vector2(12, 12)
-	aprompt.position = Vector2(-6, -46)
-	artisan.add_child(aprompt)
-	artisan.set("dialogue_file", "res://assets/dialogue_level2.json")
-	artisan.set("dialogue_node", "old_artisan")
+	b.instantiate_npc(
+		root, "laojiangren", "laojiangren", Vector2(300, 240),
+		"res://scripts/npc/npc_base.gd",
+		{"dialogue_file": "res://assets/dialogue_level2.json", "dialogue_node": "old_artisan"}
+	)
 
 	var porridge: Area2D = b.add_node(root, "Area2D", "di_erguan_huzhou")
 	porridge.position = Vector2(430, 210)
@@ -126,11 +69,14 @@ func run(_tree: SceneTree) -> bool:
 	porec.size = Vector2(24, 20)
 	posh.shape = porec
 	porridge.add_child(posh)
-	var povis := ColorRect.new()
-	povis.color = Color("#7a4a2b")
-	povis.size = Vector2(24, 16)
-	povis.position = Vector2(-12, -8)
-	porridge.add_child(povis)
+	var porridge_tex: Texture2D = load("res://assets/production/props/gameplay/porridge-pot-runtime.png")
+	if porridge_tex != null:
+		var povis := Sprite2D.new()
+		b.bind_script(povis, "res://scripts/background/interactive_prop_grounding.gd")
+		povis.texture = porridge_tex
+		povis.scale = Vector2.ONE * (44.0 / float(porridge_tex.get_width()))
+		povis.position = Vector2(0, -4)
+		porridge.add_child(povis)
 	var poprompt := ColorRect.new()
 	poprompt.name = "Prompt"
 	poprompt.color = Color("#7fd4ff")
@@ -149,11 +95,14 @@ func run(_tree: SceneTree) -> bool:
 	wsh.shape = wrec
 	wsh.position = Vector2(0, -8)
 	wood.add_child(wsh)
-	var wvis := ColorRect.new()
-	wvis.color = Color("#8a5a33")
-	wvis.size = Vector2(60, 14)
-	wvis.position = Vector2(-30, -7)
-	wood.add_child(wvis)
+	var wood_tex: Texture2D = load("res://assets/production/props/gameplay/log-bundle-runtime.png")
+	if wood_tex != null:
+		var wvis := Sprite2D.new()
+		b.bind_script(wvis, "res://scripts/background/interactive_prop_grounding.gd")
+		wvis.texture = wood_tex
+		wvis.scale = Vector2.ONE * (74.0 / float(wood_tex.get_width()))
+		wvis.position = Vector2(0, -5)
+		wood.add_child(wvis)
 	var wprompt := ColorRect.new()
 	wprompt.name = "Prompt"
 	wprompt.color = Color("#7fd4ff")
@@ -161,28 +110,11 @@ func run(_tree: SceneTree) -> bool:
 	wprompt.position = Vector2(-6, -22)
 	wood.add_child(wprompt)
 
-	var aming: Area2D = b.add_node(root, "Area2D", "aming")
-	aming.position = Vector2(720, 210)
-	b.bind_script(aming, "res://scripts/npc/npc_base.gd")
-	var msh := CollisionShape2D.new()
-	var mrec := RectangleShape2D.new()
-	mrec.size = Vector2(22, 34)
-	msh.shape = mrec
-	msh.position = Vector2(0, -17)
-	aming.add_child(msh)
-	var mvis := ColorRect.new()
-	mvis.color = Color("#d98a4a")
-	mvis.size = Vector2(22, 32)
-	mvis.position = Vector2(-11, -32)
-	aming.add_child(mvis)
-	var mprompt := ColorRect.new()
-	mprompt.name = "Prompt"
-	mprompt.color = Color("#7fd4ff")
-	mprompt.size = Vector2(12, 12)
-	mprompt.position = Vector2(-6, -42)
-	aming.add_child(mprompt)
-	aming.set("dialogue_file", "res://assets/dialogue_level2.json")
-	aming.set("dialogue_node", "aming")
+	b.instantiate_npc(
+		root, "aming", "aming", Vector2(720, 240),
+		"res://scripts/npc/npc_base.gd",
+		{"dialogue_file": "res://assets/dialogue_level2.json", "dialogue_node": "aming"}
+	)
 
 	# 存档点（岩壁前）
 	var cp: Area2D = b.add_node(root, "Area2D", "Checkpoint")
@@ -195,9 +127,9 @@ func run(_tree: SceneTree) -> bool:
 	cpsh.position = Vector2(0, -30)
 	cp.add_child(cpsh)
 
-	# 岩壁（交互目标 di_erguan_yanbi + 色块逐轮裂开）
+	# 岩壁：正式交互素材 + 三道裂纹反馈。
 	var wall: Area2D = b.add_node(root, "Area2D", "di_erguan_yanbi")
-	wall.position = Vector2(1250, 150)
+	wall.position = Vector2(1250, 250)
 	b.bind_script(wall, "res://scripts/npc/forge_wall.gd")
 	var wsh2 := CollisionShape2D.new()
 	var wrec2 := RectangleShape2D.new()
@@ -205,14 +137,22 @@ func run(_tree: SceneTree) -> bool:
 	wsh2.shape = wrec2
 	wsh2.position = Vector2(0, -55)
 	wall.add_child(wsh2)
-	var seg_colors := ["#8a4a38", "#9d5a40", "#8a4a38", "#a6653f", "#7e4232", "#94503a"]
-	for i in range(6):
-		var seg := ColorRect.new()
-		seg.name = "Seg%d" % i
-		seg.color = Color(seg_colors[i])
-		seg.size = Vector2(19, 110)
-		seg.position = Vector2(-57 + i * 19, -110)
-		wall.add_child(seg)
+	var wall_tex: Texture2D = load("res://assets/production/props/gameplay/forge-wall-runtime.png")
+	if wall_tex != null:
+		var wall_vis := Sprite2D.new()
+		wall_vis.name = "WallVisual"
+		wall_vis.texture = wall_tex
+		wall_vis.scale = Vector2.ONE * (130.0 / float(wall_tex.get_height()))
+		wall_vis.position = Vector2(0, -65)
+		wall.add_child(wall_vis)
+	for i in range(3):
+		var crack := Line2D.new()
+		crack.name = "Crack%d" % (i + 1)
+		crack.width = 2.0
+		crack.default_color = Color("#ffd08a")
+		crack.points = PackedVector2Array([Vector2(-35 + i * 28, -95), Vector2(-22 + i * 25, -70), Vector2(-30 + i * 31, -42), Vector2(-12 + i * 28, -18)])
+		crack.visible = false
+		wall.add_child(crack)
 	var oh := ColorRect.new()
 	oh.name = "OverlayHeat"
 	oh.color = Color(1.0, 0.5, 0.2, 0.35)
@@ -234,8 +174,20 @@ func run(_tree: SceneTree) -> bool:
 	wprompt2.position = Vector2(-6, -120)
 	wall.add_child(wprompt2)
 
+	# 锻造完成后才开启的关底传送门。
+	var exit_area: Area2D = b.add_node(root, "Area2D", "dierguan_chukou")
+	exit_area.position = Vector2(1400, 215)
+	b.bind_script(exit_area, "res://scripts/systems/locked_exit_portal.gd")
+	var exit_shape := CollisionShape2D.new()
+	var exit_rect := RectangleShape2D.new()
+	exit_rect.size = Vector2(50, 90)
+	exit_shape.shape = exit_rect
+	exit_shape.position = Vector2(0, -45)
+	exit_area.add_child(exit_shape)
+	b.add_goal_portal_visual(exit_area, false)
+
 	# --- Phase 8：背景系统（视差5层 + WorldEnvironment + LightRig）---
-	var pbg = b.make_background(root, [Color("#33140f"), Color("#6b2f1e"), Color("#9d5430"), Color("#c98a4a"), Color("#5c3a22")])
+	var pbg = b.make_background(root, [Color("#33140f"), Color("#6b2f1e"), Color("#9d5430"), Color("#c98a4a"), Color("#5c3a22")], "02")
 	b.add_scene_art(pbg, ground, "02")
 	b.make_environment(root, Color("#33140f"))
 	b.make_light_rig(root, Color(1.0, 0.8, 0.6), [[1250, 120, "#ff9c5b", 1.2, 90], [700, 60, "#ffb066", 0.5, 50]])
@@ -243,11 +195,12 @@ func run(_tree: SceneTree) -> bool:
 	# 岩壁实体阻挡（可交互 Area2D 之上再加物理墙体，防穿行/坠落）
 	var wall_body := StaticBody2D.new()
 	wall_body.name = "di_erguan_yanbi_qiangti"
-	wall_body.position = Vector2(1250, 150)
+	wall_body.position = Vector2(1250, 250)
 	var wbs := CollisionShape2D.new()
 	var wbr := RectangleShape2D.new()
 	wbr.size = Vector2(120, 130)
 	wbs.shape = wbr
+	wbs.position = Vector2(0, -65)
 	wall_body.add_child(wbs)
 	root.add_child(wall_body)
 

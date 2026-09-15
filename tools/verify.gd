@@ -5,8 +5,8 @@ const SCENES := {
 	"res://scenes/guanqia/01_hongyadong.tscn": ["zhujue", "HeartSystem", "chuandanayi", "diyiguan_mupai", "diyiguan_husongdizhuan"],
 	"res://scenes/guanqia/02_ciqikou.tscn": ["zhujue", "ForgeSequence", "di_erguan_yanbi", "di_erguan_mutou", "laojiangren", "aming", "UI_Timer"],
 	"res://scenes/guanqia/03_zhongshan.tscn": ["zhujue", "ChoiceSystem", "laozhanggui", "pangzhanggui", "banggong", "laozhou", "disanguan_huobao"],
-	"res://scenes/guanqia/04_fangdong.tscn": ["zhujue", "GroupFollower", "BombWarning", "NPC_Group", "PointLight2D", "Checkpoint", "disiguan_chukou"],
-	"res://scenes/guanqia/05_hongyadong_return.tscn": ["zhujue", "diwuguan_mupai", "jianglishilaoren", "diwuguan_jingguandian", "diwuguan_zhaoxiangdian"],
+	"res://scenes/guanqia/04_fangdong.tscn": ["zhujue", "GroupFollower", "BombWarning", "NPC_Group", "PointLight2D", "Checkpoint", "BlastShield1", "BlastShield2", "BlastShield3", "disiguan_chukou"],
+	"res://scenes/guanqia/05_hongyadong_return.tscn": ["zhujue", "MemoryRoute", "diwuguan_mupai", "jianglishilaoren", "diwuguan_jingguandian", "diwuguan_zhaoxiangdian"],
 }
 
 func _init() -> void:
@@ -62,6 +62,13 @@ func _init() -> void:
 				var parsed = JSON.parse_string(FileAccess.get_file_as_string("res://assets/" + f))
 				if parsed is Dictionary:
 					print("[PASS] JSON 可解析: %s" % f)
+					for node_id: String in parsed:
+						var dialogue_node: Dictionary = parsed[node_id]
+						for option: Dictionary in dialogue_node.get("options", []):
+							var next_id := str(option.get("next", ""))
+							if next_id != "" and not parsed.has(next_id):
+								print("[FAIL] %s 节点 %s 指向不存在的 %s" % [f, node_id, next_id])
+								failed += 1
 				else:
 					print("[FAIL] JSON 解析失败: %s" % f)
 					failed += 1

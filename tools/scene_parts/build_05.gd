@@ -19,50 +19,9 @@ func run(_tree: SceneTree) -> bool:
 	gv.position = Vector2(-1600, -20)
 	ground.add_child(gv)
 
-	var player: CharacterBody2D = b.add_node(root, "CharacterBody2D", "zhujue")
-	player.position = Vector2(60, 200)
-	b.bind_script(player, "res://scripts/player/player_controller.gd")
-	var psh := CollisionShape2D.new()
-	var prec := RectangleShape2D.new()
-	prec.size = Vector2(24, 26)
-	psh.shape = prec
-	psh.position = Vector2(0, -13)
-	player.add_child(psh)
-	var pv := ColorRect.new()
-	pv.color = Color("#E8B04B")
-	pv.size = Vector2(32, 32)
-	pv.position = Vector2(-16, -32)
-	player.add_child(pv)
-	var pf := ColorRect.new()
-	pf.name = "FaceRect"
-	pf.color = Color.WHITE
-	pf.size = Vector2(4, 4)
-	pf.position = Vector2(10, -30)
-	player.add_child(pf)
-	var zone: Area2D = b.add_node(player, "Area2D", "zhujue_jiaohuquyu")
-	var zsh := CollisionShape2D.new()
-	var zrec := RectangleShape2D.new()
-	zrec.size = Vector2(36, 42)
-	zsh.shape = zrec
-	zsh.position = Vector2(0, -18)
-	zone.add_child(zsh)
-	var cam: Camera2D = b.add_node(player, "Camera2D", "zhujue_shexiangji")
-	b.bind_script(cam, "res://scripts/systems/camera_rig.gd")
-	cam.position_smoothing_enabled = true
-	cam.offset = Vector2(0, -140)
-	var anim := Node.new()
-	anim.name = "zhujue_anim_kongzhi"
-	b.bind_script(anim, "res://scripts/player/player_animator.gd")
-	player.add_child(anim)
-	# --- 主角动画（帧表 AnimatedSprite2D）---
-	for c3 in player.get_children():
-		if c3 is ColorRect:
-			c3.visible = false
-	var hero := AnimatedSprite2D.new()
-	hero.name = "zhujue_donghua"
-	hero.centered = false
-	b.bind_script(hero, "res://scripts/player/hero_anim.gd")
-	player.add_child(hero)
+	var player: CharacterBody2D = b.instantiate_scene(
+		root, "res://scenes/renwu/zhujue/zhujue.tscn", "zhujue", Vector2(60, 200)
+	) as CharacterBody2D
 
 	var ui: CanvasLayer = b.add_node(root, "CanvasLayer", "UI_Base")
 	ui.layer = 10
@@ -70,12 +29,13 @@ func run(_tree: SceneTree) -> bool:
 	dlg.name = "DialoguePanel"
 	b.bind_script(dlg, "res://scripts/ui/dialogue_panel.gd")
 	ui.add_child(dlg)
+	var memory_route: Node = b.add_node(root, "Node", "MemoryRoute")
+	b.bind_script(memory_route, "res://scripts/systems/memory_route.gd")
 
 	# 交互物工厂
 	var triggers := [
-		["diwuguan_mupai", 260, "#8a6a3b", 40, "board", "res://scripts/npc/npc_base.gd"],
-		["jianglishilaoren", 480, "#b8b0a0", 38, "old_man", "res://scripts/npc/npc_base.gd"],
-		["diwuguan_jingguandian", 760, "#7fa8c9", 26, "view_spot", "res://scripts/npc/npc_base.gd"],
+		["diwuguan_mupai", 260, "#8a6a3b", 40, "board", "res://scripts/npc/memory_interactable.gd"],
+		["diwuguan_jingguandian", 760, "#7fa8c9", 26, "view_spot", "res://scripts/npc/memory_interactable.gd"],
 		["diwuguan_zhaoxiangdian", 1080, "#c9a27f", 26, "photo", "res://scripts/npc/photo_spot.gd"],
 	]
 	for t in triggers:
@@ -94,46 +54,50 @@ func run(_tree: SceneTree) -> bool:
 		ash.shape = arec
 		ash.position = Vector2(0, -23)
 		a.add_child(ash)
-		var avis := ColorRect.new()
-		avis.color = col
-		avis.size = Vector2(34, 44)
-		avis.position = Vector2(-17, -44)
-		a.add_child(avis)
+		_add_trigger_visual(a, dnode, col)
 		var pr := ColorRect.new()
 		pr.name = "Prompt"
-		pr.color = Color("#7fd4ff")
-		pr.size = Vector2(12, 12)
-		pr.position = Vector2(-6, -56)
+		pr.color = Color(0.05, 0.08, 0.12, 0.94)
+		pr.size = Vector2(18, 18)
+		var prompt_y := -78.0
+		if dnode == "view_spot":
+			prompt_y = -94.0
+		elif dnode == "photo":
+			prompt_y = -90.0
+		pr.position = Vector2(-9, prompt_y)
+		pr.z_index = 35
+		pr.visible = false
+		var key_label := Label.new()
+		key_label.name = "KeyLabel"
+		key_label.text = "E"
+		key_label.position = Vector2(5, 0)
+		key_label.add_theme_font_size_override("font_size", 12)
+		key_label.add_theme_color_override("font_color", Color("#ffd166"))
+		pr.add_child(key_label)
 		a.add_child(pr)
 		a.set("dialogue_file", "res://assets/dialogue_level5.json")
 		a.set("dialogue_node", dnode)
+		if dnode == "board":
+			a.set("memory_id", "board")
+		elif dnode == "view_spot":
+			a.set("memory_id", "view")
+
+	# 讲历史老人使用共享 NPC 场景；其它条目仍是关卡专属交互点。
+	b.instantiate_npc(
+		root, "jianglishilaoren", "jianglishilaoren", Vector2(480, 240),
+		"res://scripts/npc/memory_interactable.gd",
+		{"dialogue_node": "old_man", "memory_id": "old_man"}
+	)
 
 	# 传单阿姨（内心 OS 触发点，纯文本）
-	var flyer: Area2D = b.add_node(root, "Area2D", "chuandanayi")
-	flyer.position = Vector2(640, 215)
-	b.bind_script(flyer, "res://scripts/npc/npc_base.gd")
-	var fsh := CollisionShape2D.new()
-	var frect := RectangleShape2D.new()
-	frect.size = Vector2(24, 40)
-	fsh.shape = frect
-	fsh.position = Vector2(0, -20)
-	flyer.add_child(fsh)
-	var fvis := ColorRect.new()
-	fvis.color = Color("#b56576")
-	fvis.size = Vector2(24, 38)
-	fvis.position = Vector2(-12, -38)
-	flyer.add_child(fvis)
-	var fpr := ColorRect.new()
-	fpr.name = "Prompt"
-	fpr.color = Color("#7fd4ff")
-	fpr.size = Vector2(12, 12)
-	fpr.position = Vector2(-6, -50)
-	flyer.add_child(fpr)
-	flyer.set("dialogue_file", "res://assets/dialogue_level5.json")
-	flyer.set("dialogue_node", "flyer_lady_os")
+	b.instantiate_npc(
+		root, "chuandanayi", "chuandanayi", Vector2(640, 240),
+		"res://scripts/npc/memory_interactable.gd",
+		{"dialogue_node": "flyer_lady_os", "memory_id": "flyer"}
+	)
 
 	# --- Phase 8：背景系统（视差5层 + WorldEnvironment + LightRig）---
-	var pbg = b.make_background(root, [Color("#d8e2ef"), Color("#cfe0d8"), Color("#f0d9a0"), Color("#b7c49a"), Color("#8f9480")])
+	var pbg = b.make_background(root, [Color("#d8e2ef"), Color("#cfe0d8"), Color("#f0d9a0"), Color("#b7c49a"), Color("#8f9480")], "05")
 	b.add_scene_art(pbg, ground, "05")
 	b.make_environment(root, Color("#f0d9a0"))
 	b.make_light_rig(root, Color(0.95, 0.93, 0.88), [[300, 130, "#fff3d6", 0.4, 60], [900, 60, "#ffeecb", 0.5, 70]])
@@ -157,8 +121,50 @@ func run(_tree: SceneTree) -> bool:
 	gfill.position = Vector2(-1600, 0)
 	ground.add_child(gfill)
 
-	b.add_object_behind(ground, "res://assets/objects/dock.png", 1100.0, 130.0)
-
 	var ok: bool = b.save_scene(root, "res://scenes/guanqia/05_hongyadong_return.tscn")
 	root.free()
 	return ok
+
+func _add_trigger_visual(area: Area2D, kind: String, _accent: Color) -> void:
+	var visual := Node2D.new()
+	visual.name = "Visual"
+	visual.z_index = 15
+	area.add_child(visual)
+	match kind:
+		"board":
+			var board_texture: Texture2D = load("res://assets/production/props/info_board/info-board.png")
+			if board_texture != null:
+				var sprite := Sprite2D.new()
+				sprite.set_script(load("res://scripts/background/interactive_prop_grounding.gd"))
+				sprite.name = "InfoBoardVisual"
+				sprite.texture = board_texture
+				sprite.scale = Vector2.ONE * (64.0 / float(board_texture.get_height()))
+				sprite.position = Vector2(0, -7)
+				visual.add_child(sprite)
+		"view_spot":
+			_add_prop_sprite(
+				visual,
+				"ScenicViewerVisual",
+				"res://assets/production/props/scenic_viewer/scenic-viewer.png",
+				78.0
+			)
+		"photo":
+			_add_prop_sprite(
+				visual,
+				"PhotoCameraVisual",
+				"res://assets/production/props/photo_camera/photo-camera.png",
+				76.0
+			)
+
+func _add_prop_sprite(parent: Node2D, node_name: String, texture_path: String, display_height: float) -> void:
+	var texture: Texture2D = load(texture_path)
+	if texture == null:
+		return
+	var sprite := Sprite2D.new()
+	sprite.set_script(load("res://scripts/background/interactive_prop_grounding.gd"))
+	sprite.name = node_name
+	sprite.texture = texture
+	var display_scale := display_height / float(texture.get_height())
+	sprite.scale = Vector2.ONE * display_scale
+	sprite.position = Vector2(0, -display_height * 0.5)
+	parent.add_child(sprite)

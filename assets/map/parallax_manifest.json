@@ -1,0 +1,33 @@
+{
+  "schema": "dongjian.parallax-stage.v2",
+  "engine": "Godot 4.7",
+  "map_mode": "side_scroll_mode",
+  "visual_model": "parallax_layers",
+  "stage_canvas": {"width": 640, "height": 360},
+  "source_canvas": {"width": 1280, "height": 720},
+  "stage_segment_count": 5,
+  "stage_length": 3200,
+  "collision_source": "engine-native Ground and explicit Area2D/StaticBody2D nodes",
+  "layers": [
+    {"id": "BG_Sky", "order": 0, "scroll_factor_x": 0.0, "content": "production sky image", "source": "assets/production/backgrounds/<era>/sky.png", "collision": false},
+    {"id": "BG_Far", "order": 1, "scroll_factor_x": 0.08, "content": "transparent mountain/city/cavern depth image", "source": "assets/production/backgrounds/<era>/far.png", "collision": false},
+    {"id": "BG_Mid", "order": 2, "scroll_factor_x": 0.3, "content": "transparent architecture/cavern mid-distance image", "source": "assets/production/backgrounds/<era>/mid.png", "collision": false},
+    {"id": "BG_Near", "order": 3, "scroll_factor_x": 0.62, "content": "atmospheric depth mist", "collision": false},
+    {"id": "BG_Fore", "order": 4, "scroll_factor_x": 1.1, "content": "foreground atmospheric overlay", "collision": false},
+    {"id": "WorldTerrain", "order": 5, "scroll_factor_x": 1.0, "content": "walkable terrain art and separate collision", "collision": true}
+  ],
+  "repeat_policy": {
+    "BG_Sky": "explicit mirrored horizontal plates",
+    "BG_Far": "explicit mirrored horizontal plates",
+    "BG_Mid": "explicit mirrored horizontal plates",
+    "BG_Near": "full-stage stretched mist",
+    "BG_Fore": "full-stage stretched mist"
+  },
+  "eras": {
+    "01": "modern Hongyadong night",
+    "02": "ancient Ciqikou kiln",
+    "03": "ancient Zhongshan town",
+    "04": "wartime air-raid shelter",
+    "05": "Hongyadong return at dawn"
+  }
+}

@@ -1,0 +1,10 @@
+Use case: stylized-concept
+Asset type: production 2D side-view player idle animation grid for a Godot narrative side-scroller
+Primary request: create a precise 2x2 grid containing four sequential idle frames of Chen Mo, the same young Chinese man shown in the portrait reference. He is no longer looking at his phone. Neutral alert standing pose with a restrained breathing loop: settle, inhale, slight shoulder/backpack secondary motion, return.
+Reference roles: the portrait locks identity, costume and palette; the game screenshot locks tiny in-game readability and side-view camera; the NPC sheet locks the clean pixel-inspired edge language.
+Subject locks: short dark brown hair swept forward, olive-green field jacket over plain off-white shirt, slim black trousers, dark sneakers, compact black backpack with visible straps. Same facial identity, proportions, costume, body height and camera distance in all four cells.
+View: strict orthographic side view facing right, full body visible, grounded feet.
+Art direction: polished pixel-inspired cinematic game sprite, crisp clustered shading, dark brown outlines rather than pure black, restrained 24-32 color appearance, readable silhouette at roughly 64 pixels tall, consistent with warm historical NPC sprites but clearly modern.
+Layout: exact 2 columns by 2 rows, equal square cells, one character per cell, character centered within central 65% of each cell, identical feet baseline and standing-equivalent scale, generous empty padding. No visible grid lines, labels or dividers.
+Background: solid flat #FF00FF magenta only, no texture or gradient.
+Constraints: no phone, no weapon, no attack, no scenery, no floor shadow, no text, no watermark, no duplicate character inside a cell, nothing crossing cell boundaries, nothing cropped. Four frames must form one subtle seamless breathing loop.

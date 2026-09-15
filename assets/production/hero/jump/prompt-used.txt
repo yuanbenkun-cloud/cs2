@@ -1,0 +1,9 @@
+Use case: stylized-concept
+Asset type: production 2D side-view player jump animation grid for a Godot narrative side-scroller
+Primary request: use the accepted Chen Mo idle grid as the strict identity, costume, anatomical scale and camera-distance lock. Create an exact 2x2 grid of four sequential right-facing jump body frames: anticipation crouch, rising takeoff with knees lifting, airborne apex with compact legs, descending landing-prep pose.
+Identity locks: same young Chinese man, face, short swept dark-brown hair, olive-green field jacket, off-white shirt, slim black trousers, dark sneakers, compact black backpack and straps.
+View: strict orthographic side view facing right, full body visible; coherent jump poses with restrained backpack and jacket secondary motion.
+Art direction: polished pixel-inspired cinematic sprite, crisp clustered shading, dark brown outlines, restrained colors, readable at roughly 64 pixels tall.
+Layout: exact 2 columns by 2 rows, one character per equal square cell, same camera distance and generous padding.
+Background: solid flat #FF00FF magenta only.
+Constraints: no phone, weapon, scenery, baked floor, shadow, text or watermark; no duplicate body; nothing crosses cells or gets cropped.

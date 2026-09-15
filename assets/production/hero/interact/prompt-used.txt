@@ -1,0 +1,9 @@
+Use case: stylized-concept
+Asset type: production 2D side-view player interaction animation grid for a Godot narrative side-scroller
+Primary request: use the accepted Chen Mo idle grid as the strict identity, costume, anatomical scale and camera-distance lock. Create an exact 2x2 grid of four sequential right-facing generic interaction frames: attentive lean, extend right hand, touch/press/inspect, withdraw.
+Identity locks: same young Chinese man, face, short swept dark-brown hair, olive-green field jacket, off-white shirt, slim black trousers, dark sneakers, compact black backpack and straps.
+View: strict orthographic side view facing right, full body and fixed feet baseline; empty-hand generic interaction suitable for signs, doors and mechanisms.
+Art direction: polished pixel-inspired cinematic sprite, crisp clustered shading, dark brown outlines, restrained colors, readable at roughly 64 pixels tall.
+Layout: exact 2 columns by 2 rows, one character per equal square cell, same feet baseline, scale and generous padding.
+Background: solid flat #FF00FF magenta only.
+Constraints: no phone, weapon, card, sign, prop, scenery, floor shadow, text or watermark; no duplicate body; nothing crosses cells or gets cropped.

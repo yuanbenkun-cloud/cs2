@@ -1,0 +1,24 @@
+{
+  "generator": "tools/generate_audio_loops.py",
+  "created_at": "2026-09-13",
+  "license": "project-generated original media",
+  "sample_rate": 22050,
+  "channels": 2,
+  "duration_seconds": 24.0,
+  "source_material": "none; numeric synthesis only",
+  "tracks": [
+    "music-01-night.wav",
+    "music-02-forge.wav",
+    "music-03-old-town.wav",
+    "music-04-shelter.wav",
+    "music-05-dawn.wav",
+    "ambient-01-rain.wav",
+    "ambient-02-forge.wav",
+    "ambient-03-rain.wav",
+    "ambient-04-shelter.wav",
+    "ambient-05-dawn.wav",
+    "transition-02-kiln.wav",
+    "transition-03-cloth-market.wav",
+    "transition-04-air-raid.wav"
+  ]
+}

@@ -1,82 +1,121 @@
 extends AnimatedSprite2D
-## 主角帧表动画（归一化 8 帧条）：待机/行走/跳跃/交互。
-## 按帧表实际高度统一缩放到 ~48 世界单位；帧表高度各不同 → 播放时动态缩放对齐。
 
-const SHEETS := {
-	"idle": { "path": "res://assets/player_frames_norm/idle_n.png", "fw": 264, "fh": 691, "fps": 5 },
-	"walk": { "path": "res://assets/player_frames_norm/walk_n.png", "fw": 1152, "fh": 1946, "fps": 8 },
-	"jump": { "path": "res://assets/player_frames_norm/jump_n.png", "fw": 264, "fh": 701, "fps": 10 },
-	"interact": { "path": "res://assets/player_frames_norm/interact_n.png", "fw": 264, "fh": 814, "fps": 8 },
+## 陈默正式角色动画。每组动作由独立多行原图生成、严格 QC 后拆成 128×128 透明帧；
+## Godot 只读取单帧文件，避免依赖不规则旧图集的手工切片尺寸。
+
+const ANIMATIONS := {
+	"idle": {
+		"dir": "res://assets/production/hero/idle",
+		"prefix": "idle",
+		"count": 4,
+		"fps": 3.5,
+		"loop": true,
+		"origin_y": 116.0,
+	},
+	"walk": {
+		"dir": "res://assets/production/hero/walk",
+		"prefix": "walk",
+		"count": 6,
+		"fps": 5.5,
+		"loop": true,
+		"origin_y": 116.0,
+	},
+	"jump": {
+		"dir": "res://assets/production/hero/jump",
+		"prefix": "jump",
+		"count": 4,
+		"fps": 5.0,
+		"loop": false,
+		"origin_y": 104.0,
+	},
+	"interact": {
+		"dir": "res://assets/production/hero/interact",
+		"prefix": "interact",
+		"count": 4,
+		"fps": 5.0,
+		"loop": false,
+		"origin_y": 116.0,
+	},
 }
-const TARGET_H := 48.0
 
-var _cur := "idle"
+const FRAME_SIZE := 128.0
+const REFERENCE_SUBJECT_HEIGHT := 102.0
+const TARGET_HEIGHT := 64.0
+const DISPLAY_SCALE := TARGET_HEIGHT / REFERENCE_SUBJECT_HEIGHT
+
+var _current_animation := "idle"
 var _last_move := 1
+var _interacting := 0.0
 
 func _ready() -> void:
 	centered = false
+	material = null
+	_add_ground_shadow()
 	_build_frames()
-	_apply_anim("idle")
+	_apply_animation("idle")
+
+func _add_ground_shadow() -> void:
+	var actor := get_parent().get_parent() as Node2D
+	if actor == null or actor.has_node("GroundShadow"):
+		return
+	var shadow := Polygon2D.new()
+	shadow.name = "GroundShadow"
+	shadow.polygon = PackedVector2Array([
+		Vector2(-13, 0), Vector2(-10, -2), Vector2(-5, -3), Vector2(5, -3),
+		Vector2(10, -2), Vector2(13, 0), Vector2(10, 2), Vector2(5, 3),
+		Vector2(-5, 3), Vector2(-10, 2),
+	])
+	shadow.color = Color(0.015, 0.02, 0.03, 0.28)
+	shadow.z_index = 19
+	actor.add_child.call_deferred(shadow)
 
 func _build_frames() -> void:
-	var sf := SpriteFrames.new()
-	for anim in SHEETS:
-		var m: Dictionary = SHEETS[anim]
-		var tex: Texture2D = load(m["path"])
-		if tex == null:
-			continue
-		sf.add_animation(anim)
-		sf.set_animation_speed(anim, float(m["fps"]))
-		sf.set_animation_loop(anim, anim != "interact")
-		var count := 8
-		for i in range(count):
-			var at := AtlasTexture.new()
-			at.atlas = tex
-			at.region = Rect2(float(i) * float(m["fw"]), 0.0, float(m["fw"]), float(m["fh"]))
-			sf.add_frame(anim, at)
-	sprite_frames = sf
+	var frames := SpriteFrames.new()
+	for animation_name: String in ANIMATIONS:
+		var config: Dictionary = ANIMATIONS[animation_name]
+		frames.add_animation(animation_name)
+		frames.set_animation_speed(animation_name, float(config["fps"]))
+		frames.set_animation_loop(animation_name, bool(config["loop"]))
+		for frame_index in range(1, int(config["count"]) + 1):
+			var frame_path := "%s/%s-%d.png" % [config["dir"], config["prefix"], frame_index]
+			var texture: Texture2D = load(frame_path)
+			if texture != null:
+				frames.add_frame(animation_name, texture)
+	sprite_frames = frames
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if _interacting > 0.0:
-		_interacting -= _delta
+		_interacting -= delta
 		if _interacting <= 0.0:
-			_apply_anim("idle")
+			_apply_animation("idle")
 		return
-	var p := get_parent()
-	if p == null:
+	var player := get_parent().get_parent() as CharacterBody2D
+	if player == null:
 		return
-	var vel := Vector2.ZERO
-	if "velocity" in p:
-		vel = p.get("velocity")
-	var on_floor := true
-	if p.has_method("is_on_floor"):
-		on_floor = p.is_on_floor()
-	var moving: bool = absf(vel.x) > 12.0
+	var moving := absf(player.velocity.x) > 12.0
 	var target := "idle"
-	if not on_floor:
+	if not player.is_on_floor():
 		target = "jump"
 	elif moving:
 		target = "walk"
-		_last_move = 1 if vel.x > 0.0 else -1
+		_last_move = 1 if player.velocity.x > 0.0 else -1
 	flip_h = _last_move < 0
-	if target != _cur:
-		_apply_anim(target)
-
+	if target != _current_animation:
+		_apply_animation(target)
 
 func trigger_interact() -> void:
-	# 交互动画播放一次后回待机（跳过 _physics_process 覆盖保护）
-	_interacting = 1.0
-	_apply_anim("interact")
+	_interacting = float(ANIMATIONS["interact"]["count"]) / float(ANIMATIONS["interact"]["fps"])
+	_apply_animation("interact")
+	var feedback := get_parent().get_parent().get_node_or_null("FeedbackAnimationPlayer")
+	if feedback != null:
+		feedback.play("interact")
 
-var _interacting := 0.0
-
-func _apply_anim(name: String) -> void:
-	if not SHEETS.has(name):
+func _apply_animation(animation_name: String) -> void:
+	if not ANIMATIONS.has(animation_name):
 		return
-	_cur = name
-	var m: Dictionary = SHEETS[name]
-	var s := TARGET_H / float(m["fh"])
-	scale = Vector2(s, s)
-	position = Vector2(-float(m["fw"]) * s * 0.5, -float(m["fh"]) * s)
-	if sprite_frames != null and sprite_frames.has_animation(name):
-		play(name)
+	_current_animation = animation_name
+	var config: Dictionary = ANIMATIONS[animation_name]
+	scale = Vector2.ONE * DISPLAY_SCALE
+	position = Vector2(-FRAME_SIZE * 0.5 * DISPLAY_SCALE, -float(config["origin_y"]) * DISPLAY_SCALE)
+	if sprite_frames != null and sprite_frames.has_animation(animation_name):
+		play(animation_name)

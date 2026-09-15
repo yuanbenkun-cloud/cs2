@@ -1,0 +1,9 @@
+Use case: stylized-concept
+Asset type: production 2D side-view player walk animation grid for a Godot narrative side-scroller
+Primary request: using the accepted Chen Mo idle grid as the strict identity, costume, camera-distance and scale reference, create an exact 2-row by 3-column grid of six sequential right-facing walk-cycle body frames: right-foot contact, recoil/down, passing pose, left-foot contact, recoil/down, passing pose. The gait is purposeful but natural, not running.
+Identity locks: preserve the same young Chinese man, short swept dark-brown hair, olive-green field jacket, off-white shirt, slim black trousers, dark sneakers, compact black backpack and straps. Same face, proportions, standing-equivalent body height, palette, line weight and lighting in all six cells.
+View: strict orthographic side view facing right, complete full body in every cell, fixed torso root with actual alternating legs and restrained opposite arm swing; backpack and jacket hem have subtle secondary motion.
+Art direction: polished pixel-inspired cinematic game sprite, crisp clustered shading, dark brown outlines, restrained colors, designed to read at roughly 64 pixels tall.
+Layout: exact 3 equal columns by 2 equal rows, reading left-to-right on row one then row two. One character per cell, centered within the central 65%, identical ground/feet baseline and camera distance. No visible grid lines, labels or separators.
+Background: solid flat #FF00FF magenta only.
+Constraints: no phone, no weapon, no attack, no scenery, no floor shadow, no text, no watermark, no duplicate body within a cell, no limb crossing cell boundaries, nothing cropped. The six poses must be visibly distinct and form a seamless locomotion loop; do not repeat the same standing pose.

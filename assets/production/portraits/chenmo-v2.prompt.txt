@@ -1,0 +1,7 @@
+Use case: stylized-concept / background-extraction
+Asset type: production dialogue portrait for Chen Mo
+Primary request: create one calm, observant three-quarter-body portrait using the accepted game sprite as the identity and costume lock; remove all backdrop to genuine transparent alpha.
+Identity locks: short swept dark-brown hair, olive-green field jacket, off-white shirt, slim build, compact black backpack; no phone.
+Style: polished pixel-inspired illustration with clustered shading and deep-brown linework matching the game sprites and historical NPC portraits.
+Composition: single subject from mid-thigh upward with transparent padding, suitable for a bottom dialogue panel.
+Constraints: no weapon, scenery, frame, text, watermark or duplicate subject.

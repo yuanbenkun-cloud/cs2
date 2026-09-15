@@ -6,11 +6,11 @@ extends Node
 
 var followers: Array[Node2D] = []
 var history: Array[Vector2] = []
-var sample_interval: float = 0.5
+var sample_interval: float = 0.2
 var max_history: int = 40
 var _acc: float = 0.0
 var _leader: Node2D = null
-var _step: int = 3          # 每个 NPC 之间错开的历史条目数
+var _step: int = 1          # 紧凑队形才能整体进入挡板覆盖范围
 var _enabled: bool = false
 
 func _ready() -> void:
@@ -30,6 +30,14 @@ func add_follower(npc: Node2D) -> void:
 func start_following() -> void:
 	_enabled = true
 
+func restore_at(pos: Vector2) -> void:
+	history.clear()
+	for i in range(max_history):
+		history.append(pos - Vector2(float(i) * 2.0, 0.0))
+	for i in followers.size():
+		followers[i].global_position = pos - Vector2(18.0 + i * 18.0, 0.0)
+	_enabled = true
+
 func _physics_process(delta: float) -> void:
 	if not _enabled or _leader == null:
 		return
@@ -47,5 +55,5 @@ func _physics_process(delta: float) -> void:
 			continue
 		var idx: int = maxi(0, history.size() - 1 - i * _step)
 		var tgt: Vector2 = history[idx]
-		var speed: float = maxf(42.0, 108.0 - i * 9.0)
+		var speed: float = maxf(98.0, 120.0 - i * 4.0)
 		npc.global_position = npc.global_position.move_toward(tgt, speed * delta)

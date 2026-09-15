@@ -1,0 +1,31 @@
+{
+  "schema": "dongjian.production-parallax-backgrounds.v1",
+  "engine": "Godot 4.7",
+  "generated_at": "2026-09-12",
+  "source_tool": "Codex built-in image_gen",
+  "license": "project-generated media",
+  "source_canvas": {"width": 1280, "height": 720},
+  "runtime_display": {"width": 640, "height": 360},
+  "normalizer": "tools/normalize_parallax_backgrounds.py",
+  "layers": [
+    {"id": "sky", "scroll_factor_x": 0.0, "alpha": false, "render_order": 0},
+    {"id": "far", "scroll_factor_x": 0.08, "alpha": true, "render_order": 1},
+    {"id": "mid", "scroll_factor_x": 0.3, "alpha": true, "render_order": 2},
+    {"id": "near_mist", "scroll_factor_x": 0.62, "runtime_generated": true, "render_order": 3},
+    {"id": "foreground_mist", "scroll_factor_x": 1.1, "runtime_generated": true, "render_order": 4}
+  ],
+  "eras": [
+    {"id": "01", "name": "modern Hongyadong night", "folder": "assets/production/backgrounds/01", "prompt": "assets/production/backgrounds/01/prompts-used.md", "status": "approved_in_engine"},
+    {"id": "02", "name": "ancient Ciqikou kiln dusk", "folder": "assets/production/backgrounds/02", "prompt": "assets/production/backgrounds/02/prompts-used.md", "status": "approved_in_engine"},
+    {"id": "03", "name": "ancient Zhongshan rain", "folder": "assets/production/backgrounds/03", "prompt": "assets/production/backgrounds/03/prompts-used.md", "status": "approved_in_engine"},
+    {"id": "04", "name": "wartime air-raid shelter", "folder": "assets/production/backgrounds/04", "prompt": "assets/production/backgrounds/04/prompts-used.md", "status": "approved_in_engine"},
+    {"id": "05", "name": "Hongyadong return dawn", "folder": "assets/production/backgrounds/05", "prompt": "assets/production/backgrounds/05/prompts-used.md", "status": "approved_in_engine"}
+  ],
+  "verification": {
+    "dimensions_checked": true,
+    "alpha_checked": true,
+    "native_scale_reviewed": true,
+    "in_engine_reviewed": true,
+    "approved_by": "Codex"
+  }
+}

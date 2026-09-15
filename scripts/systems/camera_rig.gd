@@ -7,12 +7,17 @@ extends Camera2D
 var _shake_remaining: float = 0.0
 var _shake_strength: float = 4.0
 var _shake_duration: float = 0.3
+var _shake_time: float = 0.0
 
 func _process(delta: float) -> void:
 	if _shake_remaining > 0.0:
 		_shake_remaining -= delta
+		_shake_time += delta * 30.0
 		var t := maxf(_shake_remaining / _shake_duration, 0.0)
-		offset = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * _shake_strength * t
+		var access := get_node_or_null("/root/Accessibility")
+		var scale_value := float(access.get("shake_scale")) if access != null else 1.0
+		var smooth_noise := Vector2(sin(_shake_time * 1.7), sin(_shake_time * 2.3))
+		offset = smooth_noise * _shake_strength * t * t * scale_value
 		if _shake_remaining <= 0.0:
 			offset = Vector2.ZERO
 
@@ -20,3 +25,4 @@ func shake(strength: float = 4.0, duration: float = 0.3) -> void:
 	_shake_strength = strength
 	_shake_duration = duration
 	_shake_remaining = duration
+	_shake_time = 0.0

@@ -1,8 +1,12 @@
 extends "res://scripts/npc/interactable.gd"
 
-## 观景台拍照点（第五关）：拍照/不拍二选一 → 结尾独白 → 重开第一关。
+## 观景台拍照点（第五关）：拍照/不拍二选一 → 完整结局 → 返回标题页。
 
 func on_interact(_player: Node) -> void:
+	var route := get_tree().current_scene.find_child("MemoryRoute", true, false)
+	if route != null and not bool(route.call("can_finish")):
+		route.call("show_missing")
+		return
 	var ds := get_node_or_null("/root/DialogueSystem")
 	if ds == null:
 		return
@@ -17,4 +21,5 @@ func _on_ended() -> void:
 		ds.disconnect("ended", _on_ended)
 	var lm := get_node_or_null("/root/LevelManager")
 	if lm != null:
-		lm.call("travel_to", 1, "（五关走完，重新出发）")
+		var choice := "photo" if ds != null and str(ds.get("last_choice_next")) == "photo_take" else "observe"
+		lm.call("finish_story", choice)

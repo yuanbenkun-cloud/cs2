@@ -1,123 +1,134 @@
 {
   "old_shopkeeper": {
     "lines": [
-      { "speaker": "老掌柜", "text": "劳驾，把这包货送到码头，交给一个叫老周的人。他认得这包上的绳结。" },
-      { "speaker": "陈默", "text": "……行吧，反正我也是顺路。（他掂了掂货包，比想象中沉）" }
+      { "speaker": "老掌柜", "text": "劳驾，把这包染布送到码头老周手里。水路停了，误了时辰，十几户织工就收不到工钱。" },
+      { "speaker": "老掌柜", "text": "记住两件事：别拆绳结；码头帮工若要接货，先看他腰上的绿色木牌。老周定的规矩。" },
+      { "speaker": "陈默", "text": "绳结、绿木牌。我记住了。原来一包货后面，站着这么多人。" }
     ],
     "options": [
-      { "label": "接下货包，走大路", "next": "take_bag_main" },
-      { "label": "接下货包，抄小巷", "next": "take_bag_alley" }
+      { "label": "走人多但稳妥的大路", "next": "take_bag_main" },
+      { "label": "为赶时间抄近路", "next": "take_bag_alley" }
     ],
     "goods_event": ""
   },
   "take_bag_main": {
     "lines": [
-      { "speaker": "陈默", "text": "大路远点，但至少能看清谁是谁。" },
-      { "speaker": "旁白", "text": "一路平安。镇子不设防的眼睛，都在看着这条大路。" }
+      { "speaker": "旁白", "text": "大路绕远。陈默护着绳结穿过集市，货包仍沉甸甸地贴在胸前。" },
+      { "speaker": "陈默", "text": "慢一点不一定是耽误。至少我知道东西还在。" }
     ],
     "options": [],
     "goods_event": "safe"
   },
   "take_bag_alley": {
     "lines": [
-      { "speaker": "陈默", "text": "抄近路，快点送到就完事。" },
-      { "speaker": "巷口汉子", "text": "兄弟，货不少啊？我帮你提一段？……哎哟手滑！" },
-      { "speaker": "陈默", "text": "（货包被撞散，少了东西）" }
+      { "speaker": "陈默", "text": "就差这一小段，抄过去能省不少时间。" },
+      { "speaker": "巷口汉子", "text": "借过——哎哟，你这包挡路了！" },
+      { "speaker": "旁白", "text": "撞肩只是一瞬。走出巷口，绳结还在，包底却被划开了一道口子。" }
     ],
     "options": [],
     "goods_event": "stolen"
   },
   "teahouse": {
     "lines": [
-      { "speaker": "胖掌柜", "text": "哟，面生。替老掌柜送货的？那包里头装的可值不少钱吧？" },
-      { "speaker": "胖掌柜", "text": "跟哥哥说实话，老掌柜是不是托你运什么宝贝？" }
+      { "speaker": "胖掌柜", "text": "替老掌柜跑腿？那包里是染布，还是更值钱的东西？说说，我给你指条近路。" }
     ],
     "options": [
-      { "label": "实话实说：就是一包布匹", "next": "teahouse_honest" },
-      { "label": "撒谎：什么都不知道", "next": "teahouse_lie" },
-      { "label": "反问：你打听这个做什么", "next": "teahouse_retort" }
+      { "label": "只说受人所托，不谈货物", "next": "teahouse_boundary" },
+      { "label": "说是染布，应该不值钱", "next": "teahouse_honest" },
+      { "label": "编成官府急件吓退他", "next": "teahouse_lie" }
     ],
     "goods_event": ""
   },
-  "teahouse_honest": {
+  "teahouse_boundary": {
     "lines": [
-      { "speaker": "胖掌柜", "text": "哈哈，实在人。布匹就布匹，哥哥不惦记。" }
+      { "speaker": "陈默", "text": "受人所托，只交给老周。货是什么，不方便讲。" },
+      { "speaker": "胖掌柜", "text": "有分寸。沿着石阶走吧，别往后巷去。" }
     ],
     "options": [],
     "goods_event": "safe"
   },
-  "teahouse_lie": {
+  "teahouse_honest": {
     "lines": [
-      { "speaker": "胖掌柜", "text": "哦？不知道？那你怀里鼓鼓的是什么？……当我没看见，你走吧。" },
-      { "speaker": "陈默", "text": "（回头一摸——夹层里的货被顺走了）" }
+      { "speaker": "陈默", "text": "就是染布，不是什么宝贝。" },
+      { "speaker": "胖掌柜", "text": "染布才金贵。最近断货，黑市正抢呢。" },
+      { "speaker": "旁白", "text": "他离开茶馆时，几个目光已经跟上了货包。转过街角，包底又轻了一层。" }
     ],
     "options": [],
     "goods_event": "cheated"
   },
-  "teahouse_retort": {
+  "teahouse_lie": {
     "lines": [
-      { "speaker": "胖掌柜", "text": "呵，外地人嘴还挺硬。行，那就不送客了——走好。" },
-      { "speaker": "陈默", "text": "（出门时被人群挤了一下，货少了一截）" }
+      { "speaker": "陈默", "text": "官府急件。耽误了你担不起。" },
+      { "speaker": "胖掌柜", "text": "官府的包，可不用民家的绳结。小兄弟，谎撒得太响，会招来耳朵。" },
+      { "speaker": "旁白", "text": "门外的人群突然挤紧。陈默护住了包，却没护住侧袋。" }
     ],
     "options": [],
     "goods_event": "stolen"
   },
   "helper": {
     "lines": [
-      { "speaker": "码头帮工", "text": "老板，货沉，我搭把手？码头上水深，一个人可不好走。" }
+      { "speaker": "码头帮工", "text": "石板沾水了，我帮你抬一头。老周定了规矩，认牌再认人。" }
     ],
     "options": [
-      { "label": "让他帮忙", "next": "helper_yes" },
-      { "label": "不用，我自己来", "next": "helper_no" }
+      { "label": "核对绿色木牌，再共同抬货", "next": "helper_check" },
+      { "label": "省事，把整包直接交给他", "next": "helper_yes" },
+      { "label": "拒绝帮助，独自走湿滑栈桥", "next": "helper_no" }
     ],
     "goods_event": ""
   },
+  "helper_check": {
+    "lines": [
+      { "speaker": "陈默", "text": "绿色木牌，背面刻着“周”。好，我们一人一头。" },
+      { "speaker": "码头帮工", "text": "该谨慎时谨慎，该搭手时搭手。货和人都能稳稳过去。" }
+    ],
+    "options": [],
+    "goods_event": "safe"
+  },
   "helper_yes": {
     "lines": [
-      { "speaker": "陈默", "text": "行，搭把手。" },
-      { "speaker": "码头帮工", "text": "哎，来了来了——（突然脚下一绊，货包脱手滚进水里）" },
-      { "speaker": "陈默", "text": "（捞上来时，包已经破了，东西冲走大半）" }
+      { "speaker": "陈默", "text": "给，你替我拿过去吧。" },
+      { "speaker": "码头帮工", "text": "你连牌都不看？那我可就不客气了。" },
+      { "speaker": "旁白", "text": "那人钻进船缝。陈默追回货包时，只剩湿透的半包染布。" }
     ],
     "options": [],
     "goods_event": "robbed"
   },
   "helper_no": {
     "lines": [
-      { "speaker": "陈默", "text": "不用。我自己能行。" },
-      { "speaker": "旁白", "text": "他小心地避开伸过来的手，一路抱到老周跟前。" }
+      { "speaker": "陈默", "text": "不用，我自己能走。" },
+      { "speaker": "旁白", "text": "他避开了陌生人的手，却在湿栈桥上摔了一跤。货没丢，边角全浸了水。" },
+      { "speaker": "陈默", "text": "不分青红皂白地拒绝，也不等于看清了。" }
     ],
     "options": [],
-    "goods_event": "safe"
+    "goods_event": "cheated"
   },
   "laozhou_good": {
     "lines": [
-      { "speaker": "老周", "text": "绳结原样，分量分毫不差。小友，你这路走得干净。" },
-      { "speaker": "老周", "text": "这镇子看着简单，其实到处都是眼睛。可眼睛，也认得干净的人。" },
-      { "speaker": "陈默", "text": "（他第一次觉得，被人“看穿”不是什么坏事。）" }
+      { "speaker": "老周", "text": "绳结原样，染布没沾水。你不只记住了规矩，也明白规矩是拿来护人的。" },
+      { "speaker": "陈默", "text": "以前我只想快点到终点。现在才知道，路上托着的是别人的日子。" }
     ],
     "options": [],
     "goods_event": ""
   },
   "laozhou_damaged": {
     "lines": [
-      { "speaker": "老周", "text": "绳结松了，货也短了。路上有人搭话了吧？" },
-      { "speaker": "陈默", "text": "……是。" },
-      { "speaker": "老周", "text": "镇子不大，人心却绕。下次，眼睛放亮些。" }
+      { "speaker": "老周", "text": "封绳松了，染布也沾了水。这批货我不能签收；单子压在包里，十几户织工今天就等不到工钱。" },
+      { "speaker": "陈默", "text": "我走到了终点，却没把托付完整带到。原来路上每一次侥幸，都有人替我承担后果。" }
     ],
     "options": [],
     "goods_event": ""
   },
   "laozhou_bad": {
     "lines": [
-      { "speaker": "老周", "text": "东西少了大半。年轻人，这一路，你怕是连自己怀里的都看不住。" },
-      { "speaker": "陈默", "text": "（他低着头，第一次说不出“来都来了”四个字。）" }
+      { "speaker": "老周", "text": "这已经不是能不能将就的问题了。货不能收，账也结不了。你先把一路发生的事说清楚。" },
+      { "speaker": "陈默", "text": "……我会重走一遍。这次不把任何一次选择当成无关紧要的小事。" }
     ],
     "options": [],
     "goods_event": ""
   },
   "goods_bag": {
     "lines": [
-      { "speaker": "旁白", "text": "沉甸甸的货包。绳结是老掌柜亲手打的，说是码头老周一眼就能认出来。" }
+      { "speaker": "旁白", "text": "货包上是双环绳结。夹层里压着十几张织工的工钱单，最上面写着：交货才结账。" }
     ],
     "options": [],
     "goods_event": ""

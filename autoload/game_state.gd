@@ -1,15 +1,72 @@
 extends Node
 ## GameState（全局单例）：跨关数据（货物完整度、历史领悟等）。SPEC Phase 5。
 
+signal goods_changed(current: int, delta: int, event_name: String)
+
+const SAVE_PATH := "user://story_save.cfg"
+
 var goods_integrity: int = 100
 var insight_flags: Dictionary = {}   # 历史领悟（第五关等使用）
+var saved_level: int = 0
+var highest_unlocked_level: int = 1
+var story_completed := false
+var ending_choice := "observe"
+
+func _ready() -> void:
+	_load_story()
+
+func record_insight(key: String, value: Variant = true) -> void:
+	insight_flags[key] = value
+	_save_story()
+
+func reset_story() -> void:
+	goods_integrity = 100
+	insight_flags.clear()
+	ending_choice = "observe"
+
+func begin_new_story() -> void:
+	reset_story()
+	saved_level = 1
+	highest_unlocked_level = 1
+	story_completed = false
+	_save_story()
+
+func begin_from_chapter(level: int) -> void:
+	var unlocked := highest_unlocked_level
+	reset_story()
+	saved_level = clampi(level, 1, 5)
+	highest_unlocked_level = maxi(unlocked, saved_level)
+	story_completed = false
+	_save_story()
+
+func save_progress(level: int) -> void:
+	saved_level = clampi(level, 1, 5)
+	highest_unlocked_level = maxi(highest_unlocked_level, saved_level)
+	story_completed = false
+	_save_story()
+
+func has_continue() -> bool:
+	return saved_level >= 1 and saved_level <= 5 and not story_completed
+
+func get_continue_level() -> int:
+	return clampi(saved_level, 1, 5)
+
+func mark_story_complete(choice: String) -> void:
+	ending_choice = choice
+	story_completed = true
+	saved_level = 0
+	highest_unlocked_level = 5
+	_save_story()
 
 func reset_goods() -> void:
 	goods_integrity = 100
+	goods_changed.emit(goods_integrity, 0, "reset")
+	_save_story()
 
-func apply_goods_event(name: String) -> void:
+func apply_goods_event(event_name: String) -> void:
 	## stolen -30 / cheated -30 / robbed -40 / safe 0
-	match name:
+	var before := goods_integrity
+	match event_name:
 		"stolen":
 			goods_integrity -= 30
 		"cheated":
@@ -19,11 +76,37 @@ func apply_goods_event(name: String) -> void:
 		_:
 			pass  # safe / 空
 	goods_integrity = clampi(goods_integrity, 0, 100)
+	goods_changed.emit(goods_integrity, goods_integrity - before, event_name)
+	_save_story()
 
 func get_result_tier() -> String:
-	## ≥70 完好 / 40-69 受损 / <40 严重受损
-	if goods_integrity >= 70:
+	## 只有 100% 才算完好；第三关现在任何货损都会在送达验货后失败。
+	if goods_integrity >= 100:
 		return "完好"
 	if goods_integrity >= 40:
 		return "受损"
 	return "严重受损"
+
+func _save_story() -> void:
+	var cfg := ConfigFile.new()
+	cfg.set_value("progress", "saved_level", saved_level)
+	cfg.set_value("progress", "highest_unlocked_level", highest_unlocked_level)
+	cfg.set_value("progress", "story_completed", story_completed)
+	cfg.set_value("progress", "ending_choice", ending_choice)
+	cfg.set_value("run", "goods_integrity", goods_integrity)
+	cfg.set_value("run", "insight_flags", insight_flags)
+	var err := cfg.save(SAVE_PATH)
+	if err != OK:
+		push_warning("剧情存档写入失败：%d" % err)
+
+func _load_story() -> void:
+	var cfg := ConfigFile.new()
+	if cfg.load(SAVE_PATH) != OK:
+		return
+	saved_level = int(cfg.get_value("progress", "saved_level", 0))
+	highest_unlocked_level = int(cfg.get_value("progress", "highest_unlocked_level", 1))
+	story_completed = bool(cfg.get_value("progress", "story_completed", false))
+	ending_choice = str(cfg.get_value("progress", "ending_choice", "observe"))
+	goods_integrity = clampi(int(cfg.get_value("run", "goods_integrity", 100)), 0, 100)
+	var loaded_flags = cfg.get_value("run", "insight_flags", {})
+	insight_flags = loaded_flags if loaded_flags is Dictionary else {}

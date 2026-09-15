@@ -1,0 +1,7 @@
+Use case: stylized-concept
+Asset type: unique production interactive prop for a 2D side-view Godot game
+Primary request: one waist-high historical information plaque for a Chongqing riverside overlook, dark weathered timber, bronze header, faded information panel with unreadable marks and a small stilt-house silhouette.
+View: strict orthographic side view, front-facing, grounded, compatible with simple rectangular collision.
+Art direction: polished pixel-inspired cinematic prop, crisp clustered shading and deep-brown outline, matching the misty dawn and modern-night Chongqing stages.
+Background: genuine transparent alpha.
+Constraints: no readable text, UI prompt, scenery, ground plane, cast shadow, character, duplicate or watermark.

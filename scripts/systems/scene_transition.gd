@@ -26,11 +26,22 @@ func _ready() -> void:
 func play(to_path: String, caption_text: String = "") -> void:
 	_caption.text = caption_text
 	_caption.modulate.a = 0.0
-	var tw := create_tween()
-	tw.tween_property(_rect, "modulate:a", 1.0, 0.5)
-	tw.tween_callback(func() -> void:
-		get_tree().change_scene_to_file.call_deferred(to_path))
-	tw.tween_interval(0.2)
-	tw.tween_property(_rect, "modulate:a", 0.0, 0.5)
+	var fade_in := create_tween()
+	fade_in.tween_property(_rect, "modulate:a", 1.0, 0.42)
 	if caption_text != "":
-		tw.parallel().tween_property(_caption, "modulate:a", 1.0, 0.5)
+		fade_in.parallel().tween_property(_caption, "modulate:a", 1.0, 0.32)
+	await fade_in.finished
+
+	var err := get_tree().change_scene_to_file(to_path)
+	if err != OK:
+		push_error("场景切换失败：%s（错误码 %d）" % [to_path, err])
+	# 场景资源较大时，等新场景至少完成一帧装配后再揭开遮罩。
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var fade_out := create_tween()
+	fade_out.tween_interval(0.12)
+	fade_out.tween_property(_rect, "modulate:a", 0.0, 0.5)
+	if caption_text != "":
+		fade_out.parallel().tween_property(_caption, "modulate:a", 0.0, 0.28)
+	await fade_out.finished
+	queue_free()

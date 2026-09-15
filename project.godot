@@ -22,6 +22,9 @@ config/features=PackedStringArray("4.7")
 LevelManager="*res://autoload/level_manager.gd"
 GameState="*res://autoload/game_state.gd"
 DialogueSystem="*res://autoload/dialogue_system.gd"
+AudioManager="*res://autoload/audio_manager.gd"
+Accessibility="*res://autoload/accessibility.gd"
+StoryDirector="*res://autoload/story_director.gd"
 McpInteractionServer="*res://autoload/mcp_interaction_server.gd"
 Skinner="*res://autoload/skinner.gd"
 
