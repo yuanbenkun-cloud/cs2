@@ -6,6 +6,8 @@
 
 ![《洞见》主界面](docs/screenshots/menu.png)
 
+[下载 Windows 完整试玩版](https://github.com/yuanbenkun-cloud/cs2/releases/download/v1.0.0-demo/Dongjian-Windows-v1.0.0.zip) · [查看 v1.0.0 Demo 发布说明](https://github.com/yuanbenkun-cloud/cs2/releases/tag/v1.0.0-demo)
+
 ## 游戏特色
 
 - 五个章节对应重庆的不同时代与地点，每关拥有不同玩法，而非重复跑图。
@@ -47,7 +49,7 @@ AI 深度参与了从设计到验证的完整生产流程，而不只是生成�
 2. 克隆仓库后，用 Godot 导入根目录的 `project.godot`。
 3. 等待资源首次导入完成，按 `F6`/`F5` 运行项目。
 
-Windows 可执行试玩版不进入 Git 历史，发布时应从仓库的 **Releases** 页面下载，并将 EXE 与 PCK 放在同一目录后运行。
+Windows 可执行试玩版不进入 Git 历史，请从仓库的 [Releases](https://github.com/yuanbenkun-cloud/cs2/releases) 页面下载；解压后保持 EXE 与 PCK 位于同一目录并运行 `洞见.exe`。
 
 ## 项目结构
 
