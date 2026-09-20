@@ -110,7 +110,10 @@ func play_prologue(on_finished: Callable = Callable()) -> void:
 func play_transition(to_path: String, level: int, fallback_caption: String = "") -> void:
 	if busy:
 		return
-	_run_transition(to_path, level, fallback_caption)
+	# 出口常由 Area2D.body_entered 触发。延迟到空闲帧再启动，避免
+	# change_scene_to_file 在物理回调中释放 CollisionObject2D。
+	busy = true
+	_run_transition.call_deferred(to_path, level, fallback_caption)
 
 func _run_prologue(on_finished: Callable) -> void:
 	busy = true

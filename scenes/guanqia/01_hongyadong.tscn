@@ -21,10 +21,13 @@
 [ext_resource type="Script" uid="uid://lnaywqb6tglo" path="res://scripts/npc/npc_base.gd" id="21_y3jmo"]
 [ext_resource type="Texture2D" uid="uid://cg6kbjlpuage4" path="res://assets/production/props/info_board/info-board.png" id="22_86wy6"]
 [ext_resource type="Script" uid="uid://i4iaact5al8r" path="res://scripts/systems/loose_tile.gd" id="23_l2gix"]
+[ext_resource type="Texture2D" path="res://assets/production/props/gameplay/loose-tile-runtime.png" id="24_stone"]
 [ext_resource type="Script" uid="uid://fk5i8dobf61" path="res://scripts/background/light_rig.gd" id="25_3npq7"]
 [ext_resource type="Script" uid="uid://b7wudml0cke08" path="res://scripts/systems/chase_obstacle_rig.gd" id="26_lowroof"]
 [ext_resource type="Script" uid="uid://rpnxooykqgi4" path="res://scripts/background/prop_grounding.gd" id="27_grounding"]
 [ext_resource type="Script" uid="uid://b3pekiud2qvlc" path="res://scripts/systems/goal_portal_visual.gd" id="28_goal_portal"]
+[ext_resource type="Script" path="res://scripts/background/interactive_prop_grounding.gd" id="29_interactive_ground"]
+[ext_resource type="Script" path="res://scripts/systems/locked_exit_portal.gd" id="30_locked_portal"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t3f5k"]
 size = Vector2(3200, 40)
@@ -62,6 +65,9 @@ size = Vector2(40, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0jigs"]
 size = Vector2(34, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_first_portal"]
+size = Vector2(42, 80)
 
 [sub_resource type="Environment" id="Environment_bhs28"]
 background_mode = 1
@@ -461,6 +467,7 @@ z_index = 15
 position = Vector2(0, -7)
 scale = Vector2(0.0625, 0.0625)
 texture = ExtResource("22_86wy6")
+script = ExtResource("29_interactive_ground")
 
 [node name="Prompt" type="ColorRect" parent="diyiguan_mupai" unique_id=73814435]
 offset_left = -6.0
@@ -472,12 +479,28 @@ color = Color(0.49803922, 0.83137256, 1, 1)
 [node name="diyiguan_husongdizhuan" type="Area2D" parent="." unique_id=1123407182]
 position = Vector2(1930, 240)
 script = ExtResource("23_l2gix")
+portal_path = NodePath("../FirstExitPortal")
 
 [node name="@CollisionShape2D@28" type="CollisionShape2D" parent="diyiguan_husongdizhuan" unique_id=212654001]
 shape = SubResource("RectangleShape2D_0jigs")
 
-[node name="GoalPortalVisual" type="Node2D" parent="diyiguan_husongdizhuan" unique_id=664258417]
+[node name="StoneButtonVisual" type="Sprite2D" parent="diyiguan_husongdizhuan"]
+z_index = 16
+position = Vector2(0, -5)
+scale = Vector2(0.55, 0.55)
+texture = ExtResource("24_stone")
+
+[node name="FirstExitPortal" type="Area2D" parent="."]
+position = Vector2(2035, 240)
+script = ExtResource("30_locked_portal")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FirstExitPortal"]
+position = Vector2(0, -40)
+shape = SubResource("RectangleShape2D_first_portal")
+
+[node name="GoalPortalVisual" type="Node2D" parent="FirstExitPortal" unique_id=664258417]
 script = ExtResource("28_goal_portal")
+active = false
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=222361095]
 environment = SubResource("Environment_bhs28")

@@ -13,7 +13,22 @@ Thumbs.db
 *.exe
 *.pck
 *.zip
+Build/
+
+# Local capture, QA, and temporary output
+output/
+tmp/
+
+# Unrelated local study workspace
+air_quality_study/
+
+# Superseded audio drafts (the two runtime SFX are explicitly kept)
+assets/audio/score/*.ogg
+assets/audio/score/*.ogg.import
+!assets/audio/score/第4关-航弹轰炸.ogg
+!assets/audio/score/第4关-航弹轰炸.ogg.import
+!assets/audio/score/第4关-间断防空警报.ogg
+!assets/audio/score/第4关-间断防空警报.ogg.import
 
 # MCP project-local runtime state
 .mcp-runtime/
-

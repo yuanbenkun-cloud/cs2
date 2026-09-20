@@ -218,8 +218,21 @@ func add_object_behind(ground: Node, path: String, wx: float, h: float) -> void:
 	spr.texture = tex
 	spr.centered = false
 	var s := h / float(tex.get_height())
+	var bottom_padding := 0.0
+	var image := tex.get_image()
+	if image != null and not image.is_empty():
+		for y in range(image.get_height() - 1, -1, -1):
+			var has_visible_pixel := false
+			for x in range(image.get_width()):
+				if image.get_pixel(x, y).a > 0.12:
+					has_visible_pixel = true
+					break
+			if has_visible_pixel:
+				bottom_padding = float(image.get_height() - 1 - y)
+				break
 	spr.scale = Vector2(s, s)
-	spr.position = Vector2(wx - 900.0 - float(tex.get_width()) * s * 0.5, -20.0 - h)
+	# 透明画布的底部留白不应被算进落地点；可见底边再压入地面 8px。
+	spr.position = Vector2(wx - 900.0 - float(tex.get_width()) * s * 0.5, -12.0 - h + bottom_padding * s)
 	ground.add_child(spr)
 
 func add_goal_portal_visual(parent: Node, active: bool = true) -> Node2D:

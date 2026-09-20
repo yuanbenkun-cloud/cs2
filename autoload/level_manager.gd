@@ -24,6 +24,7 @@ var checkpoint_state: Dictionary = {}
 var _fail_layer: CanvasLayer = null
 var _fail_label: Label = null
 var _failing := false
+var _transitioning := false
 
 func _ready() -> void:
 	_build_fail_ui()
@@ -72,7 +73,7 @@ func fail(reason: String) -> void:
 
 func complete() -> void:
 	## 通关 → 下一场景（含穿越转场）
-	if current_level >= SCENES.size():
+	if _transitioning or current_level >= SCENES.size():
 		return
 	current_level += 1
 	var gs := get_node_or_null("/root/GameState")
@@ -84,7 +85,7 @@ func complete() -> void:
 
 func travel_to(level: int, caption: String = "") -> void:
 	## 穿越跳关（第 1 关松动地砖 → 02 等）
-	if level < 1 or level > SCENES.size():
+	if _transitioning or level < 1 or level > SCENES.size():
 		return
 	current_level = level
 	var gs := get_node_or_null("/root/GameState")
@@ -151,6 +152,8 @@ func register_checkpoint(pos: Vector2) -> void:
 
 func respawn() -> void:
 	## 重载保证机制处于确定状态；若本关登记过检查点，再恢复位置与可存档对象。
+	if _transitioning:
+		return
 	var dialogue := get_node_or_null("/root/DialogueSystem")
 	if dialogue != null and dialogue.has_method("cancel_for_scene_change"):
 		dialogue.call("cancel_for_scene_change")
@@ -187,6 +190,11 @@ func _restore_after_reload(can_restore: bool) -> void:
 		audio.call("play_event", "ui_confirm", 0.9, -3.0)
 
 func _go(path: String, caption: String = "") -> void:
+	if _transitioning:
+		return
+	_transitioning = true
+	var previous_scene := get_tree().current_scene
+	_release_transition_lock.call_deferred(previous_scene)
 	var dialogue := get_node_or_null("/root/DialogueSystem")
 	if dialogue != null and dialogue.has_method("cancel_for_scene_change"):
 		dialogue.call("cancel_for_scene_change")
@@ -195,9 +203,21 @@ func _go(path: String, caption: String = "") -> void:
 	checkpoint_state.clear()
 	var director := get_node_or_null("/root/StoryDirector")
 	if director != null:
-		director.call("play_transition", path, current_level, caption)
+		director.call_deferred("play_transition", path, current_level, caption)
 		return
 	## 无导演时使用轻量黑幕回退，保证场景切换仍可用。
 	var transition: Node = load("res://scripts/systems/scene_transition.gd").new()
 	get_tree().root.add_child(transition)
-	transition.call("play", path, caption)
+	transition.call_deferred("play", path, caption)
+
+func _release_transition_lock(previous_scene: Node) -> void:
+	# 锁只覆盖旧场景仍可能继续发信号的窗口；新场景装配后即可接收下一次通关。
+	for _frame in range(180):
+		var tree := get_tree()
+		if tree == null:
+			return
+		await tree.process_frame
+		if tree.current_scene != previous_scene:
+			_transitioning = false
+			return
+	_transitioning = false

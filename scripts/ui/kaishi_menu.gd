@@ -12,6 +12,10 @@ func _ready() -> void:
 	_build_start_card()
 	_build_controls()
 	_build_ambient_animation()
+	if bool(get_tree().get_meta("opening_video_just_finished", false)):
+		get_tree().remove_meta("opening_video_just_finished")
+		modulate.a = 0.0
+		create_tween().tween_property(self, "modulate:a", 1.0, 0.48).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _build_background() -> void:
 	var bg := TextureRect.new()
@@ -25,7 +29,8 @@ func _build_background() -> void:
 
 	var wash := ColorRect.new()
 	wash.name = "CinematicWash"
-	wash.color = Color(0.025, 0.04, 0.075, 0.70)
+	# 保留夜雨氛围，但让吊脚楼、山体和水面层次在首屏仍然可读。
+	wash.color = Color(0.025, 0.04, 0.075, 0.38)
 	wash.size = VIEW_SIZE
 	wash.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(wash)

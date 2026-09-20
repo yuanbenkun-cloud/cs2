@@ -34,7 +34,7 @@ func _on_body_entered(body: Node) -> void:
 	if body.name != "zhujue":
 		return
 	_played = true
-	monitoring = false
+	set_deferred("monitoring", false)
 	_play(body)
 
 func _play(player: Node) -> void:
@@ -43,7 +43,11 @@ func _play(player: Node) -> void:
 	_auto_close_at = Time.get_ticks_msec() + 8200
 	if player.has_method("freeze"):
 		player.call("freeze", true)
-	var forge := get_tree().current_scene.find_child("ForgeSequence", true, false)
+	var scene := get_tree().current_scene
+	if scene == null:
+		_showing = false
+		return
+	var forge := scene.find_child("ForgeSequence", true, false)
 	if forge != null and forge.has_method("set_story_paused"):
 		forge.call("set_story_paused", true)
 	_build_overlay()
@@ -55,7 +59,10 @@ func _build_overlay() -> void:
 	_layer = CanvasLayer.new()
 	_layer.name = "StoryIllustrationLayer"
 	_layer.layer = 64
-	get_tree().current_scene.add_child(_layer)
+	var scene := get_tree().current_scene
+	if scene == null:
+		return
+	scene.add_child(_layer)
 	_root = Control.new()
 	_root.name = "StoryIllustration"
 	_root.size = Vector2(640, 360)
@@ -120,9 +127,12 @@ func _close() -> void:
 	await fade.finished
 	if is_instance_valid(_layer):
 		_layer.queue_free()
-	var player := get_tree().current_scene.find_child("zhujue", true, false)
+	var tree := get_tree()
+	if tree == null or tree.current_scene == null:
+		return
+	var player := tree.current_scene.find_child("zhujue", true, false)
 	if player != null and player.has_method("freeze"):
 		player.call("freeze", false)
-	var forge := get_tree().current_scene.find_child("ForgeSequence", true, false)
+	var forge := tree.current_scene.find_child("ForgeSequence", true, false)
 	if forge != null and forge.has_method("set_story_paused"):
 		forge.call("set_story_paused", false)

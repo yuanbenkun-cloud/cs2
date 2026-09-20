@@ -11,6 +11,7 @@ var saved_level: int = 0
 var highest_unlocked_level: int = 1
 var story_completed := false
 var ending_choice := "observe"
+var photo_timestamp := ""
 
 func _ready() -> void:
 	_load_story()
@@ -23,6 +24,35 @@ func reset_story() -> void:
 	goods_integrity = 100
 	insight_flags.clear()
 	ending_choice = "observe"
+	photo_timestamp = ""
+
+func capture_photo_timestamp() -> String:
+	## 使用玩家按下快门时的本机时间；同一时间会保留到片尾照片。
+	var now := Time.get_datetime_dict_from_system(false)
+	photo_timestamp = "%04d年%02d月%02d日 %02d:%02d:%02d · 重庆" % [
+		int(now.get("year", 0)),
+		int(now.get("month", 0)),
+		int(now.get("day", 0)),
+		int(now.get("hour", 0)),
+		int(now.get("minute", 0)),
+		int(now.get("second", 0)),
+	]
+	_save_story()
+	return photo_timestamp
+
+func get_photo_timestamp(compact: bool = false) -> String:
+	if photo_timestamp == "":
+		return "拍摄时间未记录"
+	if not compact:
+		return photo_timestamp
+	var parts := photo_timestamp.split(" ")
+	if parts.size() < 2:
+		return photo_timestamp
+	var date_text := str(parts[0]).replace("年", ".").replace("月", ".").replace("日", "")
+	var time_text := str(parts[1])
+	if time_text.length() >= 5:
+		time_text = time_text.substr(0, 5)
+	return date_text + " " + time_text
 
 func begin_new_story() -> void:
 	reset_story()
@@ -93,6 +123,7 @@ func _save_story() -> void:
 	cfg.set_value("progress", "highest_unlocked_level", highest_unlocked_level)
 	cfg.set_value("progress", "story_completed", story_completed)
 	cfg.set_value("progress", "ending_choice", ending_choice)
+	cfg.set_value("progress", "photo_timestamp", photo_timestamp)
 	cfg.set_value("run", "goods_integrity", goods_integrity)
 	cfg.set_value("run", "insight_flags", insight_flags)
 	var err := cfg.save(SAVE_PATH)
@@ -107,6 +138,7 @@ func _load_story() -> void:
 	highest_unlocked_level = int(cfg.get_value("progress", "highest_unlocked_level", 1))
 	story_completed = bool(cfg.get_value("progress", "story_completed", false))
 	ending_choice = str(cfg.get_value("progress", "ending_choice", "observe"))
+	photo_timestamp = str(cfg.get_value("progress", "photo_timestamp", ""))
 	goods_integrity = clampi(int(cfg.get_value("run", "goods_integrity", 100)), 0, 100)
 	var loaded_flags = cfg.get_value("run", "insight_flags", {})
 	insight_flags = loaded_flags if loaded_flags is Dictionary else {}

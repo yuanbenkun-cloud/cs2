@@ -139,6 +139,8 @@ func run(_tree: SceneTree) -> bool:
 		bvis.scale = Vector2.ONE * (64.0 / float(board_texture.get_height()))
 		bvis.position = Vector2(0, -7)
 		bvis.z_index = 15
+		b.bind_script(bvis, "res://scripts/background/interactive_prop_grounding.gd")
+		bvis.set("target_ground_y", 247.0)
 		board.add_child(bvis)
 	var bpr := ColorRect.new()
 	bpr.name = "Prompt"
@@ -149,16 +151,36 @@ func run(_tree: SceneTree) -> bool:
 	board.set("dialogue_file", "res://assets/dialogue_level1.json")
 	board.set("dialogue_node", "info_board")
 
-	# 第一关终点：踏入时空门后穿越到 02。
+	# 第一关终点：先踩下古墙石扣，再走进显现的时空门。
 	var tile: Area2D = b.add_node(root, "Area2D", "diyiguan_husongdizhuan")
 	tile.position = Vector2(1930, 240)
 	b.bind_script(tile, "res://scripts/systems/loose_tile.gd")
+	tile.set("portal_path", NodePath("../FirstExitPortal"))
 	var tsh := CollisionShape2D.new()
 	var trect := RectangleShape2D.new()
 	trect.size = Vector2(34, 8)
 	tsh.shape = trect
 	tile.add_child(tsh)
-	b.add_goal_portal_visual(tile, true)
+	var tile_tex: Texture2D = load("res://assets/production/props/gameplay/loose-tile-runtime.png")
+	if tile_tex != null:
+		var tile_visual := Sprite2D.new()
+		tile_visual.name = "StoneButtonVisual"
+		tile_visual.texture = tile_tex
+		tile_visual.position = Vector2(0, -5)
+		tile_visual.scale = Vector2.ONE * 0.55
+		tile_visual.z_index = 16
+		tile.add_child(tile_visual)
+	var portal: Area2D = b.add_node(root, "Area2D", "FirstExitPortal")
+	portal.position = Vector2(2035, 240)
+	b.bind_script(portal, "res://scripts/systems/locked_exit_portal.gd")
+	portal.set("starts_active", false)
+	var portal_shape := CollisionShape2D.new()
+	var portal_rect := RectangleShape2D.new()
+	portal_rect.size = Vector2(42, 80)
+	portal_shape.shape = portal_rect
+	portal_shape.position = Vector2(0, -40)
+	portal.add_child(portal_shape)
+	b.add_goal_portal_visual(portal, false)
 
 	# 背景系统
 	var pbg = b.make_background(root, [Color("#0a0f22"), Color("#14204a"), Color("#3a4f8f"), Color("#6b4a6b"), Color("#23273f")], "01")

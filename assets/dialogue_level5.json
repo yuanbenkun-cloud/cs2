@@ -58,7 +58,7 @@
     "goods_event": "",
     "prelude_image": "res://assets/production/story/ending-hongyadong-photo.png",
     "prelude_duration": 1.5,
-    "prelude_stamp": "06:12 · 重庆"
+    "prelude_stamp": "@capture_time"
   },
   "photo_not": {
     "lines": [

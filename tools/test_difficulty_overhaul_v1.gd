@@ -8,6 +8,12 @@ func _check(condition: bool, message: String) -> void:
 	if not condition:
 		failed += 1
 
+func _texture_source_path(texture: Texture2D) -> String:
+	var source := texture
+	while source is AtlasTexture:
+		source = (source as AtlasTexture).atlas
+	return source.resource_path if source != null else ""
+
 func _init() -> void:
 	call_deferred("_run")
 
@@ -25,7 +31,16 @@ func _run() -> void:
 	var crowd := current_scene.find_child("diyiguan_renqun_01", true, false)
 	var crowd_people := crowd.find_children("CrowdActor*", "AnimatedSprite2D", false, false)
 	_check(crowd_people.size() == 5, "第一关：每股流动人群由 3 人增至 5 人")
-	_check(current_scene.find_child("GoalPortalVisual", true, false) != null, "第一关：旧地砖终点替换为传送门")
+	var stone := current_scene.find_child("diyiguan_husongdizhuan", true, false)
+	var stone_visual := stone.find_child("StoneButtonVisual", false, false) if stone != null else null
+	var portal1 := current_scene.find_child("FirstExitPortal", true, false)
+	var portal1_visual := portal1.find_child("GoalPortalVisual", false, false) if portal1 != null else null
+	root.get_node("LevelManager").set("current_level", 1)
+	_check(stone_visual != null, "第一关：古墙石扣恢复为可见场景物件")
+	_check(portal1 != null and not bool(portal1.get("_active")) and portal1_visual != null and not portal1_visual.visible, "第一关：碰到石扣前传送门隐藏")
+	stone.call("_on_body_entered", current_scene.find_child("zhujue", true, false))
+	await process_frame
+	_check(bool(portal1.get("_active")) and portal1_visual.visible and root.get_node("LevelManager").get("current_level") == 1, "第一关：石扣只唤醒传送门，不会立即切关")
 	aunt.global_position = crowd.global_position
 	var slowed_speed := float(aunt.call("_get_chase_speed", 300.0))
 	aunt.global_position = crowd.global_position + Vector2(100.0, 0.0)
@@ -66,8 +81,9 @@ func _run() -> void:
 	_check(current_scene.find_child("GoalPortalVisual", true, false) == null and current_scene.find_child("PhotoCameraVisual", true, false) != null, "第五关：按要求保留原拍照点，不替换传送门")
 	var aunt_visual := final_aunt.find_child("SkinAnim", true, false) as CanvasItem
 	_check(final_aunt.modulate.a == 1.0 and aunt_visual != null and aunt_visual.modulate.a == 1.0 and aunt_visual.self_modulate.a == 1.0, "第五关：传单阿姨节点与立绘均保持完全不透明")
-	var aunt_material := aunt_visual.material as ShaderMaterial
-	_check(aunt_material != null and aunt_material.shader.code.contains("vec4(c.rgb, 1.0)"), "第五关：阿姨使用强制实色着色器，不再被晨雾灯光稀释")
+	var aunt_anim := aunt_visual as AnimatedSprite2D
+	var aunt_texture := aunt_anim.sprite_frames.get_frame_texture(&"idle", 0) if aunt_anim != null else null
+	_check(aunt_texture != null and _texture_source_path(aunt_texture).ends_with("flyer-lady-return-idle-v2.png") and aunt_visual.material == null, "第五关：阿姨换用与原设一致的新实色立绘")
 	var dialogue_panel := current_scene.find_child("DialoguePanel", true, false) as Control
 	dialogue_panel.call("play_line", "传单阿姨", "测试")
 	dialogue_panel.call("reset_portraits")
@@ -83,7 +99,10 @@ func _run() -> void:
 	await process_frame
 	var photo_prelude := ds.find_child("DialoguePreludeImage", true, false) as TextureRect
 	var photo_stamp := ds.find_child("PreludeTimestamp", true, false) as Label
-	_check(photo_prelude != null and photo_prelude.texture.resource_path.ends_with("ending-hongyadong-photo.png") and photo_stamp != null and photo_stamp.text.contains("06:12") and str(ds.get("last_choice_next")) == "photo_take", "第五关拍照：真实选项会跳到带时间戳的照片画面，再进入拍照对白")
+	var now := Time.get_datetime_dict_from_system(false)
+	var expected_date := "%04d年%02d月%02d日" % [int(now.year), int(now.month), int(now.day)]
+	var recorded_stamp := str(root.get_node("GameState").get("photo_timestamp"))
+	_check(photo_prelude != null and photo_prelude.texture.resource_path.ends_with("ending-hongyadong-photo.png") and photo_stamp != null and photo_stamp.text.begins_with(expected_date) and photo_stamp.text.contains(":") and photo_stamp.text.ends_with("· 重庆") and photo_stamp.text == recorded_stamp and str(ds.get("last_choice_next")) == "photo_take", "第五关拍照：按下快门时写入实时年月日与时分秒，并保留到结局")
 	ds.call("cancel_for_scene_change")
 	ds.call("load_data", "res://assets/dialogue_level5.json")
 	ds.call("start_dialogue", "photo_not")
@@ -99,7 +118,8 @@ func _run() -> void:
 	await _load_scene("res://scenes/jieju.tscn")
 	var photo_bg := current_scene.find_child("EndingBackdrop", true, false) as TextureRect
 	var framed_photo := current_scene.find_child("HongyadongPhoto", true, false) as Sprite2D
-	_check(photo_bg.texture.resource_path.ends_with("layered-preview.png") and framed_photo.texture.resource_path.ends_with("ending-hongyadong-photo.png"), "第五关拍照：只替换带时间戳相框中的洪崖洞照片")
+	var ending_stamp := current_scene.find_child("PhotoTimestamp", true, false) as Label
+	_check(photo_bg.texture.resource_path.ends_with("layered-preview.png") and framed_photo.texture.resource_path.ends_with("ending-hongyadong-photo.png") and ending_stamp != null and ending_stamp.text == str(gs.call("get_photo_timestamp", true)), "第五关拍照：洪崖洞照片沿用快门时刻的实时时间戳")
 	gs.set("ending_choice", "observe")
 	await _load_scene("res://scenes/jieju.tscn")
 	var people_bg := current_scene.find_child("EndingBackdrop", true, false) as TextureRect

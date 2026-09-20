@@ -223,7 +223,7 @@ func run(_tree: SceneTree) -> bool:
 	gfill.position = Vector2(-1600, 0)
 	ground.add_child(gfill)
 
-	b.add_object_behind(ground, "res://assets/objects/kiln.png", 1000.0, 180.0)
+	b.add_object_behind(ground, "res://assets/production/props/kiln/kiln-right-v2.png", 1000.0, 180.0)
 
 	var ok: bool = b.save_scene(root, "res://scenes/guanqia/02_ciqikou.tscn")
 	root.free()

@@ -1,0 +1,12 @@
+Tool: Codex built-in image generation
+Date: 2026-09-15
+Purpose: Level 2 right-facing kiln production prop
+
+Edit the existing warm orange pixel-art kiln into a clear right-facing side-view kiln.
+Keep a complete grounded base, place the fire and stoking mouth on the right, keep the
+chimney toward the upper-left with smoke drifting right, preserve the dark brown pixel
+outline and historic kiln material language, and exclude people, scenery, text, borders,
+duplicate objects, cropping, halos, and opaque backgrounds.
+
+Postprocess: the generated neutral checkerboard was deterministically removed by
+tools/normalize_kiln_alpha.gd, preserving colored subject pixels and dark outlines.

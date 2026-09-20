@@ -15,8 +15,9 @@ func activate() -> void:
 
 func set_active(value: bool) -> void:
 	_active = value
-	monitoring = value
-	monitorable = value
+	# 第一关石扣会在 body_entered 中激活本门，碰撞状态必须延迟修改。
+	set_deferred("monitoring", value)
+	set_deferred("monitorable", value)
 	var visual := get_node_or_null("GoalPortalVisual")
 	if visual != null:
 		if value and visual.has_method("activate"):

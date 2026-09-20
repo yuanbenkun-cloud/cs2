@@ -30,6 +30,11 @@ func crack() -> void:
 
 func celebrate_breakthrough() -> void:
 	set_prompt_visible(false)
+	# 裂纹是独立的 Line2D，不能只淡出 WallVisual，否则墙消失后会留下发光条纹。
+	for crack_line in find_children("Crack*", "Line2D", false, false):
+		(crack_line as Line2D).visible = false
+	_toggle_overlay("OverlayHeat", false)
+	_toggle_overlay("OverlayQuench", false)
 	for shape in find_children("*", "CollisionShape2D", true, false):
 		(shape as CollisionShape2D).set_deferred("disabled", true)
 	var scene := get_tree().current_scene

@@ -102,11 +102,12 @@ func _build_choice_motif() -> void:
 		image.scale = Vector2(106.0 / float(snapshot.get_width()), 58.0 / float(snapshot.get_height()))
 		frame.add_child(image)
 		var stamp := Label.new()
-		stamp.text = "06:12 · 重庆"
+		stamp.name = "PhotoTimestamp"
+		stamp.text = str(_game_state.call("get_photo_timestamp", true)) if _game_state != null and _game_state.has_method("get_photo_timestamp") else "拍摄时间未记录"
 		stamp.position = Vector2(7, 64)
 		stamp.size = Vector2(104, 14)
 		stamp.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		stamp.add_theme_font_size_override("font_size", 8)
+		stamp.add_theme_font_size_override("font_size", 7)
 		stamp.add_theme_color_override("font_color", Color("#40382e"))
 		frame.add_child(stamp)
 		frame.rotation = 0.025

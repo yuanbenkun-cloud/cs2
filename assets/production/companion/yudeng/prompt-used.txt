@@ -1,0 +1,14 @@
+Built-in image_gen prompt summary
+
+Date: 2026-09-16
+Asset: Yudeng interactive companion hover animation
+References:
+- assets/production/hero/idle/idle-1.png (pixel density, outline and character scale)
+- assets/production/npc/flyer_lady_return/flyer-lady-return-idle-v2.png (palette, material and line weight)
+- Build/Game/codex_level2_props_restored_v2.png (native 640x360 gameplay context)
+
+Final prompt:
+Create a project-native 2D pixel-art Chongqing guide spirit named Yudeng as an exact 2x2, four-frame hover loop on solid #FF00FF. Preserve the existing game's crisp dark-brown outline, warm muted palette and hand-crafted pixel clusters. The character is a warm amber-red paper lantern with a dark-teal upturned roof-eave cap inspired by Chongqing stilt houses, expressive cream eyes, mitten hands, a vermilion tassel and a restrained blue river-ribbon curl. Frames: neutral hover, slight rise, friendly hand gesture, settle. Keep identical identity, camera distance, body scale and centered containment in all cells. No text, UI, scenery, dividers, watermark or edge crossing.
+
+Postprocess:
+generate2dsprite.py process; 2x2; 128px cells; shared scale; center alignment; strict QC; transparent chroma-key output.

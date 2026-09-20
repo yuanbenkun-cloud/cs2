@@ -76,6 +76,10 @@ func _open_node(node_id: String) -> void:
 
 func _play_image_prelude(image_path: String, hold_time: float, stamp_text: String = "") -> void:
 	## 某些结局先让玩家完整看见画面，再恢复原对话；对话状态保持 active，避免玩家移动。
+	if stamp_text == "@capture_time":
+		var gs := get_node_or_null("/root/GameState")
+		if gs != null and gs.has_method("get_photo_timestamp"):
+			stamp_text = str(gs.call("get_photo_timestamp", false))
 	_prelude_serial += 1
 	var serial := _prelude_serial
 	_clear_image_prelude()
@@ -168,6 +172,10 @@ func choose(index: int) -> void:
 	var opt: Dictionary = _options[index]
 	var nxt := str(opt.get("next", ""))
 	last_choice_next = nxt
+	if nxt == "photo_take":
+		var gs := get_node_or_null("/root/GameState")
+		if gs != null and gs.has_method("capture_photo_timestamp"):
+			gs.call("capture_photo_timestamp")
 	if nxt == "":
 		_finish()
 	else:

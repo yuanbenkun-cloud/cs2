@@ -42,10 +42,30 @@
       "id": "hero-chenmo-interact-v1",
       "role": "four-frame generic interaction one-shot",
       "path": "assets/production/hero/interact/sheet-transparent.png",
-      "status": "processed_pending_in_engine_review",
+      "status": "approved_in_engine",
       "technical": {"dimensions": "256x256", "alpha": true, "anchor": "feet", "frames": 4, "filtering": "nearest"},
       "source": {"kind": "generated", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-12", "prompt_or_source_record": "assets/production/hero/interact/prompt-used.txt"},
-      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": false, "technical_checks_passed": true, "approved_by": ""}
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "npc-flyer-lady-return-idle-v2",
+      "role": "level 5 modern Hongyadong flyer-lady idle sprite",
+      "path": "assets/production/npc/flyer_lady_return/flyer-lady-return-idle-v2.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "1254x1254", "alpha": true, "anchor": "feet-bottom-center", "frames": 1, "filtering": "linear"},
+      "visual_locks": ["same flyer-lady identity", "floral headscarf", "red blouse", "black embroidered apron", "tan satchel", "hero-matched pixel density"],
+      "source": {"kind": "generated", "url_or_tool": "Codex built-in image_gen", "creator": "OpenAI image generation", "created_at": "2026-09-15", "license": "project-generated media", "prompt_or_source_record": "assets/production/npc/flyer_lady_return/prompt-used.txt"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "companion-yudeng-hover-v1",
+      "role": "draggable Chongqing guide companion hover loop",
+      "path": "assets/production/companion/yudeng/sheet-transparent.png",
+      "status": "approved_in_engine",
+      "technical": {"dimensions": "256x256", "alpha": true, "anchor": "center", "frames": 4, "filtering": "nearest"},
+      "visual_locks": ["amber lantern body", "dark-teal stilt-house eave", "vermilion tassel", "blue two-rivers ribbon", "project-native pixel clusters"],
+      "source": {"kind": "generated-and-normalized", "url_or_tool": "Codex built-in image_gen + generate2dsprite", "creator": "OpenAI image generation", "created_at": "2026-09-16", "license": "project-generated media", "prompt_or_source_record": "assets/production/companion/yudeng/prompt-used.txt"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
     },
     {
       "id": "portrait-chenmo-v2",
@@ -118,6 +138,16 @@
       "technical": {"dimensions": "1899x828", "alpha": true, "anchor": "center", "frames": 1, "filtering": "linear"},
       "source": {"kind": "generated", "url_or_tool": "Codex built-in image_gen", "created_at": "2026-09-13", "license": "project-generated media", "prompt_or_source_record": "assets/production/props/gameplay/prompts.md"},
       "verification": {"native_scale_reviewed": true, "in_engine_reviewed": true, "technical_checks_passed": true, "approved_by": "Codex"}
+    },
+    {
+      "id": "prop-kiln-right-v2",
+      "role": "level 2 grounded right-facing kiln landmark",
+      "path": "assets/production/props/kiln/kiln-right-v2.png",
+      "status": "processed_pending_in_engine_review",
+      "technical": {"dimensions": "1254x1254", "alpha": true, "anchor": "ground-bottom-center", "frames": 1, "filtering": "linear"},
+      "visual_locks": ["right-facing fire mouth", "warm brick palette", "dark pixel outline", "grounded base"],
+      "source": {"kind": "generated-and-normalized", "url_or_tool": "Codex built-in image_gen", "creator": "OpenAI image generation", "created_at": "2026-09-15", "license": "project-generated media", "prompt_or_source_record": "assets/production/props/kiln/prompt-used.txt"},
+      "verification": {"native_scale_reviewed": true, "in_engine_reviewed": false, "technical_checks_passed": true, "approved_by": ""}
     },
     {
       "id": "prop-cargo-states-v1",

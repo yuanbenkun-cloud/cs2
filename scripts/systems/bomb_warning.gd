@@ -15,6 +15,8 @@ const RAMP_STRIKES := 3
 const RESOLVE_DELAY := 0.35
 const MISSILE_START_Y := -38.0
 const BLAST_RADIUS := 54.0
+const GROUND_EFFECT_SINK := 18.0
+const SHIELD_EFFECT_SINK := 4.0
 
 var _phase: int = Phase.COOLDOWN
 var _cooldown := INITIAL_COOLDOWN
@@ -121,7 +123,8 @@ func _explode(shield: Node) -> void:
 	_spawn_explosion(impact_pos, shield != null)
 	var audio := get_node_or_null("/root/AudioManager")
 	if audio != null:
-		audio.call("play_event", "explosion", 0.78 if shield != null else 0.68, -1.0 if shield != null else 1.5)
+		# 航弹命中专属轰炸声；挡板吸收时更闷、更低，地面直击更响。
+		audio.call("play_event", "bombardment", 0.86 if shield != null else 1.0, -4.5 if shield != null else -1.0)
 	var camera := get_tree().current_scene.find_child("Camera2D", true, false)
 	if camera != null and camera.has_method("shake"):
 		camera.call("shake", 6.5 if shield == null else 4.0, 0.32)
@@ -208,27 +211,135 @@ func _build_missile(cur: Node) -> void:
 	cur.add_child.call_deferred(_missile)
 	_missile.visible = false
 
-func _spawn_explosion(pos: Vector2, blocked: bool) -> void:
-	var burst := Polygon2D.new()
-	burst.name = "ExplosionBurst"
-	burst.z_index = 42
-	var points := PackedVector2Array()
-	for i in range(16):
-		var radius := 18.0 if i % 2 == 0 else 8.0
-		var angle := TAU * float(i) / 16.0
-		points.append(Vector2(cos(angle), sin(angle)) * radius)
-	burst.polygon = points
-	burst.color = Color("#ffd166") if blocked else Color("#ff6a3d")
-	burst.global_position = pos
-	get_tree().current_scene.add_child(burst)
-	var tween := create_tween()
-	tween.tween_property(burst, "scale", Vector2.ONE * 2.4, 0.22).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(burst, "modulate:a", 0.0, 0.38)
-	tween.tween_callback(burst.queue_free)
+func _spawn_explosion(pos: Vector2, blocked: bool) -> Node2D:
+	## 爆炸反馈全部挂在临时节点下：火花、暖光都会衰减并在一秒内销毁。
+	var feedback := Node2D.new()
+	feedback.name = "ExplosionFeedback"
+	feedback.z_index = 41
+	# 航弹判定点位于接触面上方；视觉底边继续压入地面/挡板，消除浮空缝隙。
+	var contact_sink := SHIELD_EFFECT_SINK if blocked else GROUND_EFFECT_SINK
+	feedback.global_position = pos + Vector2(0, contact_sink)
+	feedback.set_meta("contact_sink", contact_sink)
+	get_tree().current_scene.add_child(feedback)
+	var additive := CanvasItemMaterial.new()
+	additive.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	additive.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+
+	var strength := 0.76 if blocked else 1.0
+	var outer_flame := Polygon2D.new()
+	outer_flame.name = "GroundFlameOuter"
+	outer_flame.z_index = 2
+	outer_flame.material = additive
+	outer_flame.polygon = PackedVector2Array([
+		Vector2(-38, 1), Vector2(-29, -6), Vector2(-20, -8),
+		Vector2(-14, -24), Vector2(-8, -15), Vector2(-2, -43),
+		Vector2(5, -20), Vector2(13, -31), Vector2(18, -13),
+		Vector2(29, -8), Vector2(39, 1),
+	])
+	outer_flame.color = Color("#ff9b32") if blocked else Color("#ff5b2d")
+	outer_flame.scale = Vector2(0.42, 0.22) * strength
+	feedback.add_child(outer_flame)
+	var outer_tween := create_tween()
+	outer_tween.tween_property(outer_flame, "scale", Vector2.ONE * strength, 0.10).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	outer_tween.tween_property(outer_flame, "scale", Vector2(1.22, 0.76) * strength, 0.30).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	outer_tween.parallel().tween_property(outer_flame, "modulate:a", 0.0, 0.30)
+
+	var inner_flame := Polygon2D.new()
+	inner_flame.name = "GroundFlameInner"
+	inner_flame.z_index = 3
+	inner_flame.material = additive
+	inner_flame.polygon = PackedVector2Array([
+		Vector2(-23, 0), Vector2(-15, -7), Vector2(-9, -19),
+		Vector2(-3, -12), Vector2(2, -31), Vector2(8, -14),
+		Vector2(16, -9), Vector2(24, 0),
+	])
+	inner_flame.color = Color("#ffe28a")
+	inner_flame.scale = Vector2(0.34, 0.18) * strength
+	feedback.add_child(inner_flame)
+	var inner_tween := create_tween()
+	inner_tween.tween_property(inner_flame, "scale", Vector2.ONE * strength, 0.08).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	inner_tween.tween_property(inner_flame, "scale", Vector2(1.08, 0.66) * strength, 0.24).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	inner_tween.parallel().tween_property(inner_flame, "modulate:a", 0.0, 0.24)
+
+	var shockwave := Polygon2D.new()
+	shockwave.name = "GroundShockwave"
+	shockwave.z_index = 1
+	shockwave.material = additive
+	shockwave.polygon = PackedVector2Array([
+		Vector2(-32, 0), Vector2(-18, -4), Vector2(0, -6), Vector2(18, -4),
+		Vector2(32, 0), Vector2(18, 4), Vector2(0, 5), Vector2(-18, 4),
+	])
+	shockwave.color = Color(1.0, 0.66, 0.24, 0.9)
+	shockwave.scale = Vector2(0.35, 0.45) * strength
+	feedback.add_child(shockwave)
+	var shock_tween := create_tween()
+	shock_tween.tween_property(shockwave, "scale", Vector2(2.7, 0.62) * strength, 0.34).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	shock_tween.parallel().tween_property(shockwave, "modulate:a", 0.0, 0.34)
+
+	var glow := Sprite2D.new()
+	glow.name = "ExplosionGlow"
+	glow.z_index = 1
+	glow.texture = _make_radial_light_texture()
+	glow.material = additive
+	glow.scale = Vector2.ONE * (3.0 if blocked else 3.7)
+	glow.modulate = Color(1.0, 0.42, 0.12, 0.54 if blocked else 0.68)
+	feedback.add_child(glow)
+	var glow_tween := create_tween()
+	glow_tween.tween_property(glow, "scale", glow.scale * 1.28, 0.28).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	glow_tween.parallel().tween_property(glow, "modulate:a", 0.0, 0.48)
+
+	var flash_light := PointLight2D.new()
+	flash_light.name = "ExplosionFlashLight"
+	flash_light.texture = _make_radial_light_texture()
+	# 64px 径向纹理：相较上一版将实际照明直径扩大为两倍。
+	flash_light.texture_scale = 7.2 if blocked else 8.8
+	flash_light.color = Color("#ff9f45") if blocked else Color("#ff7a32")
+	flash_light.energy = 2.8 if blocked else 3.8
+	flash_light.shadow_enabled = false
+	feedback.add_child(flash_light)
+	var light_tween := create_tween()
+	light_tween.tween_property(flash_light, "energy", 0.0, 0.46).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+
+	var sparks := CPUParticles2D.new()
+	sparks.name = "ExplosionSparks"
+	sparks.z_index = 3
+	sparks.amount = 20 if blocked else 32
+	sparks.lifetime = 0.58
+	sparks.one_shot = true
+	sparks.explosiveness = 1.0
+	sparks.direction = Vector2(0, -1)
+	sparks.spread = 82.0
+	sparks.gravity = Vector2(0, 230)
+	sparks.initial_velocity_min = 95.0
+	sparks.initial_velocity_max = 225.0
+	sparks.scale_amount_min = 1.0
+	sparks.scale_amount_max = 2.4
+	sparks.color = Color("#ffd76a")
+	sparks.material = additive
+	feedback.add_child(sparks)
+	sparks.emitting = true
+
+	var smoke := CPUParticles2D.new()
+	smoke.name = "GroundBlastSmoke"
+	smoke.z_index = 0
+	smoke.amount = 10 if blocked else 16
+	smoke.lifetime = 0.92
+	smoke.one_shot = true
+	smoke.explosiveness = 0.94
+	smoke.direction = Vector2(0, -1)
+	smoke.spread = 46.0
+	smoke.gravity = Vector2(0, -12)
+	smoke.initial_velocity_min = 24.0
+	smoke.initial_velocity_max = 62.0
+	smoke.scale_amount_min = 2.5
+	smoke.scale_amount_max = 5.5
+	smoke.color = Color(0.22, 0.19, 0.17, 0.72)
+	feedback.add_child(smoke)
+	smoke.emitting = true
+
 	var debris := CPUParticles2D.new()
 	debris.name = "ExplosionDebris"
-	debris.z_index = 41
-	debris.global_position = pos
+	debris.z_index = 0
 	debris.amount = 18 if blocked else 28
 	debris.lifetime = 0.85
 	debris.one_shot = true
@@ -241,6 +352,27 @@ func _spawn_explosion(pos: Vector2, blocked: bool) -> void:
 	debris.scale_amount_min = 1.5
 	debris.scale_amount_max = 3.8
 	debris.color = Color(0.55, 0.48, 0.4, 0.82) if blocked else Color(0.24, 0.22, 0.22, 0.9)
-	get_tree().current_scene.add_child(debris)
+	feedback.add_child(debris)
 	debris.emitting = true
-	get_tree().create_timer(1.2).timeout.connect(debris.queue_free)
+	get_tree().create_timer(1.0).timeout.connect(func() -> void:
+		if is_instance_valid(feedback):
+			feedback.queue_free()
+	)
+	return feedback
+
+func _make_radial_light_texture() -> GradientTexture2D:
+	var gradient := Gradient.new()
+	gradient.offsets = PackedFloat32Array([0.0, 0.22, 1.0])
+	gradient.colors = PackedColorArray([
+		Color(1.0, 1.0, 1.0, 1.0),
+		Color(1.0, 0.82, 0.55, 0.78),
+		Color(1.0, 0.3, 0.05, 0.0),
+	])
+	var texture := GradientTexture2D.new()
+	texture.width = 64
+	texture.height = 64
+	texture.fill = GradientTexture2D.FILL_RADIAL
+	texture.fill_from = Vector2(0.5, 0.5)
+	texture.fill_to = Vector2(1.0, 0.5)
+	texture.gradient = gradient
+	return texture

@@ -116,6 +116,7 @@ func _apply_animation(animation_name: String) -> void:
 	_current_animation = animation_name
 	var config: Dictionary = ANIMATIONS[animation_name]
 	scale = Vector2.ONE * DISPLAY_SCALE
-	position = Vector2(-FRAME_SIZE * 0.5 * DISPLAY_SCALE, -float(config["origin_y"]) * DISPLAY_SCALE)
+	# 鞋底压入地面 6px，让角色真正站进路面而非贴在背景边缘上。
+	position = Vector2(-FRAME_SIZE * 0.5 * DISPLAY_SCALE, -float(config["origin_y"]) * DISPLAY_SCALE + 6.0)
 	if sprite_frames != null and sprite_frames.has_animation(animation_name):
 		play(animation_name)

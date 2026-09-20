@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Texture2D" path="res://assets/production/terrain/02/ground.png" id="1_rwcmg"]
-[ext_resource type="Texture2D" path="res://assets/objects/kiln.png" id="2_d0daq"]
+[ext_resource type="Texture2D" path="res://assets/production/props/kiln/kiln-right-v2.png" id="2_d0daq"]
 [ext_resource type="PackedScene" path="res://scenes/background/parallax_stage.tscn" id="3_ar00p"]
 [ext_resource type="Script" path="res://scripts/background/parallax_stage.gd" id="4_3cgm3"]
 [ext_resource type="PackedScene" path="res://scenes/renwu/zhujue/zhujue.tscn" id="5_dd846"]
@@ -247,8 +247,8 @@ offset_bottom = 130.0
 color = Color(0.13725491, 0.16470589, 0.2, 1)
 
 [node name="@Sprite2D@90" type="Sprite2D" parent="Ground" unique_id=1486285060]
-position = Vector2(10, -200)
-scale = Vector2(0.17578125, 0.17578125)
+position = Vector2(10, -173.486)
+scale = Vector2(0.14354067, 0.14354067)
 texture = ExtResource("2_d0daq")
 centered = false
 

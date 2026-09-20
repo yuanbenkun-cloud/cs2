@@ -1,0 +1,12 @@
+Tool: Codex built-in image_gen
+Date: 2026-09-15
+Role: Fifth-level modern Hongyadong flyer-lady idle sprite replacement.
+
+References:
+- assets/production/turnarounds/flyer-lady-turnaround-v1.png — identity, costume and palette lock.
+- assets/production/hero/idle/idle-1.png — side-view camera, pixel density, outline weight and apparent game scale.
+
+Final prompt summary:
+Create one full-body idle sprite of the same elderly Chongqing flyer lady, facing left in a relaxed three-quarter side view. Preserve the floral black headscarf, gray hair, brick-red floral blouse, blue-gray sleeves, black embroidered apron, cream sash, brown trousers and shoes, and tan cross-body satchel. Match the protagonist's crisp true-pixel-art density and restrained dark-brown outline. Use a natural smaller head, slightly stocky but proportionate body, clear hands and feet, both feet on one baseline, and a calm expression. Output one uncropped character on a genuinely transparent square canvas. Exclude sprite sheets, scenery, text, cast shadows, checkerboards, semi-transparent body pixels, halos, magenta fringe and thick sticker outlines.
+
+Post-processing: none; generated RGBA retained. Runtime normalization uses Godot bottom-padding scan and a 60-world-pixel reference height.

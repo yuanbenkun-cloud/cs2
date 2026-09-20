@@ -5,15 +5,24 @@ func _ready() -> void:
 	call_deferred("_play_intro")
 
 func _play_intro() -> void:
-	var cur := get_tree().current_scene
-	if cur == null:
-		cur = get_parent()
+	var tree := get_tree()
+	if tree == null:
+		return
+	# 本节点的父级就是第四关根节点；不要在切换中读取可能仍指向旧关的 current_scene。
+	var cur := get_parent()
 	var director := get_node_or_null("/root/StoryDirector")
-	while director != null and bool(director.get("busy")):
-		await get_tree().process_frame
-	var follower := cur.find_child("GroupFollower", true, false)
-	if follower != null:
-		follower.call("start_following")
+	while is_instance_valid(director) and bool(director.get("busy")):
+		if not is_inside_tree() or not is_instance_valid(cur):
+			return
+		tree = get_tree()
+		if tree == null:
+			return
+		await tree.process_frame
+	if not is_inside_tree() or not is_instance_valid(cur):
+		return
+	tree = get_tree()
+	if tree == null or tree.current_scene != cur:
+		return
 	var layer := CanvasLayer.new()
 	layer.name = "StoryIntroLayer"
 	layer.layer = 28
@@ -47,4 +56,5 @@ func _play_intro() -> void:
 	tween.tween_interval(1.7)
 	tween.tween_property(panel, "modulate:a", 0.0, 0.3)
 	await tween.finished
-	layer.queue_free()
+	if is_instance_valid(layer):
+		layer.queue_free()

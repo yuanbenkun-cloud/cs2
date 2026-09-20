@@ -1,7 +1,9 @@
 class_name LooseTile
 extends Area2D
 
-## 松动地砖（第一关）：踩到 → 穿越转场到第 2 关（只触发一次）。
+## 古墙石扣（第一关）：踩下后结束追逐并唤醒前方传送门。
+
+@export var portal_path: NodePath
 
 var _triggered := false
 
@@ -13,9 +15,22 @@ func _on_body_entered(body: Node) -> void:
 		return
 	if body is CharacterBody2D and body.has_method("set_look_dir"):
 		_triggered = true
-		var cm := get_tree().current_scene.find_child("ChaseManager", true, false)
+		set_deferred("monitoring", false)
+		var scene := get_tree().current_scene
+		var cm := scene.find_child("ChaseManager", true, false) if scene != null else null
 		if cm != null and cm.has_method("finish"):
 			cm.call("finish")
-		var lm := get_node_or_null("/root/LevelManager")
-		if lm != null:
-			lm.call("travel_to", 2, "脚下一空。霓虹沉入江水，百年前的窑火迎面亮起。")
+		var portal := get_node_or_null(portal_path)
+		if portal != null and portal.has_method("activate"):
+			portal.call("activate")
+		var visual := get_node_or_null("StoneButtonVisual") as CanvasItem
+		if visual != null:
+			var press := create_tween()
+			press.tween_property(visual, "position:y", visual.position.y + 4.0, 0.16).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		var notice := scene.find_child("UI_Notice", true, false) as Label if scene != null else null
+		if notice != null:
+			notice.text = "石扣沉了下去——前方的时空门正在显现。"
+			notice.visible = true
+		var audio := get_node_or_null("/root/AudioManager")
+		if audio != null:
+			audio.call("play_event", "ui_confirm", 0.78, -2.0)

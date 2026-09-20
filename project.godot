@@ -14,7 +14,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-run/main_scene="res://scenes/kaishi.tscn"
+run/main_scene="res://scenes/opening_video.tscn"
 config/features=PackedStringArray("4.7")
 
 [autoload]
@@ -25,6 +25,7 @@ DialogueSystem="*res://autoload/dialogue_system.gd"
 AudioManager="*res://autoload/audio_manager.gd"
 Accessibility="*res://autoload/accessibility.gd"
 StoryDirector="*res://autoload/story_director.gd"
+Companion="*res://autoload/companion.gd"
 McpInteractionServer="*res://autoload/mcp_interaction_server.gd"
 Skinner="*res://autoload/skinner.gd"
 

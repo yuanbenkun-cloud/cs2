@@ -26,10 +26,12 @@ const NPCS := {
 const FOLLOWER_KEYS := ["helper", "old_man", "aming"]
 const NPC_IDLE_FPS := 2.5
 const NPC_WALK_FPS := 4.0
+const CHARACTER_GROUND_EMBED := 6.0
 
 var _meta: Dictionary = {}
 var _last_scene: Node = null
 var _facing_records: Array[Dictionary] = []
+var _bottom_padding_cache: Dictionary = {}
 
 func _ready() -> void:
 	var f := FileAccess.open(META_PATH, FileAccess.READ)
@@ -52,7 +54,10 @@ func _apply(sc: Node) -> void:
 	for npc_name: String in NPCS:
 		var n := sc.find_child(npc_name, true, false)
 		if n != null:
-			_skin(n, NPCS[npc_name])
+			var skin_key: String = NPCS[npc_name]
+			if npc_name == "chuandanayi" and sc.scene_file_path.ends_with("05_hongyadong_return.tscn"):
+				skin_key = "flyer_lady_return"
+			_skin(n, skin_key)
 	var grp := sc.find_child("NPC_Group", true, false)
 	if grp != null:
 		var idx := 0
@@ -64,15 +69,23 @@ func _apply(sc: Node) -> void:
 func _skin(n: Node2D, key: String) -> void:
 	if n == null or not is_instance_valid(n):
 		return
-	if n.find_child("SkinAnim", false, false) != null:
+	var visual_parent := n.get_node_or_null("VisualPivot") as Node2D
+	if visual_parent == null:
+		visual_parent = n
+	var existing := n.find_child("SkinAnim", true, false) as Node2D
+	if existing != null:
+		var previous_embed := float(existing.get_meta("ground_embed_world", 0.0))
+		if previous_embed < CHARACTER_GROUND_EMBED:
+			existing.position.y += CHARACTER_GROUND_EMBED - previous_embed
+			existing.set_meta("ground_embed_world", CHARACTER_GROUND_EMBED)
+		if key == "flyer_lady":
+			_apply_flyer_opaque(existing, n, visual_parent)
+		_register_facing(n, existing as Node2D)
 		return
 	_add_ground_shadow(n)
 	for c in n.get_children():
 		if c is ColorRect and str(c.name) != "Prompt":
 			c.visible = false
-	var visual_parent := n.get_node_or_null("VisualPivot") as Node2D
-	if visual_parent == null:
-		visual_parent = n
 	var m: Dictionary = _meta.get(key, {})
 	if m.is_empty():
 		var fb: String = FALLBACK.get(str(n.name), "")
@@ -119,27 +132,57 @@ func _skin(n: Node2D, key: String) -> void:
 		sf.add_frame("walk", walk_at)
 	var anim := AnimatedSprite2D.new()
 	anim.name = "SkinAnim"
-	anim.centered = key == "flyer_lady"
+	anim.centered = key.begins_with("flyer_lady")
 	anim.sprite_frames = sf
 	anim.material = null
 	anim.self_modulate = Color.WHITE
 	if key == "flyer_lady":
-		# 阿姨的深色服装在第五关晨雾与灯光下会显得被背景透过；保持原图实色。
-		var opaque_shader := Shader.new()
-		opaque_shader.code = "shader_type canvas_item; render_mode unshaded; void fragment(){ vec4 c = texture(TEXTURE, UV); if(c.a < 0.08){ discard; } COLOR = vec4(c.rgb, 1.0); }"
-		var opaque_material := ShaderMaterial.new()
-		opaque_material.shader = opaque_shader
-		anim.material = opaque_material
-		n.modulate = Color.WHITE
-		n.self_modulate = Color.WHITE
-		visual_parent.modulate = Color.WHITE
-		visual_parent.self_modulate = Color.WHITE
-	var s := 60.0 / float(fh)
+		_apply_flyer_opaque(anim, n, visual_parent)
+	# 回归关的阿姨应比青年主角略有体量感；她的单帧原画留白也更多，单独放大。
+	var target_height := 72.0 if key == "flyer_lady_return" else 60.0
+	var s := target_height / float(fh)
 	anim.scale = Vector2(s, s)
-	anim.position = Vector2(0.0, -30.0) if anim.centered else Vector2(-float(fw) * s * 0.5, -float(fh) * s)
+	var bottom_padding := _visible_bottom_padding(sheet, fw, fh)
+	var ground_adjust := float(bottom_padding) * s + CHARACTER_GROUND_EMBED
+	# 居中精灵的基准必须跟随目标高度，否则单独放大后脚底会额外向下偏移。
+	anim.position = (Vector2(0.0, -target_height * 0.5) if anim.centered else Vector2(-float(fw) * s * 0.5, -float(fh) * s)) + Vector2(0.0, ground_adjust)
+	anim.set_meta("visible_bottom_padding_px", bottom_padding)
+	anim.set_meta("ground_embed_world", CHARACTER_GROUND_EMBED)
 	visual_parent.add_child(anim)
 	anim.play("idle")
 	_register_facing(n, anim)
+
+func _apply_flyer_opaque(visual: CanvasItem, actor: Node2D, visual_parent: Node2D) -> void:
+	# 提高边缘裁切阈值并增强中间调，避免晨雾关的缩放边缘形成半透明人影。
+	var opaque_shader := Shader.new()
+	opaque_shader.code = "shader_type canvas_item; render_mode unshaded, blend_mix; void fragment(){ vec4 c = texture(TEXTURE, UV); if(c.a < 0.22){ discard; } vec3 solid_rgb = clamp((c.rgb - vec3(0.5)) * 1.10 + vec3(0.5), vec3(0.0), vec3(1.0)); COLOR = vec4(solid_rgb, 1.0); }"
+	var opaque_material := ShaderMaterial.new()
+	opaque_material.shader = opaque_shader
+	visual.material = opaque_material
+	visual.modulate = Color.WHITE
+	visual.self_modulate = Color.WHITE
+	actor.modulate = Color.WHITE
+	actor.self_modulate = Color.WHITE
+	visual_parent.modulate = Color.WHITE
+	visual_parent.self_modulate = Color.WHITE
+
+func _visible_bottom_padding(sheet: Texture2D, frame_width: int, frame_height: int) -> int:
+	var key := "%s:%dx%d" % [sheet.resource_path, frame_width, frame_height]
+	if _bottom_padding_cache.has(key):
+		return int(_bottom_padding_cache[key])
+	var image := sheet.get_image()
+	if image == null or image.is_empty():
+		return 0
+	var scan_width := mini(frame_width, image.get_width())
+	var scan_height := mini(frame_height, image.get_height())
+	for y in range(scan_height - 1, -1, -1):
+		for x in range(scan_width):
+			if image.get_pixel(x, y).a >= 0.12:
+				var padding := scan_height - 1 - y
+				_bottom_padding_cache[key] = padding
+				return padding
+	_bottom_padding_cache[key] = 0
+	return 0
 
 func _register_facing(actor: Node2D, visual: Node2D) -> void:
 	for record in _facing_records:
