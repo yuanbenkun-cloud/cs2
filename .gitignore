@@ -30,5 +30,11 @@ assets/audio/score/*.ogg.import
 !assets/audio/score/第4关-间断防空警报.ogg
 !assets/audio/score/第4关-间断防空警报.ogg.import
 
+# Local/retired source recordings retained outside the published project
+assets/audio/field/rain-light-ylmir-cc0.ogg
+assets/audio/field/rain-light-ylmir-cc0.ogg.import
+assets/video/opening-yudeng-history.ogv
+assets/video/opening-yudeng-history.ogv.uid
+
 # MCP project-local runtime state
 .mcp-runtime/
